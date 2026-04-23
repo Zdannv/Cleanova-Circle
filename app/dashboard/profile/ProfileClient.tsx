@@ -38,7 +38,8 @@ export default function ProfileClient({
     startTransition(async () => {
       try {
         await updateProfileAction(formData);
-        setSuccessMsg("Profil berhasil diperbarui!");
+        router.refresh();
+        router.push("/dashboard");
       } catch (err: any) {
         setErrorMsg(err.message || "Gagal memperbarui profil.");
       }
@@ -160,18 +161,18 @@ export default function ProfileClient({
                 </div>
               </div>
 
-              <div className="pt-8 flex gap-3 justify-end">
+              <div className="pt-8 flex flex-col-reverse sm:flex-row gap-3 sm:justify-end">
                 <button 
                   type="button" 
                   onClick={() => router.push("/dashboard")}
-                  className="px-6 py-3.5 bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-300 font-medium rounded-xl transition-all"
+                  className="w-full sm:w-auto px-6 py-3.5 bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-300 font-medium rounded-xl transition-all"
                 >
                   Batal
                 </button>
                 <button 
                   type="submit" 
                   disabled={isPending}
-                  className="px-8 py-3.5 bg-amber-600 hover:bg-amber-700 text-white font-medium rounded-xl shadow-lg shadow-amber-600/20 transition-all flex items-center justify-center min-w-[160px]"
+                  className="w-full sm:w-auto px-8 py-3.5 bg-amber-600 hover:bg-amber-700 text-white font-medium rounded-xl shadow-lg shadow-amber-600/20 transition-all flex items-center justify-center min-w-[160px]"
                 >
                   Simpan Perubahan
                 </button>

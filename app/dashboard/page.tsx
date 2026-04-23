@@ -3,6 +3,7 @@ import { authOptions } from "../api/auth/[...nextauth]/route";
 import prisma from "../../lib/prisma";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import HeroCarouselClient from "./HeroCarouselClient";
 
 function getYouTubeId(url: string): string | null {
   try {
@@ -186,6 +187,14 @@ export default async function DashboardPage() {
     ),
   };
 
+  const carouselImages = [
+    { src: "/landing-page/631737903_17891967126423715_6807031068574707597_n..jpg", tag: "EKSKLUSIF", title: "Teknik Memoles Cincin Berlian Pudar" },
+    { src: "/landing-page/656353206_17897386137423715_5989968134986280728_n..jpg", tag: "TERPOPULER", title: "Cara Tepat Membersihkan Permata Berkerak" },
+    { src: "/landing-page/657349552_17898483897423715_2909239499681956677_n..jpg", tag: "TIPS & TRIK", title: "Menjaga Kilau Perhiasan Perak" },
+    { src: "/landing-page/657712290_17897621073423715_4552536375483700266_n..jpg", tag: "TUTORIAL", title: "Merawat Emas Tanpa Menggerus Gramasi" },
+    { src: "/landing-page/671129876_17900392704423715_6523539329292204971_n..jpg", tag: "STUDI KASUS", title: "Restorasi Total Cincin Antik Kusam" },
+  ];
+
   return (
     <div className="max-w-6xl mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-700 ease-out px-4 xl:px-0">
       <header className="space-y-3 pb-6 border-b border-stone-200 dark:border-stone-800">
@@ -196,6 +205,9 @@ export default async function DashboardPage() {
           Siap untuk mengembalikan kilau koleksi perhiasan berharga Anda hari ini? Mari jelajahi teknik restorasi eksklusif.
         </p>
       </header>
+
+      {/* Featured Carousel */}
+      <HeroCarouselClient images={carouselImages} />
 
       {/* Recently Viewed */}
       {recentlyViewedVideos.length > 0 && (
