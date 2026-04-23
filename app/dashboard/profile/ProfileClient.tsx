@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { updateProfileAction } from "./actions";
 
 type UserData = {
@@ -21,6 +22,7 @@ export default function ProfileClient({
   avatars: string[];
 }) {
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
   const [selectedAvatar, setSelectedAvatar] = useState<string>(user.avatar || "1.png");
   const [successMsg, setSuccessMsg] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
@@ -90,7 +92,7 @@ export default function ProfileClient({
                     src={`/avatar/${selectedAvatar}`} 
                     alt="Current Avatar" 
                     fill 
-                    className="object-cover"
+                    className="object-contain p-2"
                   />
                 </div>
               </div>
@@ -107,7 +109,7 @@ export default function ProfileClient({
                       src={`/avatar/${avatarFile}`} 
                       alt={`Avatar ${avatarFile}`} 
                       fill 
-                      className="object-cover"
+                      className="object-contain p-1"
                     />
                   </button>
                 ))}
@@ -158,11 +160,18 @@ export default function ProfileClient({
                 </div>
               </div>
 
-              <div className="pt-8 flex justify-end">
+              <div className="pt-8 flex gap-3 justify-end">
+                <button 
+                  type="button" 
+                  onClick={() => router.push("/dashboard")}
+                  className="px-6 py-3.5 bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-300 font-medium rounded-xl transition-all"
+                >
+                  Batal
+                </button>
                 <button 
                   type="submit" 
                   disabled={isPending}
-                  className="px-8 py-3.5 bg-amber-600 hover:bg-amber-700 text-white font-medium rounded-xl shadow-lg shadow-amber-600/20 transition-all flex items-center justify-center min-w-[200px]"
+                  className="px-8 py-3.5 bg-amber-600 hover:bg-amber-700 text-white font-medium rounded-xl shadow-lg shadow-amber-600/20 transition-all flex items-center justify-center min-w-[160px]"
                 >
                   Simpan Perubahan
                 </button>
