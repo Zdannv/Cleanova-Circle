@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/route";
 import prisma from "../../lib/prisma";
 import { revalidatePath } from "next/cache";
+import { sendConfirmationEmail } from "../../lib/mailer";
 
 async function verifyAdmin() {
   const session = await getServerSession(authOptions);
@@ -93,6 +94,7 @@ export async function createUserAction(formData: FormData) {
   await verifyAdmin();
 
   const name = formData.get("name") as string;
+  const email = formData.get("email") as string;
   const phone = formData.get("phone") as string;
   const password = formData.get("password") as string;
   const role = formData.get("role") as "USER" | "ADMIN";
@@ -101,11 +103,17 @@ export async function createUserAction(formData: FormData) {
     data: {
       id: `usr_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
       name,
+      email,
       phone,
       password,
       role
     }
   });
+
+  // Try sending the confirmation email
+  if (email) {
+    await sendConfirmationEmail({ name, email, phone, password });
+  }
 
   revalidatePath("/admin");
 }

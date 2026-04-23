@@ -21,6 +21,7 @@ type Category = {
 type User = {
   id: string;
   name: string;
+  email: string | null;
   phone: string;
   role: "USER" | "ADMIN";
   createdAt: Date;
@@ -370,6 +371,10 @@ export default function AdminClient({
                       <input type="text" id="userName" name="name" required className="w-full px-4 py-2.5 rounded-md border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors" placeholder="Nama Lengkap" />
                     </div>
                     <div className="space-y-1.5">
+                      <label htmlFor="userEmail" className="block text-sm font-medium text-gray-700">Email Utama</label>
+                      <input type="email" id="userEmail" name="email" required className="w-full px-4 py-2.5 rounded-md border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors" placeholder="nama@email.com" />
+                    </div>
+                    <div className="space-y-1.5">
                       <label htmlFor="userPhone" className="block text-sm font-medium text-gray-700">Nomor Telepon (ID Login)</label>
                       <input type="text" id="userPhone" name="phone" required className="w-full px-4 py-2.5 rounded-md border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors" placeholder="081xxx" />
                     </div>
@@ -413,6 +418,7 @@ export default function AdminClient({
                           <tr key={u.id} className="hover:bg-gray-50">
                             <td className="px-6 py-4">
                               <div className="text-sm font-medium text-gray-900">{u.name}</div>
+                              <div className="text-xs text-gray-500 mt-0.5">{u.email || "Tanpa Email"}</div>
                               <div className="text-xs font-mono text-gray-500 mt-0.5">{u.phone}</div>
                             </td>
                             <td className="px-6 py-4">
