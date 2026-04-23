@@ -23,12 +23,7 @@ export default function Home() {
               </span>
             </div>
             <div className="flex items-center space-x-6">
-              <Link 
-                href="/login"
-                className="hidden sm:inline-block text-sm font-medium tracking-widest uppercase text-stone-500 hover:text-amber-600 transition-colors dark:text-stone-400 dark:hover:text-amber-400"
-              >
-                Sudah Anggota?
-              </Link>
+
               <Link 
                 href="/login"
                 className="inline-flex items-center justify-center px-6 py-2.5 text-xs font-semibold tracking-widest uppercase text-white transition-all bg-stone-900 rounded-none border border-transparent shadow hover:bg-amber-600 dark:bg-white dark:text-stone-900 dark:hover:bg-amber-500 hover:shadow-lg hover:-translate-y-0.5"
