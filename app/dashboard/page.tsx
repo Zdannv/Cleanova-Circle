@@ -1,98 +1,8 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/route";
 import prisma from "../../lib/prisma";
-import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-
-export default async function DashboardPage() {
-  const session = await getServerSession(authOptions);
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  // Fetch Latest Videos securely
-  const latestVideos = await prisma.video.findMany({
-    orderBy: { createdAt: "desc" },
-    take: 6,
-  });
-
-  const productVideos = latestVideos.filter(v => v.category === "CLEANOVA_PRODUCT");
-  const diyVideos = latestVideos.filter(v => v.category === "DIY_HACKS");
-
-  return (
-    <div className="max-w-6xl mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-700 ease-out">
-      <header className="space-y-3">
-        <h1 className="text-3xl md:text-4xl font-serif text-stone-900 dark:text-white">
-          Selamat Datang, <span className="text-amber-600 dark:text-amber-500 italic">{session.user.name || "Member"}</span>!
-        </h1>
-        <p className="text-stone-500 dark:text-stone-400 text-lg font-light max-w-2xl">
-          Siap untuk mengembalikan kilau koleksi perhiasan berharga Anda hari ini? Mari jelajahi teknik restorasi eksklusif.
-        </p>
-      </header>
-
-      {latestVideos.length === 0 ? (
-        <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-3xl p-12 md:p-20 text-center shadow-xl shadow-stone-200/40 dark:shadow-black/20">
-          <div className="w-20 h-20 bg-amber-50 text-amber-600 dark:bg-stone-800 dark:text-amber-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
-            <svg className="w-10 h-10 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-              <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-          </div>
-          <h2 className="text-2xl md:text-3xl font-serif text-stone-900 dark:text-white mb-4">Video Belum Tersedia</h2>
-          <p className="text-stone-500 dark:text-stone-400 max-w-md mx-auto font-light leading-relaxed mb-8">
-            Tim pakar kami sedang mempersiapkan video materi eksklusif untuk Anda. Silakan periksa kembali dalam waktu dekat untuk menemukan panduan terbaru.
-          </p>
-        </div>
-      ) : (
-        <div className="space-y-16">
-          {/* DIY Hacks Section */}
-          {diyVideos.length > 0 && (
-            <section className="space-y-8">
-              <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-stone-200 dark:border-stone-800 pb-4">
-                <div>
-                  <h2 className="text-2xl font-serif text-stone-900 dark:text-white flex items-center gap-3">
-                    <span className="w-1.5 h-6 rounded-full bg-amber-500"></span>
-                    DIY Hacks & Tricks
-                  </h2>
-                  <p className="text-stone-500 dark:text-stone-400 text-sm mt-2 font-light">Trik rahasia menggunakan bahan rumahan.</p>
-                </div>
-                <Link href="/dashboard/videos?category=DIY_HACKS" className="text-sm font-medium uppercase tracking-widest text-amber-600 hover:text-amber-700 dark:text-amber-500 dark:hover:text-amber-400 group flex items-center gap-1">
-                  Lihat Semua <span className="group-hover:translate-x-1 transition-transform">&rarr;</span>
-                </Link>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                {diyVideos.map(renderVideoCard)}
-              </div>
-            </section>
-          )}
-
-          {/* Product Category Section */}
-          {productVideos.length > 0 && (
-            <section className="space-y-8">
-              <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-stone-200 dark:border-stone-800 pb-4">
-                 <div>
-                  <h2 className="text-2xl font-serif text-stone-900 dark:text-white flex items-center gap-3">
-                    <span className="w-1.5 h-6 rounded-full bg-stone-700 dark:bg-stone-500"></span>
-                    Rekomendasi Produk
-                  </h2>
-                  <p className="text-stone-500 dark:text-stone-400 text-sm mt-2 font-light">Panduan dosis dan ulasan peralatan premium.</p>
-                </div>
-                <Link href="/dashboard/videos?category=CLEANOVA_PRODUCT" className="text-sm font-medium uppercase tracking-widest text-amber-600 hover:text-amber-700 dark:text-amber-500 dark:hover:text-amber-400 group flex items-center gap-1">
-                  Lihat Semua <span className="group-hover:translate-x-1 transition-transform">&rarr;</span>
-                </Link>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                {productVideos.map(renderVideoCard)}
-              </div>
-            </section>
-          )}
-        </div>
-      )}
-    </div>
-  );
-}
 
 function getYouTubeId(url: string): string | null {
   try {
@@ -107,44 +17,240 @@ function getYouTubeId(url: string): string | null {
   return null;
 }
 
-function renderVideoCard(video: any) {
-  const youtubeId = getYouTubeId(video.url);
-  const thumbnailUrl = youtubeId ? `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg` : null;
+type VideoCardProps = {
+  id: string;
+  title: string;
+  description: string;
+  url: string;
+  category: string;
+  isCompleted?: boolean;
+  inProgress?: boolean;
+  likeCount?: number;
+  badge?: "completed" | "inprogress" | "new" | null;
+};
+
+function VideoCard({ id, title, description, url, category, isCompleted, inProgress, likeCount }: VideoCardProps) {
+  const youtubeId = getYouTubeId(url);
+  const thumbnailUrl = youtubeId ? `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg` : null;
 
   return (
-    <Link href={`/dashboard/videos/${video.id}`} key={video.id} className="group flex flex-col bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl overflow-hidden hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:-translate-y-1 dark:hover:shadow-[0_8px_30px_rgb(0,0,0,0.5)] transition-all duration-500">
+    <Link
+      href={`/dashboard/videos/${id}`}
+      className="group flex flex-col bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl overflow-hidden hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:-translate-y-1 dark:hover:shadow-[0_8px_30px_rgb(0,0,0,0.5)] transition-all duration-500 flex-shrink-0 w-72 md:w-80"
+    >
       <div className="relative aspect-video bg-stone-100 dark:bg-stone-800 overflow-hidden">
         {thumbnailUrl ? (
-          <img 
+          <img
             src={thumbnailUrl}
-            alt={video.title} 
+            alt={title}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
           />
         ) : (
           <div className="absolute inset-0 bg-gradient-to-br from-stone-200 to-stone-300 dark:from-stone-700 dark:to-stone-800" />
         )}
-        <div className="absolute inset-0 bg-stone-900/10 group-hover:bg-transparent transition-colors duration-500"></div>
+        <div className="absolute inset-0 bg-stone-900/10 group-hover:bg-transparent transition-colors duration-500" />
+
+        {/* Play overlay */}
         <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-          <div className="w-14 h-14 bg-white/95 dark:bg-stone-900/95 rounded-full flex items-center justify-center text-amber-600 dark:text-amber-500 shadow-xl shadow-black/20 backdrop-blur-md transform scale-50 group-hover:scale-100 transition-transform duration-500 ease-out">
+          <div className="w-14 h-14 bg-white/95 dark:bg-stone-900/95 rounded-full flex items-center justify-center text-amber-600 dark:text-amber-500 shadow-xl backdrop-blur-md transform scale-50 group-hover:scale-100 transition-transform duration-500 ease-out">
             <svg className="w-7 h-7 ml-1" fill="currentColor" viewBox="0 0 24 24">
               <path d="M8 5v14l11-7z" />
             </svg>
           </div>
         </div>
+
+        {/* Status Badge */}
+        {isCompleted ? (
+          <div className="absolute top-3 right-3 bg-emerald-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 backdrop-blur-sm bg-opacity-90">
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+            Selesai
+          </div>
+        ) : inProgress ? (
+          <div className="absolute top-3 right-3 bg-sky-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 backdrop-blur-sm bg-opacity-90">
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" />
+            </svg>
+            Ditonton
+          </div>
+        ) : null}
+
+        {/* Like count badge (for popular section) */}
+        {likeCount !== undefined && likeCount > 0 && (
+          <div className="absolute bottom-3 left-3 bg-black/60 text-white text-xs font-bold px-2.5 py-1 rounded-full flex items-center gap-1 backdrop-blur-sm">
+            <svg className="w-3.5 h-3.5 fill-rose-400" viewBox="0 0 24 24" stroke="none">
+              <path d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+            </svg>
+            {likeCount}
+          </div>
+        )}
       </div>
-      <div className="p-6 flex-1 flex flex-col">
-        <div className="flex items-center gap-2 mb-3">
+
+      <div className="p-5 flex-1 flex flex-col">
+        <div className="flex items-center gap-2 mb-2">
           <span className="text-[10px] font-bold uppercase tracking-widest text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/30 px-2.5 py-1 rounded-sm border border-amber-100 dark:border-amber-800/50">
-            {video.category === "DIY_HACKS" ? "DIY Hack" : "Produk Review"}
+            {category || "Uncategorized"}
           </span>
         </div>
-        <h3 className="font-serif font-medium text-lg text-stone-900 dark:text-white leading-snug mb-3 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors line-clamp-2">
-          {video.title}
+        <h3 className="font-serif font-medium text-base text-stone-900 dark:text-white leading-snug mb-2 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors line-clamp-2">
+          {title}
         </h3>
         <p className="text-sm text-stone-500 dark:text-stone-400 line-clamp-2 mt-auto font-light leading-relaxed">
-          {video.description}
+          {description}
         </p>
       </div>
     </Link>
+  );
+}
+
+function SectionRow({ title, icon, children, emptyMessage }: { title: string; icon: React.ReactNode; children: React.ReactNode; emptyMessage: string }) {
+  return (
+    <section className="space-y-4">
+      <div className="flex items-center gap-3">
+        <div className="text-amber-600 dark:text-amber-500">{icon}</div>
+        <h2 className="text-xl font-serif font-medium text-stone-900 dark:text-white">{title}</h2>
+      </div>
+      <div className="flex gap-5 overflow-x-auto pb-3 -mx-4 px-4 scroll-smooth snap-x snap-mandatory [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        {children}
+      </div>
+    </section>
+  );
+}
+
+export default async function DashboardPage() {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user) {
+    redirect("/login");
+  }
+
+  const userId = session.user.id as string;
+
+  const [videos, progressRecords] = await Promise.all([
+    prisma.video.findMany({ 
+      orderBy: { createdAt: "desc" },
+      include: { Category: true }
+    }),
+    prisma.progress.findMany({ where: { userId } }),
+  ]);
+
+  // Fallback aman — akan kosong jika model Like belum dikenali client
+  let popularData: { videoId: string; _count: { videoId: number } }[] = [];
+  try {
+    popularData = await (prisma as any).like.groupBy({
+      by: ["videoId"],
+      _count: { videoId: true },
+      orderBy: { _count: { videoId: "desc" } },
+      take: 10
+    });
+  } catch {
+    // Like model belum tersedia, lewati seksi Terpopuler
+  }
+
+  const progressMap = new Map(progressRecords.map(p => [p.videoId, p]));
+
+  // Recently viewed: videos the user has started (progress exists), sorted by most watchedSeconds desc
+  const recentlyViewedProgress = progressRecords
+    .filter(p => p.watchedSeconds > 0 || p.isCompleted)
+    .sort((a, b) => b.watchedSeconds - a.watchedSeconds)
+    .slice(0, 8);
+  const recentlyViewedVideoIds = new Set(recentlyViewedProgress.map(p => p.videoId));
+  const recentlyViewedVideos = videos.filter(v => recentlyViewedVideoIds.has(v.id));
+
+  // Recently added: latest 8 videos
+  const recentlyAdded = videos.slice(0, 8);
+
+  // Popular: top liked videos
+  const popularVideoIds = popularData.map(p => p.videoId);
+  const popularLikeMap = new Map(popularData.map(p => [p.videoId, p._count.videoId]));
+  const popularVideos = videos
+    .filter(v => popularVideoIds.includes(v.id))
+    .sort((a, b) => (popularLikeMap.get(b.id) ?? 0) - (popularLikeMap.get(a.id) ?? 0));
+
+  const icons = {
+    recent: (
+      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+      </svg>
+    ),
+    new: (
+      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+      </svg>
+    ),
+    popular: (
+      <svg className="w-6 h-6 fill-rose-400" viewBox="0 0 24 24" stroke="none">
+        <path d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+      </svg>
+    ),
+  };
+
+  return (
+    <div className="max-w-6xl mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-700 ease-out px-4 xl:px-0">
+      <header className="space-y-3 pb-6 border-b border-stone-200 dark:border-stone-800">
+        <h1 className="text-3xl md:text-4xl font-serif text-stone-900 dark:text-white">
+          Selamat Datang, <span className="text-amber-600 dark:text-amber-500 italic">{session.user.name || "Member"}</span>!
+        </h1>
+        <p className="text-stone-500 dark:text-stone-400 text-lg font-light max-w-2xl">
+          Siap untuk mengembalikan kilau koleksi perhiasan berharga Anda hari ini? Mari jelajahi teknik restorasi eksklusif.
+        </p>
+      </header>
+
+      {/* Recently Viewed */}
+      {recentlyViewedVideos.length > 0 && (
+        <SectionRow title="Terakhir Ditonton" icon={icons.recent} emptyMessage="">
+          {recentlyViewedVideos.map(video => {
+            const p = progressMap.get(video.id);
+            return (
+              <div key={video.id} className="snap-start">
+                <VideoCard
+                  id={video.id} title={video.title} description={video.description}
+                  url={video.url} category={video.Category?.name || ""}
+                  isCompleted={p?.isCompleted} inProgress={!p?.isCompleted && (p?.watchedSeconds ?? 0) > 0}
+                />
+              </div>
+            );
+          })}
+        </SectionRow>
+      )}
+
+      {/* Recently Added */}
+      <SectionRow title="Baru Ditambahkan" icon={icons.new} emptyMessage="Belum ada video.">
+        {recentlyAdded.length === 0 ? (
+          <p className="text-stone-400 dark:text-stone-500 text-sm py-6">Belum ada video tersedia.</p>
+        ) : recentlyAdded.map(video => {
+          const p = progressMap.get(video.id);
+          return (
+            <div key={video.id} className="snap-start">
+              <VideoCard
+                id={video.id} title={video.title} description={video.description}
+                url={video.url} category={video.Category?.name || ""}
+                isCompleted={p?.isCompleted} inProgress={!p?.isCompleted && (p?.watchedSeconds ?? 0) > 0}
+              />
+            </div>
+          );
+        })}
+      </SectionRow>
+
+      {/* Popular */}
+      <SectionRow title="Video Terpopuler" icon={icons.popular} emptyMessage="Belum ada video populer.">
+        {popularVideos.length === 0 ? (
+          <p className="text-stone-400 dark:text-stone-500 text-sm py-6">Belum ada video yang disukai. Jadilah yang pertama menyukai!</p>
+        ) : popularVideos.map(video => {
+          const p = progressMap.get(video.id);
+          return (
+            <div key={video.id} className="snap-start">
+              <VideoCard
+                id={video.id} title={video.title} description={video.description}
+                url={video.url} category={video.Category?.name || ""}
+                isCompleted={p?.isCompleted} inProgress={!p?.isCompleted && (p?.watchedSeconds ?? 0) > 0}
+                likeCount={popularLikeMap.get(video.id)}
+              />
+            </div>
+          );
+        })}
+      </SectionRow>
+    </div>
   );
 }

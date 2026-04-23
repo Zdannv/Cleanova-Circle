@@ -29,6 +29,7 @@ export type UserMinAggregateOutputType = {
   name: string | null
   email: string | null
   phone: string | null
+  password: string | null
   role: $Enums.Role | null
   createdAt: Date | null
 }
@@ -38,6 +39,7 @@ export type UserMaxAggregateOutputType = {
   name: string | null
   email: string | null
   phone: string | null
+  password: string | null
   role: $Enums.Role | null
   createdAt: Date | null
 }
@@ -47,6 +49,7 @@ export type UserCountAggregateOutputType = {
   name: number
   email: number
   phone: number
+  password: number
   role: number
   createdAt: number
   _all: number
@@ -58,6 +61,7 @@ export type UserMinAggregateInputType = {
   name?: true
   email?: true
   phone?: true
+  password?: true
   role?: true
   createdAt?: true
 }
@@ -67,6 +71,7 @@ export type UserMaxAggregateInputType = {
   name?: true
   email?: true
   phone?: true
+  password?: true
   role?: true
   createdAt?: true
 }
@@ -76,6 +81,7 @@ export type UserCountAggregateInputType = {
   name?: true
   email?: true
   phone?: true
+  password?: true
   role?: true
   createdAt?: true
   _all?: true
@@ -158,6 +164,7 @@ export type UserGroupByOutputType = {
   name: string
   email: string | null
   phone: string
+  password: string | null
   role: $Enums.Role
   createdAt: Date
   _count: UserCountAggregateOutputType | null
@@ -188,10 +195,12 @@ export type UserWhereInput = {
   name?: Prisma.StringFilter<"User"> | string
   email?: Prisma.StringNullableFilter<"User"> | string | null
   phone?: Prisma.StringFilter<"User"> | string
+  password?: Prisma.StringNullableFilter<"User"> | string | null
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   Bookmark?: Prisma.BookmarkListRelationFilter
   Comment?: Prisma.CommentListRelationFilter
+  Like?: Prisma.LikeListRelationFilter
   Note?: Prisma.NoteListRelationFilter
   Progress?: Prisma.ProgressListRelationFilter
 }
@@ -201,10 +210,12 @@ export type UserOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrder
+  password?: Prisma.SortOrderInput | Prisma.SortOrder
   role?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   Bookmark?: Prisma.BookmarkOrderByRelationAggregateInput
   Comment?: Prisma.CommentOrderByRelationAggregateInput
+  Like?: Prisma.LikeOrderByRelationAggregateInput
   Note?: Prisma.NoteOrderByRelationAggregateInput
   Progress?: Prisma.ProgressOrderByRelationAggregateInput
 }
@@ -217,10 +228,12 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   name?: Prisma.StringFilter<"User"> | string
+  password?: Prisma.StringNullableFilter<"User"> | string | null
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   Bookmark?: Prisma.BookmarkListRelationFilter
   Comment?: Prisma.CommentListRelationFilter
+  Like?: Prisma.LikeListRelationFilter
   Note?: Prisma.NoteListRelationFilter
   Progress?: Prisma.ProgressListRelationFilter
 }, "id" | "email" | "phone">
@@ -230,6 +243,7 @@ export type UserOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrder
+  password?: Prisma.SortOrderInput | Prisma.SortOrder
   role?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
@@ -245,6 +259,7 @@ export type UserScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"User"> | string
   email?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   phone?: Prisma.StringWithAggregatesFilter<"User"> | string
+  password?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   role?: Prisma.EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
@@ -254,10 +269,12 @@ export type UserCreateInput = {
   name: string
   email?: string | null
   phone: string
+  password?: string | null
   role?: $Enums.Role
   createdAt?: Date | string
   Bookmark?: Prisma.BookmarkCreateNestedManyWithoutUserInput
   Comment?: Prisma.CommentCreateNestedManyWithoutUserInput
+  Like?: Prisma.LikeCreateNestedManyWithoutUserInput
   Note?: Prisma.NoteCreateNestedManyWithoutUserInput
   Progress?: Prisma.ProgressCreateNestedManyWithoutUserInput
 }
@@ -267,10 +284,12 @@ export type UserUncheckedCreateInput = {
   name: string
   email?: string | null
   phone: string
+  password?: string | null
   role?: $Enums.Role
   createdAt?: Date | string
   Bookmark?: Prisma.BookmarkUncheckedCreateNestedManyWithoutUserInput
   Comment?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
+  Like?: Prisma.LikeUncheckedCreateNestedManyWithoutUserInput
   Note?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
   Progress?: Prisma.ProgressUncheckedCreateNestedManyWithoutUserInput
 }
@@ -280,10 +299,12 @@ export type UserUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   Bookmark?: Prisma.BookmarkUpdateManyWithoutUserNestedInput
   Comment?: Prisma.CommentUpdateManyWithoutUserNestedInput
+  Like?: Prisma.LikeUpdateManyWithoutUserNestedInput
   Note?: Prisma.NoteUpdateManyWithoutUserNestedInput
   Progress?: Prisma.ProgressUpdateManyWithoutUserNestedInput
 }
@@ -293,10 +314,12 @@ export type UserUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   Bookmark?: Prisma.BookmarkUncheckedUpdateManyWithoutUserNestedInput
   Comment?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
+  Like?: Prisma.LikeUncheckedUpdateManyWithoutUserNestedInput
   Note?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
   Progress?: Prisma.ProgressUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -306,6 +329,7 @@ export type UserCreateManyInput = {
   name: string
   email?: string | null
   phone: string
+  password?: string | null
   role?: $Enums.Role
   createdAt?: Date | string
 }
@@ -315,6 +339,7 @@ export type UserUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -324,6 +349,7 @@ export type UserUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -338,6 +364,7 @@ export type UserCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   phone?: Prisma.SortOrder
+  password?: Prisma.SortOrder
   role?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -347,6 +374,7 @@ export type UserMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   phone?: Prisma.SortOrder
+  password?: Prisma.SortOrder
   role?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -356,6 +384,7 @@ export type UserMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   phone?: Prisma.SortOrder
+  password?: Prisma.SortOrder
   role?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -372,6 +401,20 @@ export type UserUpdateOneRequiredWithoutBookmarkNestedInput = {
   upsert?: Prisma.UserUpsertWithoutBookmarkInput
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutBookmarkInput, Prisma.UserUpdateWithoutBookmarkInput>, Prisma.UserUncheckedUpdateWithoutBookmarkInput>
+}
+
+export type UserCreateNestedOneWithoutLikeInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutLikeInput, Prisma.UserUncheckedCreateWithoutLikeInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutLikeInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutLikeNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutLikeInput, Prisma.UserUncheckedCreateWithoutLikeInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutLikeInput
+  upsert?: Prisma.UserUpsertWithoutLikeInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutLikeInput, Prisma.UserUpdateWithoutLikeInput>, Prisma.UserUncheckedUpdateWithoutLikeInput>
 }
 
 export type UserCreateNestedOneWithoutCommentInput = {
@@ -425,9 +468,11 @@ export type UserCreateWithoutBookmarkInput = {
   name: string
   email?: string | null
   phone: string
+  password?: string | null
   role?: $Enums.Role
   createdAt?: Date | string
   Comment?: Prisma.CommentCreateNestedManyWithoutUserInput
+  Like?: Prisma.LikeCreateNestedManyWithoutUserInput
   Note?: Prisma.NoteCreateNestedManyWithoutUserInput
   Progress?: Prisma.ProgressCreateNestedManyWithoutUserInput
 }
@@ -437,9 +482,11 @@ export type UserUncheckedCreateWithoutBookmarkInput = {
   name: string
   email?: string | null
   phone: string
+  password?: string | null
   role?: $Enums.Role
   createdAt?: Date | string
   Comment?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
+  Like?: Prisma.LikeUncheckedCreateNestedManyWithoutUserInput
   Note?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
   Progress?: Prisma.ProgressUncheckedCreateNestedManyWithoutUserInput
 }
@@ -465,9 +512,11 @@ export type UserUpdateWithoutBookmarkInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   Comment?: Prisma.CommentUpdateManyWithoutUserNestedInput
+  Like?: Prisma.LikeUpdateManyWithoutUserNestedInput
   Note?: Prisma.NoteUpdateManyWithoutUserNestedInput
   Progress?: Prisma.ProgressUpdateManyWithoutUserNestedInput
 }
@@ -477,8 +526,82 @@ export type UserUncheckedUpdateWithoutBookmarkInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  Comment?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
+  Like?: Prisma.LikeUncheckedUpdateManyWithoutUserNestedInput
+  Note?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
+  Progress?: Prisma.ProgressUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutLikeInput = {
+  id: string
+  name: string
+  email?: string | null
+  phone: string
+  password?: string | null
+  role?: $Enums.Role
+  createdAt?: Date | string
+  Bookmark?: Prisma.BookmarkCreateNestedManyWithoutUserInput
+  Comment?: Prisma.CommentCreateNestedManyWithoutUserInput
+  Note?: Prisma.NoteCreateNestedManyWithoutUserInput
+  Progress?: Prisma.ProgressCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutLikeInput = {
+  id: string
+  name: string
+  email?: string | null
+  phone: string
+  password?: string | null
+  role?: $Enums.Role
+  createdAt?: Date | string
+  Bookmark?: Prisma.BookmarkUncheckedCreateNestedManyWithoutUserInput
+  Comment?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
+  Note?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
+  Progress?: Prisma.ProgressUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutLikeInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutLikeInput, Prisma.UserUncheckedCreateWithoutLikeInput>
+}
+
+export type UserUpsertWithoutLikeInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutLikeInput, Prisma.UserUncheckedUpdateWithoutLikeInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutLikeInput, Prisma.UserUncheckedCreateWithoutLikeInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutLikeInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutLikeInput, Prisma.UserUncheckedUpdateWithoutLikeInput>
+}
+
+export type UserUpdateWithoutLikeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  Bookmark?: Prisma.BookmarkUpdateManyWithoutUserNestedInput
+  Comment?: Prisma.CommentUpdateManyWithoutUserNestedInput
+  Note?: Prisma.NoteUpdateManyWithoutUserNestedInput
+  Progress?: Prisma.ProgressUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutLikeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  Bookmark?: Prisma.BookmarkUncheckedUpdateManyWithoutUserNestedInput
   Comment?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
   Note?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
   Progress?: Prisma.ProgressUncheckedUpdateManyWithoutUserNestedInput
@@ -489,9 +612,11 @@ export type UserCreateWithoutCommentInput = {
   name: string
   email?: string | null
   phone: string
+  password?: string | null
   role?: $Enums.Role
   createdAt?: Date | string
   Bookmark?: Prisma.BookmarkCreateNestedManyWithoutUserInput
+  Like?: Prisma.LikeCreateNestedManyWithoutUserInput
   Note?: Prisma.NoteCreateNestedManyWithoutUserInput
   Progress?: Prisma.ProgressCreateNestedManyWithoutUserInput
 }
@@ -501,9 +626,11 @@ export type UserUncheckedCreateWithoutCommentInput = {
   name: string
   email?: string | null
   phone: string
+  password?: string | null
   role?: $Enums.Role
   createdAt?: Date | string
   Bookmark?: Prisma.BookmarkUncheckedCreateNestedManyWithoutUserInput
+  Like?: Prisma.LikeUncheckedCreateNestedManyWithoutUserInput
   Note?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
   Progress?: Prisma.ProgressUncheckedCreateNestedManyWithoutUserInput
 }
@@ -529,9 +656,11 @@ export type UserUpdateWithoutCommentInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   Bookmark?: Prisma.BookmarkUpdateManyWithoutUserNestedInput
+  Like?: Prisma.LikeUpdateManyWithoutUserNestedInput
   Note?: Prisma.NoteUpdateManyWithoutUserNestedInput
   Progress?: Prisma.ProgressUpdateManyWithoutUserNestedInput
 }
@@ -541,9 +670,11 @@ export type UserUncheckedUpdateWithoutCommentInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   Bookmark?: Prisma.BookmarkUncheckedUpdateManyWithoutUserNestedInput
+  Like?: Prisma.LikeUncheckedUpdateManyWithoutUserNestedInput
   Note?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
   Progress?: Prisma.ProgressUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -553,10 +684,12 @@ export type UserCreateWithoutNoteInput = {
   name: string
   email?: string | null
   phone: string
+  password?: string | null
   role?: $Enums.Role
   createdAt?: Date | string
   Bookmark?: Prisma.BookmarkCreateNestedManyWithoutUserInput
   Comment?: Prisma.CommentCreateNestedManyWithoutUserInput
+  Like?: Prisma.LikeCreateNestedManyWithoutUserInput
   Progress?: Prisma.ProgressCreateNestedManyWithoutUserInput
 }
 
@@ -565,10 +698,12 @@ export type UserUncheckedCreateWithoutNoteInput = {
   name: string
   email?: string | null
   phone: string
+  password?: string | null
   role?: $Enums.Role
   createdAt?: Date | string
   Bookmark?: Prisma.BookmarkUncheckedCreateNestedManyWithoutUserInput
   Comment?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
+  Like?: Prisma.LikeUncheckedCreateNestedManyWithoutUserInput
   Progress?: Prisma.ProgressUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -593,10 +728,12 @@ export type UserUpdateWithoutNoteInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   Bookmark?: Prisma.BookmarkUpdateManyWithoutUserNestedInput
   Comment?: Prisma.CommentUpdateManyWithoutUserNestedInput
+  Like?: Prisma.LikeUpdateManyWithoutUserNestedInput
   Progress?: Prisma.ProgressUpdateManyWithoutUserNestedInput
 }
 
@@ -605,10 +742,12 @@ export type UserUncheckedUpdateWithoutNoteInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   Bookmark?: Prisma.BookmarkUncheckedUpdateManyWithoutUserNestedInput
   Comment?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
+  Like?: Prisma.LikeUncheckedUpdateManyWithoutUserNestedInput
   Progress?: Prisma.ProgressUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -617,10 +756,12 @@ export type UserCreateWithoutProgressInput = {
   name: string
   email?: string | null
   phone: string
+  password?: string | null
   role?: $Enums.Role
   createdAt?: Date | string
   Bookmark?: Prisma.BookmarkCreateNestedManyWithoutUserInput
   Comment?: Prisma.CommentCreateNestedManyWithoutUserInput
+  Like?: Prisma.LikeCreateNestedManyWithoutUserInput
   Note?: Prisma.NoteCreateNestedManyWithoutUserInput
 }
 
@@ -629,10 +770,12 @@ export type UserUncheckedCreateWithoutProgressInput = {
   name: string
   email?: string | null
   phone: string
+  password?: string | null
   role?: $Enums.Role
   createdAt?: Date | string
   Bookmark?: Prisma.BookmarkUncheckedCreateNestedManyWithoutUserInput
   Comment?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
+  Like?: Prisma.LikeUncheckedCreateNestedManyWithoutUserInput
   Note?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -657,10 +800,12 @@ export type UserUpdateWithoutProgressInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   Bookmark?: Prisma.BookmarkUpdateManyWithoutUserNestedInput
   Comment?: Prisma.CommentUpdateManyWithoutUserNestedInput
+  Like?: Prisma.LikeUpdateManyWithoutUserNestedInput
   Note?: Prisma.NoteUpdateManyWithoutUserNestedInput
 }
 
@@ -669,10 +814,12 @@ export type UserUncheckedUpdateWithoutProgressInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   Bookmark?: Prisma.BookmarkUncheckedUpdateManyWithoutUserNestedInput
   Comment?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
+  Like?: Prisma.LikeUncheckedUpdateManyWithoutUserNestedInput
   Note?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -684,6 +831,7 @@ export type UserUncheckedUpdateWithoutProgressInput = {
 export type UserCountOutputType = {
   Bookmark: number
   Comment: number
+  Like: number
   Note: number
   Progress: number
 }
@@ -691,6 +839,7 @@ export type UserCountOutputType = {
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   Bookmark?: boolean | UserCountOutputTypeCountBookmarkArgs
   Comment?: boolean | UserCountOutputTypeCountCommentArgs
+  Like?: boolean | UserCountOutputTypeCountLikeArgs
   Note?: boolean | UserCountOutputTypeCountNoteArgs
   Progress?: boolean | UserCountOutputTypeCountProgressArgs
 }
@@ -722,6 +871,13 @@ export type UserCountOutputTypeCountCommentArgs<ExtArgs extends runtime.Types.Ex
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountLikeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LikeWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountNoteArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.NoteWhereInput
 }
@@ -739,10 +895,12 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   name?: boolean
   email?: boolean
   phone?: boolean
+  password?: boolean
   role?: boolean
   createdAt?: boolean
   Bookmark?: boolean | Prisma.User$BookmarkArgs<ExtArgs>
   Comment?: boolean | Prisma.User$CommentArgs<ExtArgs>
+  Like?: boolean | Prisma.User$LikeArgs<ExtArgs>
   Note?: boolean | Prisma.User$NoteArgs<ExtArgs>
   Progress?: boolean | Prisma.User$ProgressArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -753,6 +911,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   name?: boolean
   email?: boolean
   phone?: boolean
+  password?: boolean
   role?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["user"]>
@@ -762,6 +921,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   name?: boolean
   email?: boolean
   phone?: boolean
+  password?: boolean
   role?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["user"]>
@@ -771,14 +931,16 @@ export type UserSelectScalar = {
   name?: boolean
   email?: boolean
   phone?: boolean
+  password?: boolean
   role?: boolean
   createdAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "phone" | "role" | "createdAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "phone" | "password" | "role" | "createdAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   Bookmark?: boolean | Prisma.User$BookmarkArgs<ExtArgs>
   Comment?: boolean | Prisma.User$CommentArgs<ExtArgs>
+  Like?: boolean | Prisma.User$LikeArgs<ExtArgs>
   Note?: boolean | Prisma.User$NoteArgs<ExtArgs>
   Progress?: boolean | Prisma.User$ProgressArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -791,6 +953,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   objects: {
     Bookmark: Prisma.$BookmarkPayload<ExtArgs>[]
     Comment: Prisma.$CommentPayload<ExtArgs>[]
+    Like: Prisma.$LikePayload<ExtArgs>[]
     Note: Prisma.$NotePayload<ExtArgs>[]
     Progress: Prisma.$ProgressPayload<ExtArgs>[]
   }
@@ -799,6 +962,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     name: string
     email: string | null
     phone: string
+    password: string | null
     role: $Enums.Role
     createdAt: Date
   }, ExtArgs["result"]["user"]>
@@ -1197,6 +1361,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   Bookmark<T extends Prisma.User$BookmarkArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$BookmarkArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BookmarkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   Comment<T extends Prisma.User$CommentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$CommentArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  Like<T extends Prisma.User$LikeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$LikeArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LikePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   Note<T extends Prisma.User$NoteArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$NoteArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   Progress<T extends Prisma.User$ProgressArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ProgressArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -1232,6 +1397,7 @@ export interface UserFieldRefs {
   readonly name: Prisma.FieldRef<"User", 'String'>
   readonly email: Prisma.FieldRef<"User", 'String'>
   readonly phone: Prisma.FieldRef<"User", 'String'>
+  readonly password: Prisma.FieldRef<"User", 'String'>
   readonly role: Prisma.FieldRef<"User", 'Role'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
 }
@@ -1672,6 +1838,30 @@ export type User$CommentArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   distinct?: Prisma.CommentScalarFieldEnum | Prisma.CommentScalarFieldEnum[]
+}
+
+/**
+ * User.Like
+ */
+export type User$LikeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Like
+   */
+  select?: Prisma.LikeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Like
+   */
+  omit?: Prisma.LikeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LikeInclude<ExtArgs> | null
+  where?: Prisma.LikeWhereInput
+  orderBy?: Prisma.LikeOrderByWithRelationInput | Prisma.LikeOrderByWithRelationInput[]
+  cursor?: Prisma.LikeWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LikeScalarFieldEnum | Prisma.LikeScalarFieldEnum[]
 }
 
 /**

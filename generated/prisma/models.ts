@@ -9,9 +9,11 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/Bookmark'
+export type * from './models/Like'
 export type * from './models/Comment'
 export type * from './models/Note'
 export type * from './models/Progress'
 export type * from './models/User'
 export type * from './models/Video'
+export type * from './models/Category'
 export type * from './commonInputTypes'

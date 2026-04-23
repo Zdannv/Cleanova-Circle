@@ -167,23 +167,6 @@ export type EnumRoleWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumRoleFilter<$PrismaModel>
 }
 
-export type EnumVideoCategoryFilter<$PrismaModel = never> = {
-  equals?: $Enums.VideoCategory | Prisma.EnumVideoCategoryFieldRefInput<$PrismaModel>
-  in?: $Enums.VideoCategory[] | Prisma.ListEnumVideoCategoryFieldRefInput<$PrismaModel>
-  notIn?: $Enums.VideoCategory[] | Prisma.ListEnumVideoCategoryFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumVideoCategoryFilter<$PrismaModel> | $Enums.VideoCategory
-}
-
-export type EnumVideoCategoryWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.VideoCategory | Prisma.EnumVideoCategoryFieldRefInput<$PrismaModel>
-  in?: $Enums.VideoCategory[] | Prisma.ListEnumVideoCategoryFieldRefInput<$PrismaModel>
-  notIn?: $Enums.VideoCategory[] | Prisma.ListEnumVideoCategoryFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumVideoCategoryWithAggregatesFilter<$PrismaModel> | $Enums.VideoCategory
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumVideoCategoryFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumVideoCategoryFilter<$PrismaModel>
-}
-
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -348,23 +331,6 @@ export type NestedEnumRoleWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumRoleFilter<$PrismaModel>
   _max?: Prisma.NestedEnumRoleFilter<$PrismaModel>
-}
-
-export type NestedEnumVideoCategoryFilter<$PrismaModel = never> = {
-  equals?: $Enums.VideoCategory | Prisma.EnumVideoCategoryFieldRefInput<$PrismaModel>
-  in?: $Enums.VideoCategory[] | Prisma.ListEnumVideoCategoryFieldRefInput<$PrismaModel>
-  notIn?: $Enums.VideoCategory[] | Prisma.ListEnumVideoCategoryFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumVideoCategoryFilter<$PrismaModel> | $Enums.VideoCategory
-}
-
-export type NestedEnumVideoCategoryWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.VideoCategory | Prisma.EnumVideoCategoryFieldRefInput<$PrismaModel>
-  in?: $Enums.VideoCategory[] | Prisma.ListEnumVideoCategoryFieldRefInput<$PrismaModel>
-  notIn?: $Enums.VideoCategory[] | Prisma.ListEnumVideoCategoryFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumVideoCategoryWithAggregatesFilter<$PrismaModel> | $Enums.VideoCategory
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumVideoCategoryFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumVideoCategoryFilter<$PrismaModel>
 }
 
 

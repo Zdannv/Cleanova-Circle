@@ -18,7 +18,7 @@ export async function addVideoAction(formData: FormData) {
   const title = formData.get("title") as string;
   const description = formData.get("description") as string;
   const url = formData.get("url") as string;
-  const category = formData.get("category") as "CLEANOVA_PRODUCT" | "DIY_HACKS";
+  const categoryId = formData.get("categoryId") as string;
   const toolsString = formData.get("toolsNeeded") as string;
 
   const toolsNeeded = toolsString
@@ -31,7 +31,7 @@ export async function addVideoAction(formData: FormData) {
       title,
       description,
       url,
-      category,
+      categoryId,
       toolsNeeded,
     },
   });
@@ -46,7 +46,7 @@ export async function updateVideoAction(id: string, formData: FormData) {
   const title = formData.get("title") as string;
   const description = formData.get("description") as string;
   const url = formData.get("url") as string;
-  const category = formData.get("category") as "CLEANOVA_PRODUCT" | "DIY_HACKS";
+  const categoryId = formData.get("categoryId") as string;
   const toolsString = formData.get("toolsNeeded") as string;
 
   const toolsNeeded = toolsString
@@ -59,7 +59,7 @@ export async function updateVideoAction(id: string, formData: FormData) {
       title,
       description,
       url,
-      category,
+      categoryId,
       toolsNeeded,
     },
   });
@@ -75,4 +75,49 @@ export async function deleteVideoAction(id: string) {
   
   revalidatePath("/admin");
   revalidatePath("/dashboard");
+}
+
+export async function createCategoryAction(name: string) {
+  await verifyAdmin();
+  await prisma.category.create({ data: { name } });
+  revalidatePath("/admin");
+}
+
+export async function deleteCategoryAction(id: string) {
+  await verifyAdmin();
+  await prisma.category.delete({ where: { id } });
+  revalidatePath("/admin");
+}
+
+export async function createUserAction(formData: FormData) {
+  await verifyAdmin();
+
+  const name = formData.get("name") as string;
+  const phone = formData.get("phone") as string;
+  const password = formData.get("password") as string;
+  const role = formData.get("role") as "USER" | "ADMIN";
+
+  await prisma.user.create({
+    data: {
+      id: `usr_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+      name,
+      phone,
+      password,
+      role
+    }
+  });
+
+  revalidatePath("/admin");
+}
+
+export async function deleteUserAction(id: string) {
+  await verifyAdmin();
+
+  const session = await getServerSession(authOptions);
+  if (session?.user?.id === id) {
+    throw new Error("Cannot delete own admin account");
+  }
+
+  await prisma.user.delete({ where: { id } });
+  revalidatePath("/admin");
 }

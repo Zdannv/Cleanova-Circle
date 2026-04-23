@@ -52,11 +52,13 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   Bookmark: 'Bookmark',
+  Like: 'Like',
   Comment: 'Comment',
   Note: 'Note',
   Progress: 'Progress',
   User: 'User',
-  Video: 'Video'
+  Video: 'Video',
+  Category: 'Category'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -83,6 +85,16 @@ export const BookmarkScalarFieldEnum = {
 } as const
 
 export type BookmarkScalarFieldEnum = (typeof BookmarkScalarFieldEnum)[keyof typeof BookmarkScalarFieldEnum]
+
+
+export const LikeScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  videoId: 'videoId',
+  createdAt: 'createdAt'
+} as const
+
+export type LikeScalarFieldEnum = (typeof LikeScalarFieldEnum)[keyof typeof LikeScalarFieldEnum]
 
 
 export const CommentScalarFieldEnum = {
@@ -125,6 +137,7 @@ export const UserScalarFieldEnum = {
   name: 'name',
   email: 'email',
   phone: 'phone',
+  password: 'password',
   role: 'role',
   createdAt: 'createdAt'
 } as const
@@ -137,12 +150,21 @@ export const VideoScalarFieldEnum = {
   title: 'title',
   description: 'description',
   url: 'url',
-  category: 'category',
+  categoryId: 'categoryId',
   toolsNeeded: 'toolsNeeded',
   createdAt: 'createdAt'
 } as const
 
 export type VideoScalarFieldEnum = (typeof VideoScalarFieldEnum)[keyof typeof VideoScalarFieldEnum]
+
+
+export const CategoryScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  createdAt: 'createdAt'
+} as const
+
+export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
 
 
 export const SortOrder = {

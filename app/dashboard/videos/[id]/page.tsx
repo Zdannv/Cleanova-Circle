@@ -16,10 +16,36 @@ export default async function VideoPage({ params }: { params: Promise<{ id: stri
   // Next.js 15+ (and Turbopack 16) requires awaiting the dynamic params
   const { id } = await params;
 
-  // 2. Fetch the specific video
-  const video = await prisma.video.findUnique({
-    where: { id }
-  });
+  // 2. Fetch the specific video, notes, progress, bookmark, and comments
+  const [video, notes, progress, bookmark, comments, likeCount, userLike] = await Promise.all([
+    prisma.video.findUnique({
+      where: { id },
+      include: { Category: true }
+    }),
+    prisma.note.findMany({
+      where: { videoId: id, userId: session.user.id },
+      orderBy: { createdAt: 'desc' }
+    }),
+    prisma.progress.findFirst({
+      where: { videoId: id, userId: session.user.id }
+    }),
+    prisma.bookmark.findFirst({
+      where: { videoId: id, userId: session.user.id }
+    }),
+    prisma.comment.findMany({
+      where: { videoId: id },
+      include: {
+        User: {
+          select: { name: true }
+        }
+      },
+      orderBy: { createdAt: 'desc' }
+    }),
+    prisma.like.count({ where: { videoId: id } }),
+    prisma.like.findUnique({
+      where: { userId_videoId: { userId: session.user.id as string, videoId: id } }
+    })
+  ]);
 
   // 3. Handle Not Found Gracefully
   if (!video) {
@@ -47,5 +73,17 @@ export default async function VideoPage({ params }: { params: Promise<{ id: stri
     );
   }
 
-  return <VideoPlayerClient video={video} />;
+  return (
+    <VideoPlayerClient 
+      video={video} 
+      initialNotes={notes} 
+      initialProgress={progress?.isCompleted || false}
+      initialWatchedSeconds={progress?.watchedSeconds || 0}
+      userId={session.user.id} 
+      isBookmarked={!!bookmark}
+      initialComments={comments}
+      initialLikeCount={likeCount}
+      isLiked={!!userLike}
+    />
+  );
 }

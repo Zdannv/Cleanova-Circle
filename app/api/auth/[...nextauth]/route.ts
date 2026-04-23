@@ -15,12 +15,6 @@ export const authOptions: NextAuthOptions = {
           throw new Error("Phone and Password are required");
         }
 
-        // Validate the Temporary Password
-        const validPassword = process.env.TEMP_PASSWORD || "cleanova2026";
-        if (credentials.password !== validPassword) {
-          throw new Error("Invalid password");
-        }
-
         const user = await prisma.user.findUnique({
           where: { phone: credentials.phone }
         });
@@ -28,6 +22,20 @@ export const authOptions: NextAuthOptions = {
         if (!user) {
           throw new Error("User not found");
         }
+
+        // Validate Password 
+        if (user.password) {
+          if (credentials.password !== user.password) {
+            throw new Error("Invalid password");
+          }
+        } else {
+          const validPassword = process.env.TEMP_PASSWORD || "cleanova2026";
+          if (credentials.password !== validPassword) {
+            throw new Error("Invalid password");
+          }
+        }
+
+
 
         return {
           id: user.id,

@@ -15,11 +15,3 @@ export const Role = {
 } as const
 
 export type Role = (typeof Role)[keyof typeof Role]
-
-
-export const VideoCategory = {
-  CLEANOVA_PRODUCT: 'CLEANOVA_PRODUCT',
-  DIY_HACKS: 'DIY_HACKS'
-} as const
-
-export type VideoCategory = (typeof VideoCategory)[keyof typeof VideoCategory]

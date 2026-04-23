@@ -16,6 +16,17 @@ model Bookmark {
   Video     Video    @relation(fields: [videoId], references: [id], onDelete: Cascade)
 }
 
+model Like {
+  id        String   @id @default(cuid())
+  userId    String
+  videoId   String
+  createdAt DateTime @default(now())
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Video     Video    @relation(fields: [videoId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, videoId])
+}
+
 model Comment {
   id            String    @id
   videoId       String
@@ -55,10 +66,12 @@ model User {
   name      String
   email     String?    @unique
   phone     String     @unique
+  password  String?
   role      Role       @default(USER)
   createdAt DateTime   @default(now())
   Bookmark  Bookmark[]
   Comment   Comment[]
+  Like      Like[]
   Note      Note[]
   Progress  Progress[]
 }
@@ -68,13 +81,22 @@ model Video {
   title       String
   description String
   url         String
-  category    VideoCategory
+  categoryId  String?
   toolsNeeded String[]      @default([])
   createdAt   DateTime      @default(now())
   Bookmark    Bookmark[]
+  Category    Category?     @relation(fields: [categoryId], references: [id])
   Comment     Comment[]
+  Like        Like[]
   Note        Note[]
   Progress    Progress[]
+}
+
+model Category {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  videos    Video[]
 }
 
 enum Role {
@@ -82,7 +104,4 @@ enum Role {
   USER
 }
 
-enum VideoCategory {
-  CLEANOVA_PRODUCT
-  DIY_HACKS
-}
+
