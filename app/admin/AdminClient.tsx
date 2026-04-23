@@ -171,19 +171,22 @@ export default function AdminClient({
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col min-w-0 overflow-y-auto">
-        <header className="bg-white border-b border-gray-200 px-8 py-4 flex justify-between items-center sticky top-0 z-10 shrink-0">
-          <h2 className="text-lg font-semibold text-gray-800">
-            {activeTab === "VIDEOS" && "Manajemen Konten Video"}
-            {activeTab === "CATEGORIES" && "Pengaturan Kategori"}
-            {activeTab === "USERS" && "Pusat Akun Pengguna"}
-          </h2>
-          <div className="flex items-center gap-3">
-            <span className="text-sm font-medium text-gray-600 bg-gray-100 px-3 py-1.5 rounded-full">Admin: {user.name}</span>
+      <main className="flex-1 flex flex-col min-w-0 overflow-y-auto pb-20 md:pb-0">
+        <header className="bg-white border-b border-gray-200 px-4 md:px-8 py-4 flex flex-col md:flex-row justify-between items-start md:items-center sticky top-0 z-10 shrink-0 gap-3 md:gap-0">
+          <div>
+            <h1 className="md:hidden text-lg font-bold tracking-widest text-gray-900 mb-1">CMS ADMIN</h1>
+            <h2 className="text-md md:text-lg font-semibold text-gray-500 md:text-gray-800">
+              {activeTab === "VIDEOS" && "Manajemen Konten Video"}
+              {activeTab === "CATEGORIES" && "Pengaturan Kategori"}
+              {activeTab === "USERS" && "Pusat Akun Pengguna"}
+            </h2>
+          </div>
+          <div className="flex items-center gap-3 self-end md:self-auto">
+            <span className="text-xs md:text-sm font-medium text-gray-600 bg-gray-100 px-3 py-1.5 rounded-full ring-1 ring-gray-200">Admin: {user.name}</span>
           </div>
         </header>
 
-        <div className="p-8 space-y-8 max-w-6xl mx-auto w-full relative">
+        <div className="p-4 md:p-8 space-y-8 max-w-6xl mx-auto w-full relative">
           
           {isPending && (
             <div className="absolute inset-0 bg-white/50 backdrop-blur-sm z-50 flex items-start justify-center pt-20">
@@ -446,7 +449,27 @@ export default function AdminClient({
           )}
 
         </div>
-      </main>
+	      </main>
+
+      {/* Mobile Navigation */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-gray-900 text-white flex justify-around p-2 z-50 border-t border-gray-800 pb-[calc(0.5rem+env(safe-area-inset-bottom))]">
+        <button onClick={() => setActiveTab("VIDEOS")} className={`flex flex-col items-center p-2 rounded-lg ${activeTab === 'VIDEOS' ? 'text-blue-400 bg-gray-800' : 'text-gray-400 hover:text-gray-200'}`}>
+          <svg className="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+          <span className="text-[10px] font-medium tracking-wide">Video</span>
+        </button>
+        <button onClick={() => setActiveTab("CATEGORIES")} className={`flex flex-col items-center p-2 rounded-lg ${activeTab === 'CATEGORIES' ? 'text-blue-400 bg-gray-800' : 'text-gray-400 hover:text-gray-200'}`}>
+          <svg className="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" /></svg>
+          <span className="text-[10px] font-medium tracking-wide">Kategori</span>
+        </button>
+        <button onClick={() => setActiveTab("USERS")} className={`flex flex-col items-center p-2 rounded-lg ${activeTab === 'USERS' ? 'text-blue-400 bg-gray-800' : 'text-gray-400 hover:text-gray-200'}`}>
+          <svg className="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+          <span className="text-[10px] font-medium tracking-wide">Pengguna</span>
+        </button>
+        <Link href="/dashboard" className="flex flex-col items-center p-2 rounded-lg text-rose-400 hover:text-rose-300">
+          <svg className="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+          <span className="text-[10px] font-medium tracking-wide">Dashboard</span>
+        </Link>
+      </nav>
     </div>
   );
 }

@@ -2,6 +2,7 @@
 
 import { useState, useTransition, useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { 
   addNoteAction, 
   deleteNoteAction, 
@@ -35,8 +36,10 @@ type Comment = {
   content: string;
   createdAt: Date;
   userId: string;
+  parentId: string | null;
   User: {
     name: string;
+    avatar: string | null;
   };
 };
 
@@ -80,6 +83,8 @@ export default function VideoPlayerClient({
   const [optimisticProgress, setOptimisticProgress] = useState(initialProgress);
   const [optimisticBookmark, setOptimisticBookmark] = useState(isBookmarked);
   const [newComment, setNewComment] = useState("");
+  const [replyingTo, setReplyingTo] = useState<string | null>(null);
+  const [replyContent, setReplyContent] = useState("");
   const [optimisticLike, setOptimisticLike] = useState(isLiked);
   const [optimisticLikeCount, setOptimisticLikeCount] = useState(initialLikeCount);
   const playerRef = useRef<any>(null);
@@ -206,18 +211,30 @@ export default function VideoPlayerClient({
     });
   };
 
-  const handleAddComment = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newComment.trim()) return;
-    const text = newComment;
-    setNewComment("");
+  const submitComment = (content: string, parentId?: string) => {
+    if (!content.trim()) return;
     startTransition(async () => {
       try {
-        await addCommentAction(video.id, text);
+        await addCommentAction(video.id, content, parentId);
+        if (!parentId) setNewComment("");
+        else {
+          setReplyContent("");
+          setReplyingTo(null);
+        }
       } catch (err) {
         console.error("Failed to add comment", err);
       }
     });
+  };
+
+  const handleAddComment = (e: React.FormEvent) => {
+    e.preventDefault();
+    submitComment(newComment);
+  };
+
+  const handleAddReply = (e: React.FormEvent, parentId: string) => {
+    e.preventDefault();
+    submitComment(replyContent, parentId);
   };
 
   const handleDeleteComment = (commentId: string) => {
@@ -231,6 +248,97 @@ export default function VideoPlayerClient({
       }
     });
   };
+
+  const topLevelComments = initialComments.filter(c => !c.parentId);
+  const repliesMap = initialComments.reduce((acc, c) => {
+    if (c.parentId) {
+      if (!acc[c.parentId]) acc[c.parentId] = [];
+      acc[c.parentId].unshift(c);
+    }
+    return acc;
+  }, {} as Record<string, typeof initialComments>);
+
+  const renderCommentContent = (comment: Comment, isReply = false) => (
+    <div key={comment.id} className={`flex gap-4 p-5 ${isReply ? 'mt-3 ml-6 md:ml-12 bg-stone-50/80 dark:bg-stone-800/30' : 'bg-white dark:bg-stone-900 shadow-sm'} rounded-2xl border border-stone-100 dark:border-stone-800 relative group`}>
+       <div className="w-10 h-10 rounded-full bg-stone-200 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 flex items-center justify-center text-stone-600 dark:text-stone-300 font-bold uppercase shrink-0 overflow-hidden relative shadow-sm">
+          {comment.User.avatar ? (
+             <Image src={`/avatar/${comment.User.avatar}`} alt={comment.User.name} fill className="object-contain p-0.5 bg-white dark:bg-stone-800" sizes="40px" />
+          ) : (
+             comment.User.name.charAt(0)
+          )}
+       </div>
+       <div className="flex-1 space-y-1.5 min-w-0">
+          <div className="flex items-baseline justify-between gap-2">
+             <h4 className="font-medium text-stone-900 dark:text-stone-100 truncate">{comment.User.name}</h4>
+             <span className="text-xs text-stone-400 dark:text-stone-500 whitespace-nowrap">
+                {new Date(comment.createdAt).toLocaleDateString("id-ID", { day: 'numeric', month: 'long', year: 'numeric' })}
+             </span>
+          </div>
+          <p className="text-stone-600 dark:text-stone-300 whitespace-pre-wrap break-words leading-relaxed text-sm">
+             {comment.content}
+          </p>
+          
+          <div className="flex gap-4 pt-2">
+            {!isReply && (
+              <button
+                onClick={() => {
+                  setReplyingTo(replyingTo === comment.id ? null : comment.id);
+                  setReplyContent("");
+                }}
+                className="text-xs font-medium text-stone-500 hover:text-amber-600 dark:text-stone-400 dark:hover:text-amber-500 transition-colors"
+                title="Beri komentar balasan"
+              >
+                {replyingTo === comment.id ? "Batal Balas" : "Balas"}
+              </button>
+            )}
+          </div>
+
+          {replyingTo === comment.id && !isReply && (
+            <form onSubmit={e => handleAddReply(e, comment.id)} className="mt-4 animate-in fade-in slide-in-from-top-2 duration-300">
+              <div className="flex flex-col gap-2">
+                <textarea
+                  className="w-full bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-xl p-3 text-stone-800 dark:text-stone-200 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-amber-500/50 resize-none min-h-[80px] shadow-sm text-sm"
+                  placeholder={`Membalas ${comment.User.name}...`}
+                  value={replyContent}
+                  onChange={e => setReplyContent(e.target.value)}
+                  disabled={isPending}
+                  autoFocus
+                />
+                <div className="flex justify-end gap-2">
+                  <button 
+                    type="button" 
+                    onClick={() => setReplyingTo(null)}
+                    className="py-2 px-4 bg-stone-100 hover:bg-stone-200 text-stone-600 dark:bg-stone-800 dark:hover:bg-stone-700 dark:text-stone-300 text-xs font-medium rounded-lg transition-colors"
+                  >
+                    Batal
+                  </button>
+                  <button 
+                    type="submit" 
+                    disabled={!replyContent.trim() || isPending}
+                    className="py-2 px-4 bg-amber-600 hover:bg-amber-700 text-white text-xs font-medium rounded-lg shadow shadow-amber-600/20 transition-all disabled:opacity-50"
+                  >
+                    {isPending ? 'Mengirim...' : 'Kirim Balasan'}
+                  </button>
+                </div>
+              </div>
+            </form>
+          )}
+       </div>
+       
+       {userId === comment.userId && (
+          <div className="absolute top-4 right-4 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
+             <button
+               onClick={() => handleDeleteComment(comment.id)}
+               disabled={isPending}
+               className="text-stone-400 hover:text-red-500 text-sm flex items-center gap-1 bg-white/90 dark:bg-stone-900/90 py-1 px-2 rounded-md border border-stone-100 dark:border-stone-800 backdrop-blur-sm"
+               title="Hapus Komentar"
+             >
+                Hapus
+             </button>
+          </div>
+       )}
+    </div>
+ );
 
   return (
     <div className="max-w-6xl mx-auto py-6 animate-in fade-in zoom-in-95 duration-500 ease-out px-4 xl:px-0">
@@ -484,39 +592,19 @@ export default function VideoPlayerClient({
           </form>
 
           <div className="space-y-6">
-             {initialComments.length === 0 ? (
+             {topLevelComments.length === 0 ? (
                 <div className="text-center py-10 border-2 border-dashed border-stone-200 dark:border-stone-800 rounded-2xl">
                    <p className="text-stone-500 dark:text-stone-400">Jadilah yang pertama untuk berdiskusi!</p>
                 </div>
              ) : (
-                initialComments.map((comment) => (
-                   <div key={comment.id} className="flex gap-4 p-5 bg-white dark:bg-stone-900 rounded-2xl border border-stone-100 dark:border-stone-800 shadow-sm relative group">
-                      <div className="w-10 h-10 rounded-full bg-stone-200 dark:bg-stone-800 flex items-center justify-center text-stone-600 dark:text-stone-300 font-bold uppercase shrink-0">
-                         {comment.User.name.charAt(0)}
-                      </div>
-                      <div className="flex-1 space-y-1.5 min-w-0">
-                         <div className="flex items-baseline justify-between gap-2">
-                            <h4 className="font-medium text-stone-900 dark:text-stone-100 truncate">{comment.User.name}</h4>
-                            <span className="text-xs text-stone-400 dark:text-stone-500 whitespace-nowrap">
-                               {new Date(comment.createdAt).toLocaleDateString("id-ID", { day: 'numeric', month: 'long', year: 'numeric' })}
-                            </span>
-                         </div>
-                         <p className="text-stone-600 dark:text-stone-300 whitespace-pre-wrap break-words leading-relaxed text-sm">
-                            {comment.content}
-                         </p>
-                      </div>
+                topLevelComments.map((comment) => (
+                   <div key={`thread-${comment.id}`}>
+                      {renderCommentContent(comment, false)}
                       
-                      {userId === comment.userId && (
-                         <div className="absolute top-4 right-4 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
-                            <button
-                              onClick={() => handleDeleteComment(comment.id)}
-                              disabled={isPending}
-                              className="text-stone-400 hover:text-red-500 text-sm flex items-center gap-1 bg-white/90 dark:bg-stone-900/90 py-1 px-2 rounded-md border border-stone-100 dark:border-stone-800 backdrop-blur-sm"
-                              title="Hapus Komentar"
-                            >
-                               Hapus
-                            </button>
-                         </div>
+                      {repliesMap[comment.id] && repliesMap[comment.id].length > 0 && (
+                        <div className="space-y-1">
+                          {repliesMap[comment.id].map(reply => renderCommentContent(reply, true))}
+                        </div>
                       )}
                    </div>
                 ))

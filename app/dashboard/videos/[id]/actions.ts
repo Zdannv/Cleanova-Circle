@@ -132,7 +132,7 @@ export async function toggleBookmarkAction(videoId: string) {
   revalidatePath(`/dashboard/videos/${videoId}`);
 }
 
-export async function addCommentAction(videoId: string, content: string) {
+export async function addCommentAction(videoId: string, content: string, parentId?: string) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) throw new Error("Unauthorized");
 
@@ -141,7 +141,8 @@ export async function addCommentAction(videoId: string, content: string) {
       id: randomUUID(),
       userId: session.user.id as string,
       videoId,
-      content
+      content,
+      parentId: parentId || null,
     }
   });
 

@@ -36,7 +36,7 @@ export default async function VideoPage({ params }: { params: Promise<{ id: stri
       where: { videoId: id },
       include: {
         User: {
-          select: { name: true }
+          select: { name: true, avatar: true }
         }
       },
       orderBy: { createdAt: 'desc' }
