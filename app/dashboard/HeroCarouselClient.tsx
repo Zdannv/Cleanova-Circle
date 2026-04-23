@@ -1,8 +1,9 @@
 "use client";
 
 import { useRef } from "react";
+import Link from "next/link";
 
-type CarouselImage = { src: string; tag: string; title: string; };
+type CarouselImage = { src: string; tag: string; title: string; slug?: string; };
 
 export default function HeroCarouselClient({ images }: { images: CarouselImage[] }) {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -45,17 +46,24 @@ export default function HeroCarouselClient({ images }: { images: CarouselImage[]
         ref={scrollRef}
         className="flex gap-4 md:gap-6 overflow-x-auto pb-6 snap-x snap-mandatory scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
-        {images.map((item, idx) => (
-          <div key={idx} className="snap-center sm:snap-start shrink-0 relative w-[85vw] sm:w-[500px] md:w-[650px] h-64 md:h-[350px] rounded-3xl overflow-hidden shadow-sm border border-stone-200 dark:border-stone-800 group/item">
-            <img src={item.src} className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover/item:scale-105" alt={item.title} />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-            <div className="absolute bottom-6 left-6 right-6 md:bottom-8 md:left-8 md:right-8">
-              <span className="inline-block px-3 py-1 bg-amber-500/90 backdrop-blur-sm text-white text-[10px] md:text-xs font-bold tracking-wider rounded-md mb-3">{item.tag}</span>
-              <h3 className="text-white font-serif text-xl md:text-3xl font-medium leading-tight max-w-lg mb-2">{item.title}</h3>
-              <p className="text-stone-300 text-sm hidden md:block">Pelajari rahasia dan trik jitu persembahan instruktur profesional Cleanova Circle khusus untuk Anda di sini.</p>
+        {images.map((item, idx) => {
+          const content = (
+            <div className={`snap-center sm:snap-start shrink-0 relative w-[85vw] sm:w-[500px] md:w-[650px] h-64 md:h-[350px] rounded-3xl overflow-hidden shadow-sm border border-stone-200 dark:border-stone-800 group/item ${item.slug ? 'cursor-pointer' : ''}`}>
+              <img src={item.src} className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover/item:scale-105" alt={item.title} />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+              <div className="absolute bottom-6 left-6 right-6 md:bottom-8 md:left-8 md:right-8">
+                <span className="inline-block px-3 py-1 bg-amber-500/90 backdrop-blur-sm text-white text-[10px] md:text-xs font-bold tracking-wider rounded-md mb-3">{item.tag}</span>
+                <h3 className="text-white font-serif text-xl md:text-3xl font-medium leading-tight max-w-lg mb-2">{item.title}</h3>
+                <p className="text-stone-300 text-sm hidden md:block">Pelajari rahasia dan trik jitu persembahan instruktur profesional Cleanova Circle khusus untuk Anda di sini.</p>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+
+          if (item.slug) {
+            return <Link key={idx} href={`/dashboard/articles/${item.slug}`}>{content}</Link>;
+          }
+          return <div key={idx}>{content}</div>;
+        })}
       </div>
     </section>
   );

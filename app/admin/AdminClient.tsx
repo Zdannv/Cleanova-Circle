@@ -1,7 +1,10 @@
 "use client";
 
-import { useState, useRef, useTransition } from "react";
+import { useState, useRef, useTransition, useCallback } from "react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+
+const MarkdownPreview = dynamic(() => import("../dashboard/articles/MarkdownContent"), { ssr: false });
 import { 
   addVideoAction, 
   updateVideoAction, 
@@ -9,7 +12,10 @@ import {
   createCategoryAction,
   deleteCategoryAction,
   createUserAction,
-  deleteUserAction
+  deleteUserAction,
+  addArticleAction,
+  updateArticleAction,
+  deleteArticleAction
 } from "./actions";
 
 type Category = {
@@ -38,23 +44,41 @@ type Video = {
   createdAt: Date;
 };
 
+type Article = {
+  id: string;
+  title: string;
+  slug: string;
+  coverImage: string;
+  content: string;
+  tag: string;
+  createdAt: Date;
+};
+
 export default function AdminClient({
   videos,
   categories,
   users,
+  articles,
   user,
 }: {
   videos: Video[];
   categories: Category[];
   users: User[];
+  articles: Article[];
   user: any;
 }) {
-  const [activeTab, setActiveTab] = useState<"VIDEOS" | "CATEGORIES" | "USERS">("VIDEOS");
+  const [activeTab, setActiveTab] = useState<"VIDEOS" | "CATEGORIES" | "USERS" | "ARTICLES">("VIDEOS");
   const [editingVideo, setEditingVideo] = useState<Video | null>(null);
+  const [editingArticle, setEditingArticle] = useState<Article | null>(null);
+  const [articleContent, setArticleContent] = useState("");
+  const [isDocxLoading, setIsDocxLoading] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
   const [isPending, startTransition] = useTransition();
   const formRef = useRef<HTMLFormElement>(null);
   const categoryFormRef = useRef<HTMLFormElement>(null);
   const userFormRef = useRef<HTMLFormElement>(null);
+  const articleFormRef = useRef<HTMLFormElement>(null);
+  const docxInputRef = useRef<HTMLInputElement>(null);
 
   // VIDEO ACTIONS
   const handleVideoSubmit = (formData: FormData) => {
@@ -120,6 +144,84 @@ export default function AdminClient({
     }
   };
 
+  // ARTICLE ACTIONS
+  const handleArticleSubmit = (formData: FormData) => {
+    startTransition(async () => {
+      if (editingArticle) {
+        await updateArticleAction(editingArticle.id, formData);
+        setEditingArticle(null);
+      } else {
+        await addArticleAction(formData);
+      }
+      articleFormRef.current?.reset();
+    });
+  };
+
+  const handleArticleDelete = (id: string) => {
+    if (confirm("Apakah Anda yakin ingin menghapus artikel/publikasi ini?")) {
+      startTransition(async () => {
+        if (editingArticle?.id === id) setEditingArticle(null);
+        await deleteArticleAction(id);
+      });
+    }
+  };
+
+  const handleEditArticle = (article: Article) => {
+    setEditingArticle(article);
+    setArticleContent(article.content);
+    setActiveTab("ARTICLES");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  // DOCX IMPORT
+  const htmlToMarkdown = (html: string): string => {
+    return html
+      .replace(/<h1[^>]*>(.*?)<\/h1>/gi, '\n\n# $1\n\n')
+      .replace(/<h2[^>]*>(.*?)<\/h2>/gi, '\n\n## $1\n\n')
+      .replace(/<h3[^>]*>(.*?)<\/h3>/gi, '\n\n### $1\n\n')
+      .replace(/<h4[^>]*>(.*?)<\/h4>/gi, '\n\n#### $1\n\n')
+      .replace(/<strong[^>]*>(.*?)<\/strong>/gi, ' **$1** ')
+      .replace(/<b[^>]*>(.*?)<\/b>/gi, ' **$1** ')
+      .replace(/<em[^>]*>(.*?)<\/em>/gi, ' *$1* ')
+      .replace(/<i[^>]*>(.*?)<\/i>/gi, ' *$1* ')
+      .replace(/<li[^>]*>(.*?)<\/li>/gi, '\n- $1')
+      .replace(/<ul[^>]*>/gi, '\n\n')
+      .replace(/<ol[^>]*>/gi, '\n\n')
+      .replace(/<\/ul>/gi, '\n\n')
+      .replace(/<\/ol>/gi, '\n\n')
+      .replace(/<br\s*\/?>/gi, '\n')
+      .replace(/<p[^>]*>(.*?)<\/p>/gi, '\n\n$1\n\n')
+      .replace(/<div[^>]*>(.*?)<\/div>/gi, '\n\n$1\n\n')
+      .replace(/<[^>]+>/g, '')
+      .replace(/&amp;/g, '&')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&nbsp;/g, ' ')
+      .replace(/&quot;/g, '"')
+      .replace(/\n{3,}/g, '\n\n')
+      .trim();
+  };
+
+  const handleDocxImport = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setIsDocxLoading(true);
+    try {
+      const mammoth = await import("mammoth");
+      const arrayBuffer = await file.arrayBuffer();
+      const result = await mammoth.convertToHtml({ arrayBuffer });
+      const markdown = htmlToMarkdown(result.value);
+      setArticleContent(markdown);
+      setShowPreview(true);
+    } catch (err) {
+      alert("Gagal membaca file .docx. Pastikan file tidak corrupt.");
+      console.error(err);
+    } finally {
+      setIsDocxLoading(false);
+      if (docxInputRef.current) docxInputRef.current.value = "";
+    }
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-50 flex font-sans text-gray-900">
       {/* Sidebar Layout */}
@@ -148,6 +250,16 @@ export default function AdminClient({
               <path strokeLinecap="round" strokeLinejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
             </svg>
             Kategori Video
+          </button>
+          <button 
+            type="button"
+            onClick={() => setActiveTab("ARTICLES")}
+            className={`w-full text-left px-4 py-3 rounded-md flex items-center gap-3 font-medium transition-colors ${activeTab === 'ARTICLES' ? 'bg-gray-800 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800/50'}`}
+          >
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+            </svg>
+            Artikel
           </button>
           <button 
             type="button"
@@ -448,26 +560,182 @@ export default function AdminClient({
             </div>
           )}
 
+          {/* TAB 4: ARTICLES */}
+          {activeTab === "ARTICLES" && (
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <section className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden lg:col-span-1 h-fit">
+                <div className={`px-6 py-5 border-b border-gray-200 transition-colors ${editingArticle ? "bg-amber-50/50" : "bg-gray-50/50"}`}>
+                  <h3 className="text-base font-semibold text-gray-800 flex flex-col gap-1">
+                    <span>{editingArticle ? "Edit Artikel" : "Tambah Artikel Baru"}</span>
+                    {editingArticle && <span className="text-xs px-2 py-1 bg-amber-100 text-amber-800 rounded w-fit">Mode Edit Aktif</span>}
+                  </h3>
+                </div>
+                <form action={handleArticleSubmit} ref={articleFormRef} className="p-6 space-y-5">
+                  <div className="space-y-1.5">
+                    <label htmlFor="title" className="block text-sm font-medium text-gray-700">Judul Artikel</label>
+                    <input type="text" id="title" name="title" required defaultValue={editingArticle?.title || ""} className="w-full px-4 py-2.5 rounded-md border border-gray-300 focus:ring-2 focus:ring-blue-500 text-sm" placeholder="Contoh: Tips Merawat Sepatu Putih" />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label htmlFor="tag" className="block text-sm font-medium text-gray-700">Tag / Kategori</label>
+                    <input type="text" id="tag" name="tag" defaultValue={editingArticle?.tag || "Artikel"} className="w-full px-4 py-2.5 rounded-md border border-gray-300 focus:ring-2 focus:ring-blue-500 text-sm" placeholder="Contoh: TIPS & TRIK" />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label htmlFor="coverImage" className="block text-sm font-medium text-gray-700">Cover Image URL</label>
+                    <input
+                      type="text"
+                      id="coverImage"
+                      name="coverImage"
+                      required
+                      defaultValue={editingArticle?.coverImage || ""}
+                      className="w-full px-4 py-2.5 rounded-md border border-gray-300 focus:ring-2 focus:ring-blue-500 text-sm font-mono"
+                      placeholder="https://i.postimg.cc/xxxxxx/nama-file.jpg"
+                    />
+                    <p className="text-xs text-gray-500 mt-1 leading-relaxed">
+                      Untuk gambar dari Postimages, pastikan URL diawali <code className="bg-gray-100 px-1 rounded text-indigo-600">https://i.postimg.cc/</code> (bukan <code className="bg-gray-100 px-1 rounded text-red-500">postimg.cc</code>). Cara: setelah upload → klik kanan gambar → <em>Copy image address</em>.
+                      Untuk gambar lokal gunakan path seperti <code className="bg-gray-100 px-1 rounded text-indigo-600">/landing-page/nama.jpg</code>
+                    </p>
+                  </div>
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between mb-1">
+                      <label htmlFor="content" className="block text-sm font-medium text-gray-700">Isi Artikel <span className="text-xs font-normal text-gray-400">(Markdown)</span></label>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        {isDocxLoading && (
+                          <span className="text-xs text-indigo-600 flex items-center gap-1">
+                            <svg className="w-3 h-3 animate-spin" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/></svg>
+                            Mengkonversi dokumen...
+                          </span>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => docxInputRef.current?.click()}
+                          disabled={isDocxLoading}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200 rounded-md transition-colors disabled:opacity-50"
+                        >
+                          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                          </svg>
+                          Import dari .docx
+                        </button>
+                        {articleContent && (
+                          <button
+                            type="button"
+                            onClick={() => setShowPreview(!showPreview)}
+                            className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold border rounded-md transition-colors ${showPreview ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border-emerald-200'}`}
+                          >
+                            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            {showPreview ? 'Edit Mode' : 'Preview'}
+                          </button>
+                        )}
+                        <input
+                          ref={docxInputRef}
+                          type="file"
+                          accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                          className="hidden"
+                          onChange={handleDocxImport}
+                        />
+                      </div>
+                    </div>
+                    {/* Hidden input selalu ada — memastikan content terkirim saat preview mode aktif */}
+                    <input type="hidden" name="content" value={articleContent} />
+                    {showPreview && articleContent ? (
+                      <div className="w-full min-h-[300px] px-4 py-3 rounded-md border border-emerald-200 bg-white overflow-auto text-sm">
+                        <MarkdownPreview content={articleContent} />
+                      </div>
+                    ) : (
+                      <textarea
+                        id="content"
+                        rows={12}
+                        required={!articleContent}
+                        value={articleContent}
+                        onChange={(e) => setArticleContent(e.target.value)}
+                        className="w-full px-4 py-2.5 rounded-md border border-gray-300 focus:ring-2 focus:ring-blue-500 text-sm font-mono"
+                        placeholder={"Tulis konten artikel di sini...\n\nTips format Markdown:\n# Judul Besar\n## Subjudul\n**teks tebal**, *teks miring*\n- item list"}
+                      />
+                    )}
+                    {articleContent && (
+                      <p className="text-xs text-gray-500">{articleContent.length.toLocaleString()} karakter · {articleContent.split('\n').filter(Boolean).length} baris teks</p>
+                    )}
+                  </div>
+                  <div className="pt-2 flex gap-3">
+                     {editingArticle && (
+                       <button type="button" onClick={() => { setEditingArticle(null); setArticleContent(""); articleFormRef.current?.reset(); }} className="flex-1 py-2.5 bg-white border border-gray-300 text-gray-700 font-medium rounded-md shadow-sm transition-colors text-sm" disabled={isPending}>Batal</button>
+                     )}
+                    <button type="submit" disabled={isPending || isDocxLoading} className="flex-1 py-2.5 text-white font-medium rounded-md shadow-sm transition-colors text-sm bg-gray-900 hover:bg-black disabled:opacity-50">
+                      {editingArticle ? "Simpan Perbaikan" : "Publikasi Artikel"}
+                    </button>
+                  </div>
+                </form>
+              </section>
+
+              <section className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden lg:col-span-2">
+                <div className="px-6 py-5 border-b border-gray-200 bg-gray-50/50 flex justify-between items-center">
+                  <h3 className="text-base font-semibold text-gray-800">Daftar Publikasi Topik</h3>
+                  <span className="text-xs font-medium text-gray-500 bg-gray-200 px-2 py-1 rounded">Total: {articles.length}</span>
+                </div>
+                <div className="overflow-x-auto w-full">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="bg-gray-50 border-b border-gray-200 text-gray-600 text-xs uppercase tracking-wider font-semibold">
+                        <th className="px-6 py-4">Judul & Tag</th>
+                        <th className="px-6 py-4 text-right">Aksi</th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {articles.length === 0 ? (
+                        <tr><td colSpan={2} className="px-6 py-8 text-center text-sm text-gray-500">Belum ada artikel.</td></tr>
+                      ) : (
+                        articles.map((a) => (
+                          <tr key={a.id} className="hover:bg-gray-50">
+                            <td className="px-6 py-4">
+                              <div className="text-sm font-semibold text-gray-900 mb-1">{a.title}</div>
+                              <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-indigo-100 text-indigo-800">
+                                {a.tag}
+                              </span>
+                              <div className="text-xs text-gray-500 mt-1 truncate max-w-sm">{a.slug}</div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-right">
+                               <div className="flex items-center justify-end gap-2">
+                                 <button onClick={() => handleEditArticle(a)} className="inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium bg-white text-gray-700 hover:bg-gray-50 rounded transition-colors border border-gray-300">Edit</button>
+                                 <button onClick={() => handleArticleDelete(a.id)} disabled={isPending} className="inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium bg-red-50 text-red-700 hover:bg-red-100 rounded transition-colors border border-red-200 disabled:opacity-50">Hapus</button>
+                               </div>
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+            </div>
+          )}
+
         </div>
-	      </main>
+      </main>
 
       {/* Mobile Navigation */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-gray-900 text-white flex justify-around p-2 z-50 border-t border-gray-800 pb-[calc(0.5rem+env(safe-area-inset-bottom))]">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-gray-900 text-white flex justify-around p-1 z-50 border-t border-gray-800 pb-[calc(0.5rem+env(safe-area-inset-bottom))]">
         <button onClick={() => setActiveTab("VIDEOS")} className={`flex flex-col items-center p-2 rounded-lg ${activeTab === 'VIDEOS' ? 'text-blue-400 bg-gray-800' : 'text-gray-400 hover:text-gray-200'}`}>
-          <svg className="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-          <span className="text-[10px] font-medium tracking-wide">Video</span>
+          <svg className="w-5 h-5 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+          <span className="text-[9px] font-medium tracking-wide">Video</span>
         </button>
         <button onClick={() => setActiveTab("CATEGORIES")} className={`flex flex-col items-center p-2 rounded-lg ${activeTab === 'CATEGORIES' ? 'text-blue-400 bg-gray-800' : 'text-gray-400 hover:text-gray-200'}`}>
-          <svg className="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" /></svg>
-          <span className="text-[10px] font-medium tracking-wide">Kategori</span>
+          <svg className="w-5 h-5 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" /></svg>
+          <span className="text-[9px] font-medium tracking-wide">Kategori</span>
+        </button>
+        <button onClick={() => setActiveTab("ARTICLES")} className={`flex flex-col items-center p-2 rounded-lg ${activeTab === 'ARTICLES' ? 'text-blue-400 bg-gray-800' : 'text-gray-400 hover:text-gray-200'}`}>
+          <svg className="w-5 h-5 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" /></svg>
+          <span className="text-[9px] font-medium tracking-wide">Publikasi</span>
         </button>
         <button onClick={() => setActiveTab("USERS")} className={`flex flex-col items-center p-2 rounded-lg ${activeTab === 'USERS' ? 'text-blue-400 bg-gray-800' : 'text-gray-400 hover:text-gray-200'}`}>
-          <svg className="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
-          <span className="text-[10px] font-medium tracking-wide">Pengguna</span>
+          <svg className="w-5 h-5 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+          <span className="text-[9px] font-medium tracking-wide">User</span>
         </button>
         <Link href="/dashboard" className="flex flex-col items-center p-2 rounded-lg text-rose-400 hover:text-rose-300">
-          <svg className="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
-          <span className="text-[10px] font-medium tracking-wide">Dashboard</span>
+          <svg className="w-5 h-5 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+          <span className="text-[9px] font-medium tracking-wide">Keluar</span>
         </Link>
       </nav>
     </div>

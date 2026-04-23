@@ -105,4 +105,12 @@ enum Role {
   USER
 }
 
-
+model Article {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  coverImage  String
+  content     String
+  tag         String   @default("Artikel")
+  createdAt   DateTime @default(now())
+}

@@ -11,7 +11,7 @@ export default async function AdminPage() {
     redirect("/dashboard");
   }
 
-  const [videos, categories, users] = await Promise.all([
+  const [videos, categories, users, articles] = await Promise.all([
     prisma.video.findMany({
       orderBy: { createdAt: "desc" },
       include: { Category: true }
@@ -21,8 +21,11 @@ export default async function AdminPage() {
     }),
     prisma.user.findMany({
       orderBy: { createdAt: "desc" }
+    }),
+    prisma.article.findMany({
+      orderBy: { createdAt: "desc" }
     })
   ]);
 
-  return <AdminClient videos={videos} categories={categories} users={users} user={session.user} />;
+  return <AdminClient videos={videos} categories={categories} users={users} articles={articles} user={session.user} />;
 }

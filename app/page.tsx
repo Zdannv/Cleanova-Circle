@@ -84,6 +84,7 @@ export default function Home() {
                 src="/landing-page/671129876_17900392704423715_6523539329292204971_n..jpg" 
                 alt="Perbaikan perhiasan oleh Cleanova" 
                 fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-contain transition-transform duration-1000 hover:scale-105"
                 priority
               />
@@ -148,6 +149,7 @@ export default function Home() {
                   src="/landing-page/656353206_17897386137423715_5989968134986280728_n..jpg" 
                   alt="DIY Hacks & Tricks" 
                   fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   className="object-contain transition-transform duration-700 group-hover:scale-105"
                 />
               </div>
@@ -164,6 +166,7 @@ export default function Home() {
                   src="/landing-page/656701773_17898483894423715_5763756912223990821_n..jpg" 
                   alt="Step-by-Step Restoration Videos" 
                   fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   className="object-contain transition-transform duration-700 group-hover:scale-105"
                 />
               </div>
@@ -180,6 +183,7 @@ export default function Home() {
                   src="/landing-page/656817205_17899009773423715_4292222626302527645_n..jpg" 
                   alt="Product Recommendations" 
                   fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   className="object-contain transition-transform duration-700 group-hover:scale-105"
                 />
               </div>

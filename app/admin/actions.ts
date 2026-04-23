@@ -129,3 +129,62 @@ export async function deleteUserAction(id: string) {
   await prisma.user.delete({ where: { id } });
   revalidatePath("/admin");
 }
+
+export async function addArticleAction(formData: FormData) {
+  await verifyAdmin();
+
+  const title = formData.get("title") as string;
+  const content = formData.get("content") as string;
+  const coverImage = formData.get("coverImage") as string;
+  const tag = formData.get("tag") as string;
+
+  const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
+
+  await prisma.article.create({
+    data: {
+      title,
+      slug: `${slug}-${Math.random().toString(36).substring(2, 6)}`,
+      content,
+      coverImage,
+      tag: tag || "Artikel"
+    }
+  });
+
+  revalidatePath("/admin");
+  revalidatePath("/dashboard");
+}
+
+export async function updateArticleAction(id: string, formData: FormData) {
+  await verifyAdmin();
+
+  const title = formData.get("title") as string;
+  const content = formData.get("content") as string;
+  const coverImage = formData.get("coverImage") as string;
+  const tag = formData.get("tag") as string;
+
+  const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
+
+  // content bisa null jika hidden input tidak terkirim — fallback ke string kosong
+  const safeContent = content ?? "";
+
+  await prisma.article.update({
+    where: { id },
+    data: {
+      title,
+      slug: `${slug}-${Math.random().toString(36).substring(2, 6)}`,
+      content: safeContent,
+      coverImage,
+      tag: tag || "Artikel"
+    }
+  });
+
+  revalidatePath("/admin");
+  revalidatePath("/dashboard");
+}
+
+export async function deleteArticleAction(id: string) {
+  await verifyAdmin();
+  await prisma.article.delete({ where: { id } });
+  revalidatePath("/admin");
+  revalidatePath("/dashboard");
+}

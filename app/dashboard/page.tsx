@@ -128,12 +128,16 @@ export default async function DashboardPage() {
 
   const userId = session.user.id as string;
 
-  const [videos, progressRecords] = await Promise.all([
+  const [videos, progressRecords, articles] = await Promise.all([
     prisma.video.findMany({ 
       orderBy: { createdAt: "desc" },
       include: { Category: true }
     }),
     prisma.progress.findMany({ where: { userId } }),
+    prisma.article.findMany({
+      orderBy: { createdAt: "desc" },
+      take: 5
+    }),
   ]);
 
   // Fallback aman — akan kosong jika model Like belum dikenali client
@@ -187,13 +191,22 @@ export default async function DashboardPage() {
     ),
   };
 
-  const carouselImages = [
-    { src: "/landing-page/631737903_17891967126423715_6807031068574707597_n..jpg", tag: "EKSKLUSIF", title: "Teknik Memoles Cincin Berlian Pudar" },
-    { src: "/landing-page/656353206_17897386137423715_5989968134986280728_n..jpg", tag: "TERPOPULER", title: "Cara Tepat Membersihkan Permata Berkerak" },
-    { src: "/landing-page/657349552_17898483897423715_2909239499681956677_n..jpg", tag: "TIPS & TRIK", title: "Menjaga Kilau Perhiasan Perak" },
-    { src: "/landing-page/657712290_17897621073423715_4552536375483700266_n..jpg", tag: "TUTORIAL", title: "Merawat Emas Tanpa Menggerus Gramasi" },
-    { src: "/landing-page/671129876_17900392704423715_6523539329292204971_n..jpg", tag: "STUDI KASUS", title: "Restorasi Total Cincin Antik Kusam" },
-  ];
+  const hasArticles = articles.length > 0;
+  
+  const carouselImages = hasArticles 
+    ? articles.map(a => ({
+        src: a.coverImage,
+        tag: a.tag,
+        title: a.title,
+        slug: a.slug
+      }))
+    : [
+        { src: "/landing-page/631737903_17891967126423715_6807031068574707597_n..jpg", tag: "EKSKLUSIF", title: "Teknik Memoles Cincin Berlian Pudar" },
+        { src: "/landing-page/656353206_17897386137423715_5989968134986280728_n..jpg", tag: "TERPOPULER", title: "Cara Tepat Membersihkan Permata Berkerak" },
+        { src: "/landing-page/657349552_17898483897423715_2909239499681956677_n..jpg", tag: "TIPS & TRIK", title: "Menjaga Kilau Perhiasan Perak" },
+        { src: "/landing-page/657712290_17897621073423715_4552536375483700266_n..jpg", tag: "TUTORIAL", title: "Merawat Emas Tanpa Menggerus Gramasi" },
+        { src: "/landing-page/671129876_17900392704423715_6523539329292204971_n..jpg", tag: "STUDI KASUS", title: "Restorasi Total Cincin Antik Kusam" },
+      ];
 
   return (
     <div className="max-w-6xl mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-700 ease-out px-4 xl:px-0">

@@ -57,3 +57,8 @@ export type Video = Prisma.VideoModel
  * 
  */
 export type Category = Prisma.CategoryModel
+/**
+ * Model Article
+ * 
+ */
+export type Article = Prisma.ArticleModel
