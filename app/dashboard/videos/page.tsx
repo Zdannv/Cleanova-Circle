@@ -14,17 +14,21 @@ export default async function VideosPage({
 
   const { category } = await searchParams;
 
+  const categoriesFromDb = await prisma.category.findMany({ orderBy: { name: "asc" } });
+
   const videos = await prisma.video.findMany({
-    where: category === "DIY_HACKS" || category === "CLEANOVA_PRODUCT"
-      ? { category: category as any }
-      : undefined,
+    where: category ? { categoryId: category } : undefined,
     orderBy: { createdAt: "desc" },
+    include: { Category: true }
   });
 
   const categories = [
     { label: "Semua", value: "", href: "/dashboard/videos" },
-    { label: "DIY Hacks", value: "DIY_HACKS", href: "/dashboard/videos?category=DIY_HACKS" },
-    { label: "Rekomendasi Produk", value: "CLEANOVA_PRODUCT", href: "/dashboard/videos?category=CLEANOVA_PRODUCT" },
+    ...categoriesFromDb.map(cat => ({
+      label: cat.name,
+      value: cat.id,
+      href: `/dashboard/videos?category=${cat.id}`
+    }))
   ];
 
   const activeCategory = category || "";
@@ -100,12 +104,8 @@ export default async function VideosPage({
                 </div>
                 {/* Category Badge */}
                 <div className="absolute top-3 left-3">
-                  <span className={`text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-sm border ${
-                    video.category === "DIY_HACKS"
-                      ? "bg-amber-50/90 text-amber-700 border-amber-200"
-                      : "bg-white/90 text-stone-700 border-stone-200"
-                  }`}>
-                    {video.category === "DIY_HACKS" ? "DIY Hack" : "Produk"}
+                  <span className="text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-sm border bg-white/90 text-stone-700 border-stone-200">
+                    {video.Category?.name || "Uncategorized"}
                   </span>
                 </div>
               </div>
