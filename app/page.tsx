@@ -12,9 +12,12 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-amber-600 to-yellow-400 flex items-center justify-center text-white font-serif italic font-bold shadow-lg shadow-amber-500/20">
-                CC
-              </div>
+              <Image 
+                src="/landing-page/logo.jpg" 
+                alt="Cleanova Circle Logo" 
+                width={40} height={40}
+                className="w-10 h-10 rounded-full object-contain shadow-lg shadow-amber-500/20"
+              />
               <span className="font-serif font-medium text-2xl tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-stone-800 to-stone-500 dark:from-stone-200 dark:to-stone-400">
                 Cleanova Circle
               </span>
@@ -83,10 +86,10 @@ export default function Home() {
           <div className="flex-1 w-full relative z-10 lg:pl-10">
             <div className="relative aspect-[4/5] sm:aspect-video lg:aspect-[4/5] bg-stone-200 dark:bg-stone-800 shadow-2xl overflow-hidden before:absolute before:inset-0 before:ring-1 before:ring-inset before:ring-black/10">
               <Image 
-                src="https://images.unsplash.com/photo-1599643478524-fb5244098775?q=80&w=800&auto=format&fit=crop" 
-                alt="Perhiasan berkilau dan elegan" 
+                src="/landing-page/671129876_17900392704423715_6523539329292204971_n..jpg" 
+                alt="Perbaikan perhiasan oleh Cleanova" 
                 fill
-                className="object-cover transition-transform duration-1000 hover:scale-105"
+                className="object-contain transition-transform duration-1000 hover:scale-105"
                 priority
               />
               {/* Elegant Accent Box */}
@@ -147,10 +150,10 @@ export default function Home() {
             <div className="group">
               <div className="relative aspect-[4/3] overflow-hidden bg-stone-100 dark:bg-stone-800 mb-6">
                 <Image 
-                  src="https://via.placeholder.com/400x300/f5f5f4/44403c?text=DIY+Hacks" 
+                  src="/landing-page/656353206_17897386137423715_5989968134986280728_n..jpg" 
                   alt="DIY Hacks & Tricks" 
-                  width={400} height={300} 
-                  className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-105"
+                  fill
+                  className="object-contain transition-transform duration-700 group-hover:scale-105"
                 />
               </div>
               <h3 className="text-2xl font-serif text-stone-900 dark:text-white mb-3">DIY Hacks & Tricks</h3>
@@ -163,10 +166,10 @@ export default function Home() {
             <div className="group">
               <div className="relative aspect-[4/3] overflow-hidden bg-stone-100 dark:bg-stone-800 mb-6">
                 <Image 
-                  src="https://via.placeholder.com/400x300/f5f5f4/44403c?text=Video+Restorasi" 
+                  src="/landing-page/656701773_17898483894423715_5763756912223990821_n..jpg" 
                   alt="Step-by-Step Restoration Videos" 
-                  width={400} height={300} 
-                  className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-105"
+                  fill
+                  className="object-contain transition-transform duration-700 group-hover:scale-105"
                 />
               </div>
               <h3 className="text-2xl font-serif text-stone-900 dark:text-white mb-3">Step-by-Step Video</h3>
@@ -179,10 +182,10 @@ export default function Home() {
             <div className="group">
               <div className="relative aspect-[4/3] overflow-hidden bg-stone-100 dark:bg-stone-800 mb-6">
                 <Image 
-                  src="https://via.placeholder.com/400x300/f5f5f4/44403c?text=Produk+Rekomendasi" 
+                  src="/landing-page/656817205_17899009773423715_4292222626302527645_n..jpg" 
                   alt="Product Recommendations" 
-                  width={400} height={300} 
-                  className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-105"
+                  fill
+                  className="object-contain transition-transform duration-700 group-hover:scale-105"
                 />
               </div>
               <h3 className="text-2xl font-serif text-stone-900 dark:text-white mb-3">Product Rating & Guide</h3>
