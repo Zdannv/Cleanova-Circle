@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
+import Image from "next/image";
 
 export default function DashboardLayout({
   children,
@@ -15,6 +16,7 @@ export default function DashboardLayout({
     { label: "Ikhtisar", href: "/dashboard", icon: "M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" },
     { label: "Pustaka Video", href: "/dashboard/videos", icon: "M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" },
     { label: "Markah Saya", href: "/dashboard/bookmarks", icon: "M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" },
+    { label: "Profil Saya", href: "/dashboard/profile", icon: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" },
   ];
 
   return (
@@ -23,8 +25,8 @@ export default function DashboardLayout({
       <aside className="hidden md:flex flex-col w-64 border-r border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 relative z-20 shadow-sm">
         <div className="p-6 border-b border-stone-200 dark:border-stone-800">
           <Link href="/" className="flex items-center gap-3">
-             <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-amber-600 to-yellow-400 flex items-center justify-center text-white font-serif italic font-bold shadow-sm">
-                CC
+             <div className="w-8 h-8 rounded-full shadow-sm relative overflow-hidden bg-white">
+               <Image src="/landing-page/logo.jpg" alt="Logo" fill className="object-contain" />
              </div>
              <span className="font-serif font-medium text-lg tracking-wide text-stone-800 dark:text-stone-200">
                 Cleanova Circle
@@ -67,8 +69,8 @@ export default function DashboardLayout({
         {/* Mobile Header */}
         <header className="md:hidden flex items-center justify-between p-4 border-b border-stone-200 dark:border-stone-800 bg-white/80 dark:bg-stone-900/80 backdrop-blur-md sticky top-0 z-30">
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-amber-600 to-yellow-400 flex items-center justify-center text-white font-serif italic flex-shrink-0 text-sm shadow">
-                CC
+            <div className="w-8 h-8 rounded-full shadow-sm relative overflow-hidden bg-white flex-shrink-0">
+               <Image src="/landing-page/logo.jpg" alt="Logo" fill className="object-contain" />
             </div>
             <span className="font-serif font-medium text-lg text-stone-800 dark:text-stone-200">
                 Cleanova

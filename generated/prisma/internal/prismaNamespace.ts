@@ -1100,8 +1100,9 @@ export type ProgressScalarFieldEnum = (typeof ProgressScalarFieldEnum)[keyof typ
 export const UserScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  email: 'email',
+  avatar: 'avatar',
   phone: 'phone',
+  email: 'email',
   password: 'password',
   role: 'role',
   createdAt: 'createdAt'

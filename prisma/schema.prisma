@@ -64,6 +64,7 @@ model Progress {
 model User {
   id        String     @id
   name      String
+  avatar    String?    @default("1.png")
   phone     String     @unique
   email     String?    @unique
   password  String?
