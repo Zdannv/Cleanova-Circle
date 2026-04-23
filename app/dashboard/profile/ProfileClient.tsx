@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { updateProfileAction } from "./actions";
 
 type UserData = {
@@ -23,6 +24,7 @@ export default function ProfileClient({
 }) {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+  const { update: updateSession } = useSession();
   const [selectedAvatar, setSelectedAvatar] = useState<string>(user.avatar || "1.png");
   const [successMsg, setSuccessMsg] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
@@ -38,6 +40,10 @@ export default function ProfileClient({
     startTransition(async () => {
       try {
         await updateProfileAction(formData);
+        await updateSession({
+          name: formData.get("name"),
+          avatar: selectedAvatar,
+        });
         router.refresh();
         router.push("/dashboard");
       } catch (err: any) {
