@@ -59,7 +59,8 @@ export const ModelName = {
   User: 'User',
   Video: 'Video',
   Category: 'Category',
-  Article: 'Article'
+  Article: 'Article',
+  LandingPage: 'LandingPage'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -180,6 +181,42 @@ export const ArticleScalarFieldEnum = {
 } as const
 
 export type ArticleScalarFieldEnum = (typeof ArticleScalarFieldEnum)[keyof typeof ArticleScalarFieldEnum]
+
+
+export const LandingPageScalarFieldEnum = {
+  id: 'id',
+  logoUrl: 'logoUrl',
+  heroTitle: 'heroTitle',
+  heroSubtitle: 'heroSubtitle',
+  heroDescription: 'heroDescription',
+  heroImageUrl: 'heroImageUrl',
+  whatsappUrl: 'whatsappUrl',
+  valueTitle: 'valueTitle',
+  valueDescription: 'valueDescription',
+  valueCard1Title: 'valueCard1Title',
+  valueCard1Text: 'valueCard1Text',
+  valueCard2Title: 'valueCard2Title',
+  valueCard2Text: 'valueCard2Text',
+  valueCard3Title: 'valueCard3Title',
+  valueCard3Text: 'valueCard3Text',
+  featureTitle: 'featureTitle',
+  featureSubtitle: 'featureSubtitle',
+  feature1Title: 'feature1Title',
+  feature1Description: 'feature1Description',
+  feature1ImageUrl: 'feature1ImageUrl',
+  feature2Title: 'feature2Title',
+  feature2Description: 'feature2Description',
+  feature2ImageUrl: 'feature2ImageUrl',
+  feature3Title: 'feature3Title',
+  feature3Description: 'feature3Description',
+  feature3ImageUrl: 'feature3ImageUrl',
+  ctaTitle: 'ctaTitle',
+  ctaSubtitle: 'ctaSubtitle',
+  ctaDescription: 'ctaDescription',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LandingPageScalarFieldEnum = (typeof LandingPageScalarFieldEnum)[keyof typeof LandingPageScalarFieldEnum]
 
 
 export const SortOrder = {

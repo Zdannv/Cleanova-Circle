@@ -62,3 +62,8 @@ export type Category = Prisma.CategoryModel
  * 
  */
 export type Article = Prisma.ArticleModel
+/**
+ * Model LandingPage
+ * 
+ */
+export type LandingPage = Prisma.LandingPageModel

@@ -114,3 +114,48 @@ model Article {
   tag         String   @default("Artikel")
   createdAt   DateTime @default(now())
 }
+
+model LandingPage {
+  id                String   @id @default("default")
+  logoUrl           String   @default("/landing-page/logo.jpg")
+  heroTitle         String   @default("Kembalikan Kilau")
+  heroSubtitle      String   @default("Koleksi Berharga Anda.")
+  heroDescription   String   @default("Bergabunglah dengan Cleanova Circle—komunitas eksklusif yang membagikan rahasia, tips DIY, dan panduan restorasi profesional agar perhiasan dan koleksi Anda selalu tampil memukau seperti baru.")
+  heroImageUrl      String   @default("/landing-page/671129876_17900392704423715_6523539329292204971_n..jpg")
+  whatsappUrl       String   @default("https://wa.me/6287855310680?text=Halo%20Admin%20Cleanova,%20saya%20tertarik%20untuk%20mendaftar%20langganan%20web%20edukasi%20Cleanova%20Circle.")
+  
+  // Value Section
+  valueTitle        String   @default("Perawatan Tepat, Investasi Selamat")
+  valueDescription  String   @default("Perhiasan yang kusam bukan berarti rusak permanen. Dengan teknik yang salah, Anda berisiko merusak material berharga. Di Cleanova Circle, kami mengajarkan Anda metode restorasi yang aman, hemat biaya, dan efektif, menjaga koleksi Anda tetap murni generasi demi generasi.")
+  
+  // Value Cards
+  valueCard1Title   String   @default("Hemat Ratusan Ribu")
+  valueCard1Text    String   @default("Kurangi ketergantungan pada jasa pembersih profesional yang mahal dengan teknik mandiri yang terbukti.")
+  valueCard2Title   String   @default("Aman & Teruji")
+  valueCard2Text    String   @default("Lupakan risiko kerusakan akibat bahan kimia keras. Kami merekomendasikan produk dengan komposisi teraman.")
+  valueCard3Title   String   @default("Hasil Instan")
+  valueCard3Text    String   @default("Panduan langsung ke inti yang memungkinkan Anda melihat perbedaannya (Before & After) dalam hitungan menit.")
+  
+  // Feature Section
+  featureTitle      String   @default("Akses Aksesibilitas Tak Terbatas")
+  featureSubtitle   String   @default("Eksklusif Untuk Member")
+  
+  feature1Title     String   @default("DIY Hacks & Tricks")
+  feature1Description String @default("Pelajari rahasia merawat perak, emas, hingga berlian menggunakan bahan-bahan aman yang bisa Anda temukan di rumah.")
+  feature1ImageUrl  String   @default("/landing-page/656353206_17897386137423715_5989968134986280728_n..jpg")
+  
+  feature2Title     String   @default("Step-by-Step Video")
+  feature2Description String @default("Tonton panduan visual visual untuk proses restorasi perhiasan kusam mulai dari persiapan hingga tahap pemolesan akhir.")
+  feature2ImageUrl  String   @default("/landing-page/656701773_17898483894423715_5763756912223990821_n..jpg")
+  
+  feature3Title     String   @default("Product Rating & Guide")
+  feature3Description String @default("Rekomendasi independen dan panduan dosis pemakaian produk pembersih pabrikan dari para kurator pengalaman.")
+  feature3ImageUrl  String   @default("/landing-page/656817205_17899009773423715_4292222626302527645_n..jpg")
+  
+  // Bottom CTA
+  ctaTitle          String   @default("Mulai Merawat")
+  ctaSubtitle       String   @default("Koleksi Kesayangan Anda.")
+  ctaDescription    String   @default("Tingkatkan standar kebersihan dan estetika koleksi Anda hari ini juga tanpa menghabiskan budget berlebih di jasa terpadu.")
+  
+  updatedAt         DateTime @updatedAt @default(now())
+}

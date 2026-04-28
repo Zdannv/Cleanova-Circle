@@ -392,7 +392,8 @@ export const ModelName = {
   User: 'User',
   Video: 'Video',
   Category: 'Category',
-  Article: 'Article'
+  Article: 'Article',
+  LandingPage: 'LandingPage'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -408,7 +409,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "bookmark" | "like" | "comment" | "note" | "progress" | "user" | "video" | "category" | "article"
+    modelProps: "bookmark" | "like" | "comment" | "note" | "progress" | "user" | "video" | "category" | "article" | "landingPage"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1078,6 +1079,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    LandingPage: {
+      payload: Prisma.$LandingPagePayload<ExtArgs>
+      fields: Prisma.LandingPageFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.LandingPageFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LandingPagePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.LandingPageFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LandingPagePayload>
+        }
+        findFirst: {
+          args: Prisma.LandingPageFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LandingPagePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.LandingPageFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LandingPagePayload>
+        }
+        findMany: {
+          args: Prisma.LandingPageFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LandingPagePayload>[]
+        }
+        create: {
+          args: Prisma.LandingPageCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LandingPagePayload>
+        }
+        createMany: {
+          args: Prisma.LandingPageCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.LandingPageCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LandingPagePayload>[]
+        }
+        delete: {
+          args: Prisma.LandingPageDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LandingPagePayload>
+        }
+        update: {
+          args: Prisma.LandingPageUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LandingPagePayload>
+        }
+        deleteMany: {
+          args: Prisma.LandingPageDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.LandingPageUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.LandingPageUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LandingPagePayload>[]
+        }
+        upsert: {
+          args: Prisma.LandingPageUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LandingPagePayload>
+        }
+        aggregate: {
+          args: Prisma.LandingPageAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateLandingPage>
+        }
+        groupBy: {
+          args: Prisma.LandingPageGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LandingPageGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.LandingPageCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LandingPageCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1219,6 +1294,42 @@ export const ArticleScalarFieldEnum = {
 } as const
 
 export type ArticleScalarFieldEnum = (typeof ArticleScalarFieldEnum)[keyof typeof ArticleScalarFieldEnum]
+
+
+export const LandingPageScalarFieldEnum = {
+  id: 'id',
+  logoUrl: 'logoUrl',
+  heroTitle: 'heroTitle',
+  heroSubtitle: 'heroSubtitle',
+  heroDescription: 'heroDescription',
+  heroImageUrl: 'heroImageUrl',
+  whatsappUrl: 'whatsappUrl',
+  valueTitle: 'valueTitle',
+  valueDescription: 'valueDescription',
+  valueCard1Title: 'valueCard1Title',
+  valueCard1Text: 'valueCard1Text',
+  valueCard2Title: 'valueCard2Title',
+  valueCard2Text: 'valueCard2Text',
+  valueCard3Title: 'valueCard3Title',
+  valueCard3Text: 'valueCard3Text',
+  featureTitle: 'featureTitle',
+  featureSubtitle: 'featureSubtitle',
+  feature1Title: 'feature1Title',
+  feature1Description: 'feature1Description',
+  feature1ImageUrl: 'feature1ImageUrl',
+  feature2Title: 'feature2Title',
+  feature2Description: 'feature2Description',
+  feature2ImageUrl: 'feature2ImageUrl',
+  feature3Title: 'feature3Title',
+  feature3Description: 'feature3Description',
+  feature3ImageUrl: 'feature3ImageUrl',
+  ctaTitle: 'ctaTitle',
+  ctaSubtitle: 'ctaSubtitle',
+  ctaDescription: 'ctaDescription',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LandingPageScalarFieldEnum = (typeof LandingPageScalarFieldEnum)[keyof typeof LandingPageScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1431,6 +1542,7 @@ export type GlobalOmitConfig = {
   video?: Prisma.VideoOmit
   category?: Prisma.CategoryOmit
   article?: Prisma.ArticleOmit
+  landingPage?: Prisma.LandingPageOmit
 }
 
 /* Types for Logging */

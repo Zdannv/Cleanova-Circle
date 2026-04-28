@@ -188,3 +188,38 @@ export async function deleteArticleAction(id: string) {
   revalidatePath("/admin");
   revalidatePath("/dashboard");
 }
+
+export async function updateLandingPageAction(formData: FormData) {
+  await verifyAdmin();
+
+  const keys = [
+    "logoUrl", "heroTitle", "heroSubtitle", "heroDescription", "heroImageUrl", "whatsappUrl",
+    "valueTitle", "valueDescription",
+    "valueCard1Title", "valueCard1Text", "valueCard2Title", "valueCard2Text", "valueCard3Title", "valueCard3Text",
+    "featureTitle", "featureSubtitle",
+    "feature1Title", "feature1Description", "feature1ImageUrl",
+    "feature2Title", "feature2Description", "feature2ImageUrl",
+    "feature3Title", "feature3Description", "feature3ImageUrl",
+    "ctaTitle", "ctaSubtitle", "ctaDescription"
+  ];
+
+  const data: any = {};
+  keys.forEach(key => {
+    const val = formData.get(key);
+    if (val !== null) {
+      data[key] = val as string;
+    }
+  });
+
+  await prisma.landingPage.upsert({
+    where: { id: "default" },
+    update: data,
+    create: {
+      ...data,
+      id: "default",
+    },
+  });
+
+  revalidatePath("/");
+  revalidatePath("/admin");
+}

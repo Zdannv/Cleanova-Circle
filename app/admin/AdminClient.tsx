@@ -15,7 +15,8 @@ import {
   deleteUserAction,
   addArticleAction,
   updateArticleAction,
-  deleteArticleAction
+  deleteArticleAction,
+  updateLandingPageAction
 } from "./actions";
 
 type Category = {
@@ -54,20 +55,53 @@ type Article = {
   createdAt: Date;
 };
 
+type LandingPage = {
+  logoUrl: string;
+  whatsappUrl: string;
+  heroTitle: string;
+  heroSubtitle: string;
+  heroDescription: string;
+  heroImageUrl: string;
+  valueTitle: string;
+  valueDescription: string;
+  valueCard1Title: string;
+  valueCard1Text: string;
+  valueCard2Title: string;
+  valueCard2Text: string;
+  valueCard3Title: string;
+  valueCard3Text: string;
+  featureTitle: string;
+  featureSubtitle: string;
+  feature1Title: string;
+  feature1Description: string;
+  feature1ImageUrl: string;
+  feature2Title: string;
+  feature2Description: string;
+  feature2ImageUrl: string;
+  feature3Title: string;
+  feature3Description: string;
+  feature3ImageUrl: string;
+  ctaTitle: string;
+  ctaSubtitle: string;
+  ctaDescription: string;
+} | null;
+
 export default function AdminClient({
   videos,
   categories,
   users,
   articles,
+  landingPage,
   user,
 }: {
   videos: Video[];
   categories: Category[];
   users: User[];
   articles: Article[];
+  landingPage: LandingPage;
   user: any;
 }) {
-  const [activeTab, setActiveTab] = useState<"VIDEOS" | "CATEGORIES" | "USERS" | "ARTICLES">("VIDEOS");
+  const [activeTab, setActiveTab] = useState<"VIDEOS" | "CATEGORIES" | "USERS" | "ARTICLES" | "LANDING">("VIDEOS");
   const [editingVideo, setEditingVideo] = useState<Video | null>(null);
   const [editingArticle, setEditingArticle] = useState<Article | null>(null);
   const [articleContent, setArticleContent] = useState("");
@@ -173,6 +207,14 @@ export default function AdminClient({
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  // LANDING PAGE ACTIONS
+  const handleLandingSubmit = (formData: FormData) => {
+    startTransition(async () => {
+      await updateLandingPageAction(formData);
+      alert("Landing page berhasil diperbarui!");
+    });
+  };
+
   // DOCX IMPORT
   const htmlToMarkdown = (html: string): string => {
     return html
@@ -271,6 +313,16 @@ export default function AdminClient({
             </svg>
             Akun Pengguna
           </button>
+          <button 
+            type="button"
+            onClick={() => setActiveTab("LANDING")}
+            className={`w-full text-left px-4 py-3 rounded-md flex items-center gap-3 font-medium transition-colors ${activeTab === 'LANDING' ? 'bg-gray-800 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800/50'}`}
+          >
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9s2.015-9 4.5-9m0 18c-5.982 0-10.833-4.851-10.833-10.833" />
+            </svg>
+            Landing Page
+          </button>
         </nav>
         <div className="p-4 border-t border-gray-800">
           <Link href="/dashboard" className="flex items-center gap-2 text-sm text-gray-300 hover:text-white transition-colors">
@@ -291,6 +343,7 @@ export default function AdminClient({
               {activeTab === "VIDEOS" && "Manajemen Konten Video"}
               {activeTab === "CATEGORIES" && "Pengaturan Kategori"}
               {activeTab === "USERS" && "Pusat Akun Pengguna"}
+              {activeTab === "LANDING" && "Kelola Konten Landing Page"}
             </h2>
           </div>
           <div className="flex items-center gap-3 self-end md:self-auto">
@@ -712,6 +765,140 @@ export default function AdminClient({
             </div>
           )}
 
+          {/* TAB 5: LANDING PAGE */}
+          {activeTab === "LANDING" && (
+            <div className="space-y-8 pb-10">
+              <section className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden text-gray-900">
+                <div className="px-6 py-5 border-b border-gray-200 bg-gray-50/50 flex justify-between items-center">
+                  <h3 className="text-base font-semibold text-gray-800">Pengaturan Landing Page</h3>
+                  <button 
+                    form="landing-page-form"
+                    type="submit" 
+                    disabled={isPending}
+                    className="px-6 py-2 bg-gray-900 text-white text-sm font-medium rounded hover:bg-black transition-colors disabled:opacity-50"
+                  >
+                    Simpan Semua Perubahan
+                  </button>
+                </div>
+                <form id="landing-page-form" action={handleLandingSubmit} className="p-6 space-y-12">
+                   {/* Header & Logo */}
+                   <div className="space-y-6">
+                    <h4 className="text-sm font-bold uppercase tracking-widest text-amber-600 border-b pb-2">Header & Logo</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-1.5">
+                        <label className="block text-sm font-medium text-gray-700">Logo Image URL</label>
+                        <input type="text" name="logoUrl" defaultValue={landingPage?.logoUrl || "/landing-page/logo.jpg"} className="w-full px-4 py-2 border rounded-md text-sm font-mono" />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="block text-sm font-medium text-gray-700">WhatsApp URL</label>
+                        <input type="text" name="whatsappUrl" defaultValue={landingPage?.whatsappUrl || "https://wa.me/..."} className="w-full px-4 py-2 border rounded-md text-sm font-mono" />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Hero Section */}
+                  <div className="space-y-6">
+                    <h4 className="text-sm font-bold uppercase tracking-widest text-amber-600 border-b pb-2">Hero Section</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-1.5">
+                        <label className="block text-sm font-medium text-gray-700">Hero Title</label>
+                        <input type="text" name="heroTitle" defaultValue={landingPage?.heroTitle || "Kembalikan Kilau"} className="w-full px-4 py-2 border rounded-md text-sm" />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="block text-sm font-medium text-gray-700">Hero Subtitle</label>
+                        <input type="text" name="heroSubtitle" defaultValue={landingPage?.heroSubtitle || "Koleksi Berharga Anda."} className="w-full px-4 py-2 border rounded-md text-sm italic" />
+                      </div>
+                      <div className="space-y-1.5 md:col-span-2">
+                        <label className="block text-sm font-medium text-gray-700">Hero Description</label>
+                        <textarea name="heroDescription" rows={3} defaultValue={landingPage?.heroDescription || ""} className="w-full px-4 py-2 border rounded-md text-sm" />
+                      </div>
+                      <div className="space-y-1.5 md:col-span-2">
+                        <label className="block text-sm font-medium text-gray-700">Hero Image URL</label>
+                        <input type="text" name="heroImageUrl" defaultValue={landingPage?.heroImageUrl || ""} className="w-full px-4 py-2 border rounded-md text-sm font-mono" />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Value Section */}
+                  <div className="space-y-6">
+                    <h4 className="text-sm font-bold uppercase tracking-widest text-amber-600 border-b pb-2">Value Section</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-1.5">
+                        <label className="block text-sm font-medium text-gray-700">Value Title</label>
+                        <input type="text" name="valueTitle" defaultValue={landingPage?.valueTitle || ""} className="w-full px-4 py-2 border rounded-md text-sm" />
+                      </div>
+                      <div className="space-y-1.5 md:col-span-2">
+                        <label className="block text-sm font-medium text-gray-700">Value Description</label>
+                        <textarea name="valueDescription" rows={3} defaultValue={landingPage?.valueDescription || ""} className="w-full px-4 py-2 border rounded-md text-sm" />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Features */}
+                  <div className="space-y-6">
+                    <h4 className="text-sm font-bold uppercase tracking-widest text-amber-600 border-b pb-2">Features Section</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-1.5">
+                        <label className="block text-sm font-medium text-gray-700">Feature 1 Title</label>
+                        <input type="text" name="feature1Title" defaultValue={landingPage?.feature1Title || ""} className="w-full px-4 py-2 border rounded-md text-sm" />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="block text-sm font-medium text-gray-700">Feature 1 Image URL</label>
+                        <input type="text" name="feature1ImageUrl" defaultValue={landingPage?.feature1ImageUrl || ""} className="w-full px-4 py-2 border rounded-md text-xs font-mono" />
+                      </div>
+                      <div className="space-y-1.5 md:col-span-2">
+                        <label className="block text-sm font-medium text-gray-700">Feature 1 Desc</label>
+                        <textarea name="feature1Description" rows={2} defaultValue={landingPage?.feature1Description || ""} className="w-full px-4 py-2 border rounded-md text-sm" />
+                      </div>
+                    </div>
+                    {/* Add Feature 2 & 3 similarly if user needs, but let's keep it compact for now or do it all */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+                      <div className="space-y-1.5">
+                        <label className="block text-sm font-medium text-gray-700">Feature 2 Title</label>
+                        <input type="text" name="feature2Title" defaultValue={landingPage?.feature2Title || ""} className="w-full px-4 py-2 border rounded-md text-sm" />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="block text-sm font-medium text-gray-700">Feature 2 Image URL</label>
+                        <input type="text" name="feature2ImageUrl" defaultValue={landingPage?.feature2ImageUrl || ""} className="w-full px-4 py-2 border rounded-md text-xs font-mono" />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+                      <div className="space-y-1.5">
+                        <label className="block text-sm font-medium text-gray-700">Feature 3 Title</label>
+                        <input type="text" name="feature3Title" defaultValue={landingPage?.feature3Title || ""} className="w-full px-4 py-2 border rounded-md text-sm" />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="block text-sm font-medium text-gray-700">Feature 3 Image URL</label>
+                        <input type="text" name="feature3ImageUrl" defaultValue={landingPage?.feature3ImageUrl || ""} className="w-full px-4 py-2 border rounded-md text-xs font-mono" />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* CTA Section */}
+                  <div className="space-y-6">
+                    <h4 className="text-sm font-bold uppercase tracking-widest text-amber-600 border-b pb-2">CTA Section</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-1.5">
+                        <label className="block text-sm font-medium text-gray-700">CTA Title</label>
+                        <input type="text" name="ctaTitle" defaultValue={landingPage?.ctaTitle || ""} className="w-full px-4 py-2 border rounded-md text-sm" />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="block text-sm font-medium text-gray-700">CTA Subtitle</label>
+                        <input type="text" name="ctaSubtitle" defaultValue={landingPage?.ctaSubtitle || ""} className="w-full px-4 py-2 border rounded-md text-sm" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="pt-6 border-t flex justify-end">
+                    <button type="submit" disabled={isPending} className="px-10 py-4 bg-amber-600 text-white font-bold uppercase tracking-widest rounded-md hover:bg-amber-700 transition-all disabled:opacity-50">
+                      Update Landing Page
+                    </button>
+                  </div>
+                </form>
+              </section>
+            </div>
+          )}
+
         </div>
       </main>
 
@@ -732,6 +919,10 @@ export default function AdminClient({
         <button onClick={() => setActiveTab("USERS")} className={`flex flex-col items-center p-2 rounded-lg ${activeTab === 'USERS' ? 'text-blue-400 bg-gray-800' : 'text-gray-400 hover:text-gray-200'}`}>
           <svg className="w-5 h-5 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
           <span className="text-[9px] font-medium tracking-wide">User</span>
+        </button>
+        <button onClick={() => setActiveTab("LANDING")} className={`flex flex-col items-center p-2 rounded-lg ${activeTab === 'LANDING' ? 'text-blue-400 bg-gray-800' : 'text-gray-400 hover:text-gray-200'}`}>
+          <svg className="w-5 h-5 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9s2.015-9 4.5-9m0 18c-5.982 0-10.833-4.851-10.833-10.833" /></svg>
+          <span className="text-[9px] font-medium tracking-wide">Landing</span>
         </button>
         <Link href="/dashboard" className="flex flex-col items-center p-2 rounded-lg text-rose-400 hover:text-rose-300">
           <svg className="w-5 h-5 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
