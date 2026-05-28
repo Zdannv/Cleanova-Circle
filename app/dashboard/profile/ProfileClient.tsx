@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { updateProfileAction } from "./actions";
@@ -18,9 +19,11 @@ type UserData = {
 export default function ProfileClient({
   user,
   avatars,
+  isAdmin = false,
 }: {
   user: UserData;
   avatars: string[];
+  isAdmin?: boolean;
 }) {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
@@ -63,6 +66,33 @@ export default function ProfileClient({
           Kustomisasi akun Anda. Atur nama, password, dan identitas visual di Cleanova Circle.
         </p>
       </header>
+
+      {isAdmin && (
+        <Link
+          href="/admin"
+          className="group block bg-gradient-to-br from-amber-50 to-amber-100/60 dark:from-amber-900/20 dark:to-amber-950/30 border border-amber-200 dark:border-amber-800/40 rounded-3xl p-6 md:p-7 shadow-sm hover:shadow-md hover:border-amber-300 dark:hover:border-amber-700 transition-all"
+        >
+          <div className="flex items-center gap-5">
+            <div className="w-14 h-14 rounded-2xl bg-amber-600 text-white flex items-center justify-center shadow-md shadow-amber-600/30 group-hover:scale-105 transition-transform flex-shrink-0">
+              <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
+              </svg>
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <h2 className="font-serif font-semibold text-lg md:text-xl text-stone-900 dark:text-white">CMS Admin Panel</h2>
+                <span className="text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full bg-amber-600 text-white">Admin</span>
+              </div>
+              <p className="text-sm text-stone-600 dark:text-stone-400 font-light mt-0.5">
+                Kelola artikel, video, dan konten Cleanova Circle.
+              </p>
+            </div>
+            <svg className="w-5 h-5 text-amber-600 dark:text-amber-500 group-hover:translate-x-1 transition-transform flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
+        </Link>
+      )}
 
       <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-3xl overflow-hidden shadow-sm relative">
         {isPending && (

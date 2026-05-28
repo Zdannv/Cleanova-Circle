@@ -21,5 +21,5 @@ export default async function ProfilePage() {
   // Define avatars
   const avatars = Array.from({ length: 12 }, (_, i) => `${i + 1}.png`);
 
-  return <ProfileClient user={user} avatars={avatars} />;
+  return <ProfileClient user={user} avatars={avatars} isAdmin={user.role === "ADMIN"} />;
 }

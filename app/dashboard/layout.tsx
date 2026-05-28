@@ -14,6 +14,7 @@ export default function DashboardLayout({
   const pathname = usePathname();
   const { data: session } = useSession();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const isAdmin = (session?.user as any)?.role === "ADMIN";
 
   const navLinks = [
     { label: "Dashboard", href: "/dashboard", icon: "M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" },
@@ -21,6 +22,9 @@ export default function DashboardLayout({
     { label: "Artikel", href: "/dashboard/articles", icon: "M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" },
     { label: "Saved", href: "/dashboard/bookmarks", icon: "M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" },
   ];
+
+  // Admin-only icon (shield-check) for admin access
+  const adminIconPath = "M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z";
 
   return (
     <div className="flex h-screen bg-[#fafaf9] text-stone-900 font-sans dark:bg-stone-950 dark:text-stone-50 overflow-hidden">
@@ -68,7 +72,21 @@ export default function DashboardLayout({
           })}
         </nav>
         
-        <div className="p-4 border-t border-stone-200 dark:border-stone-800 bg-stone-50/50 dark:bg-stone-900">
+        <div className="p-4 border-t border-stone-200 dark:border-stone-800 bg-stone-50/50 dark:bg-stone-900 space-y-2">
+          {isAdmin && (
+            <Link
+              href="/admin"
+              title={!isSidebarOpen ? "Admin Panel" : undefined}
+              className={`flex items-center ${isSidebarOpen ? "gap-3 px-3" : "justify-center px-0"} py-3 w-full rounded-xl text-sm font-medium text-amber-700 hover:text-amber-800 bg-amber-50/80 hover:bg-amber-100 dark:text-amber-400 dark:hover:text-amber-300 dark:bg-amber-900/20 dark:hover:bg-amber-900/30 transition-colors border border-amber-200/60 dark:border-amber-800/40`}
+            >
+              <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d={adminIconPath} />
+              </svg>
+              <span className={`whitespace-nowrap transition-all duration-300 ${isSidebarOpen ? "opacity-100 block" : "opacity-0 hidden"}`}>
+                Admin Panel
+              </span>
+            </Link>
+          )}
           <button
             onClick={() => signOut({ callbackUrl: '/' })}
             title={!isSidebarOpen ? "Keluar Akun" : undefined}
@@ -96,6 +114,17 @@ export default function DashboardLayout({
             </span>
           </Link>
           <div className="flex items-center gap-2">
+            {isAdmin && (
+              <Link
+                href="/admin"
+                title="Admin Panel"
+                className="text-amber-600 hover:text-amber-700 dark:text-amber-500 dark:hover:text-amber-400 p-2 rounded-full bg-amber-50 hover:bg-amber-100 dark:bg-amber-900/20 dark:hover:bg-amber-900/30 transition-colors"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d={adminIconPath} />
+                </svg>
+              </Link>
+            )}
             <Link 
               href="/dashboard/profile"
               className="text-stone-500 hover:text-amber-600 dark:text-stone-400 dark:hover:text-amber-500 p-2 rounded-full hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
