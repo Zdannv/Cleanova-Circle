@@ -2,7 +2,9 @@
 
 import { useState, useRef, useTransition, useCallback } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import dynamic from "next/dynamic";
+import { supabase, SUPABASE_BUCKET } from "../../lib/supabase";
 
 const MarkdownPreview = dynamic(() => import("../dashboard/articles/MarkdownContent"), { ssr: false });
 import { 
@@ -105,6 +107,9 @@ export default function AdminClient({
   const [editingVideo, setEditingVideo] = useState<Video | null>(null);
   const [editingArticle, setEditingArticle] = useState<Article | null>(null);
   const [articleContent, setArticleContent] = useState("");
+  const [coverImageUrl, setCoverImageUrl] = useState("");
+  const [isUploadingCover, setIsUploadingCover] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const [isDocxLoading, setIsDocxLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -113,6 +118,72 @@ export default function AdminClient({
   const userFormRef = useRef<HTMLFormElement>(null);
   const articleFormRef = useRef<HTMLFormElement>(null);
   const docxInputRef = useRef<HTMLInputElement>(null);
+  const coverImageInputRef = useRef<HTMLInputElement>(null);
+
+  // Upload cover image ke Supabase Storage, lalu simpan public URL ke state.
+  const uploadImageToSupabase = useCallback(async (file: File): Promise<string | null> => {
+    setUploadError(null);
+    setIsUploadingCover(true);
+    try {
+      const safeName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, "_");
+      const fileName = `articles/${Date.now()}-${safeName}`;
+
+      const { error: uploadErr } = await supabase.storage
+        .from(SUPABASE_BUCKET)
+        .upload(fileName, file, {
+          cacheControl: "3600",
+          upsert: false,
+          contentType: file.type || "image/jpeg",
+        });
+
+      if (uploadErr) {
+        throw uploadErr;
+      }
+
+      const { data: publicData } = supabase.storage
+        .from(SUPABASE_BUCKET)
+        .getPublicUrl(fileName);
+
+      if (!publicData?.publicUrl) {
+        throw new Error("Gagal mengambil public URL setelah upload.");
+      }
+
+      return publicData.publicUrl;
+    } catch (err: any) {
+      const msg = err?.message || "Upload gambar gagal. Coba lagi.";
+      setUploadError(msg);
+      return null;
+    } finally {
+      setIsUploadingCover(false);
+    }
+  }, []);
+
+  const handleCoverFileChange = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      setUploadError("File harus berupa gambar (jpg, png, webp, dll).");
+      return;
+    }
+    // Batasi ukuran (5MB) agar tidak membebani storage.
+    if (file.size > 5 * 1024 * 1024) {
+      setUploadError("Ukuran gambar maksimal 5MB.");
+      return;
+    }
+    const url = await uploadImageToSupabase(file);
+    if (url) {
+      setCoverImageUrl(url);
+    }
+    if (coverImageInputRef.current) coverImageInputRef.current.value = "";
+  }, [uploadImageToSupabase]);
+
+  const resetArticleForm = useCallback(() => {
+    setEditingArticle(null);
+    setArticleContent("");
+    setCoverImageUrl("");
+    setUploadError(null);
+    articleFormRef.current?.reset();
+  }, []);
 
   // VIDEO ACTIONS
   const handleVideoSubmit = (formData: FormData) => {
@@ -180,21 +251,24 @@ export default function AdminClient({
 
   // ARTICLE ACTIONS
   const handleArticleSubmit = (formData: FormData) => {
+    if (!coverImageUrl) {
+      setUploadError("Cover image wajib diunggah sebelum mempublikasikan artikel.");
+      return;
+    }
     startTransition(async () => {
       if (editingArticle) {
         await updateArticleAction(editingArticle.id, formData);
-        setEditingArticle(null);
       } else {
         await addArticleAction(formData);
       }
-      articleFormRef.current?.reset();
+      resetArticleForm();
     });
   };
 
   const handleArticleDelete = (id: string) => {
     if (confirm("Apakah Anda yakin ingin menghapus artikel/publikasi ini?")) {
       startTransition(async () => {
-        if (editingArticle?.id === id) setEditingArticle(null);
+        if (editingArticle?.id === id) resetArticleForm();
         await deleteArticleAction(id);
       });
     }
@@ -203,6 +277,8 @@ export default function AdminClient({
   const handleEditArticle = (article: Article) => {
     setEditingArticle(article);
     setArticleContent(article.content);
+    setCoverImageUrl(article.coverImage || "");
+    setUploadError(null);
     setActiveTab("ARTICLES");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -633,19 +709,82 @@ export default function AdminClient({
                     <input type="text" id="tag" name="tag" defaultValue={editingArticle?.tag || "Artikel"} className="w-full px-4 py-2.5 rounded-md border border-gray-300 focus:ring-2 focus:ring-blue-500 text-sm" placeholder="Contoh: TIPS & TRIK" />
                   </div>
                   <div className="space-y-1.5">
-                    <label htmlFor="coverImage" className="block text-sm font-medium text-gray-700">Cover Image URL</label>
+                    <label htmlFor="coverImageFile" className="block text-sm font-medium text-gray-700">Cover Image</label>
+                    {/* Hidden field — value yang nyatanya dikirim ke server action */}
+                    <input type="hidden" name="coverImage" value={coverImageUrl} />
+
+                    {coverImageUrl ? (
+                      <div className="space-y-2">
+                        <div className="relative w-full aspect-[16/9] rounded-md overflow-hidden border border-gray-200 bg-gray-50">
+                          <Image
+                            src={coverImageUrl}
+                            alt="Preview cover"
+                            fill
+                            sizes="(max-width: 768px) 100vw, 50vw"
+                            className="object-cover"
+                            unoptimized
+                          />
+                        </div>
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <button
+                            type="button"
+                            onClick={() => coverImageInputRef.current?.click()}
+                            disabled={isUploadingCover || isPending}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200 rounded-md transition-colors disabled:opacity-50"
+                          >
+                            Ganti Gambar
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => { setCoverImageUrl(""); setUploadError(null); }}
+                            disabled={isUploadingCover || isPending}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-rose-50 text-rose-700 hover:bg-rose-100 border border-rose-200 rounded-md transition-colors disabled:opacity-50"
+                          >
+                            Hapus
+                          </button>
+                          <span className="text-[11px] text-gray-500 truncate max-w-[180px]" title={coverImageUrl}>{coverImageUrl}</span>
+                        </div>
+                      </div>
+                    ) : (
+                      <label
+                        htmlFor="coverImageFile"
+                        className={`flex flex-col items-center justify-center w-full aspect-[16/9] rounded-md border-2 border-dashed ${isUploadingCover ? "border-indigo-300 bg-indigo-50/40" : "border-gray-300 bg-gray-50 hover:bg-gray-100"} cursor-pointer transition-colors`}
+                      >
+                        {isUploadingCover ? (
+                          <div className="flex flex-col items-center gap-2 text-indigo-600">
+                            <svg className="w-6 h-6 animate-spin" viewBox="0 0 24 24" fill="none">
+                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+                            </svg>
+                            <span className="text-sm font-medium">Mengunggah gambar…</span>
+                          </div>
+                        ) : (
+                          <div className="flex flex-col items-center gap-1 text-gray-500">
+                            <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 7.5m0 0L7.5 12M12 7.5v9" />
+                            </svg>
+                            <span className="text-sm font-medium text-gray-700">Klik untuk pilih gambar</span>
+                            <span className="text-xs text-gray-500">JPG, PNG, atau WEBP · maks. 5MB</span>
+                          </div>
+                        )}
+                      </label>
+                    )}
+
                     <input
-                      type="text"
-                      id="coverImage"
-                      name="coverImage"
-                      required
-                      defaultValue={editingArticle?.coverImage || ""}
-                      className="w-full px-4 py-2.5 rounded-md border border-gray-300 focus:ring-2 focus:ring-blue-500 text-sm font-mono"
-                      placeholder="https://i.postimg.cc/xxxxxx/nama-file.jpg"
+                      ref={coverImageInputRef}
+                      id="coverImageFile"
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleCoverFileChange}
+                      disabled={isUploadingCover || isPending}
                     />
+
+                    {uploadError && (
+                      <p className="text-xs text-rose-600 mt-1">⚠ {uploadError}</p>
+                    )}
                     <p className="text-xs text-gray-500 mt-1 leading-relaxed">
-                      Untuk gambar dari Postimages, pastikan URL diawali <code className="bg-gray-100 px-1 rounded text-indigo-600">https://i.postimg.cc/</code> (bukan <code className="bg-gray-100 px-1 rounded text-red-500">postimg.cc</code>). Cara: setelah upload → klik kanan gambar → <em>Copy image address</em>.
-                      Untuk gambar lokal gunakan path seperti <code className="bg-gray-100 px-1 rounded text-indigo-600">/landing-page/nama.jpg</code>
+                      Gambar diunggah ke Supabase Storage (bucket <code className="bg-gray-100 px-1 rounded text-indigo-600">{SUPABASE_BUCKET}</code>) dan URL publiknya disimpan ke artikel.
                     </p>
                   </div>
                   <div className="space-y-1.5">
@@ -714,10 +853,18 @@ export default function AdminClient({
                   </div>
                   <div className="pt-2 flex gap-3">
                      {editingArticle && (
-                       <button type="button" onClick={() => { setEditingArticle(null); setArticleContent(""); articleFormRef.current?.reset(); }} className="flex-1 py-2.5 bg-white border border-gray-300 text-gray-700 font-medium rounded-md shadow-sm transition-colors text-sm" disabled={isPending}>Batal</button>
+                       <button type="button" onClick={resetArticleForm} className="flex-1 py-2.5 bg-white border border-gray-300 text-gray-700 font-medium rounded-md shadow-sm transition-colors text-sm" disabled={isPending || isUploadingCover}>Batal</button>
                      )}
-                    <button type="submit" disabled={isPending || isDocxLoading} className="flex-1 py-2.5 text-white font-medium rounded-md shadow-sm transition-colors text-sm bg-gray-900 hover:bg-black disabled:opacity-50">
-                      {editingArticle ? "Simpan Perbaikan" : "Publikasi Artikel"}
+                    <button
+                      type="submit"
+                      disabled={isPending || isDocxLoading || isUploadingCover || !coverImageUrl}
+                      className="flex-1 py-2.5 text-white font-medium rounded-md shadow-sm transition-colors text-sm bg-gray-900 hover:bg-black disabled:opacity-50"
+                    >
+                      {isUploadingCover
+                        ? "Mengunggah gambar…"
+                        : editingArticle
+                          ? "Simpan Perbaikan"
+                          : "Publikasi Artikel"}
                     </button>
                   </div>
                 </form>
