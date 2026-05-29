@@ -18,8 +18,8 @@ import {
   addArticleAction,
   updateArticleAction,
   deleteArticleAction,
-  updateLandingPageAction
 } from "./actions";
+import LandingEditor from "./LandingEditor";
 
 type Category = {
   id: string;
@@ -283,13 +283,7 @@ export default function AdminClient({
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // LANDING PAGE ACTIONS
-  const handleLandingSubmit = (formData: FormData) => {
-    startTransition(async () => {
-      await updateLandingPageAction(formData);
-      alert("Landing page berhasil diperbarui!");
-    });
-  };
+  // LANDING PAGE — handler ditangani oleh komponen <LandingEditor /> sendiri.
 
   // DOCX IMPORT
   const htmlToMarkdown = (html: string): string => {
@@ -914,135 +908,8 @@ export default function AdminClient({
 
           {/* TAB 5: LANDING PAGE */}
           {activeTab === "LANDING" && (
-            <div className="space-y-8 pb-10">
-              <section className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden text-gray-900">
-                <div className="px-6 py-5 border-b border-gray-200 bg-gray-50/50 flex justify-between items-center">
-                  <h3 className="text-base font-semibold text-gray-800">Pengaturan Landing Page</h3>
-                  <button 
-                    form="landing-page-form"
-                    type="submit" 
-                    disabled={isPending}
-                    className="px-6 py-2 bg-gray-900 text-white text-sm font-medium rounded hover:bg-black transition-colors disabled:opacity-50"
-                  >
-                    Simpan Semua Perubahan
-                  </button>
-                </div>
-                <form id="landing-page-form" action={handleLandingSubmit} className="p-6 space-y-12">
-                   {/* Header & Logo */}
-                   <div className="space-y-6">
-                    <h4 className="text-sm font-bold uppercase tracking-widest text-amber-600 border-b pb-2">Header & Logo</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-1.5">
-                        <label className="block text-sm font-medium text-gray-700">Logo Image URL</label>
-                        <input type="text" name="logoUrl" defaultValue={landingPage?.logoUrl || "/landing-page/logo.jpg"} className="w-full px-4 py-2 border rounded-md text-sm font-mono" />
-                      </div>
-                      <div className="space-y-1.5">
-                        <label className="block text-sm font-medium text-gray-700">WhatsApp URL</label>
-                        <input type="text" name="whatsappUrl" defaultValue={landingPage?.whatsappUrl || "https://wa.me/..."} className="w-full px-4 py-2 border rounded-md text-sm font-mono" />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Hero Section */}
-                  <div className="space-y-6">
-                    <h4 className="text-sm font-bold uppercase tracking-widest text-amber-600 border-b pb-2">Hero Section</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-1.5">
-                        <label className="block text-sm font-medium text-gray-700">Hero Title</label>
-                        <input type="text" name="heroTitle" defaultValue={landingPage?.heroTitle || "Kembalikan Kilau"} className="w-full px-4 py-2 border rounded-md text-sm" />
-                      </div>
-                      <div className="space-y-1.5">
-                        <label className="block text-sm font-medium text-gray-700">Hero Subtitle</label>
-                        <input type="text" name="heroSubtitle" defaultValue={landingPage?.heroSubtitle || "Koleksi Berharga Anda."} className="w-full px-4 py-2 border rounded-md text-sm italic" />
-                      </div>
-                      <div className="space-y-1.5 md:col-span-2">
-                        <label className="block text-sm font-medium text-gray-700">Hero Description</label>
-                        <textarea name="heroDescription" rows={3} defaultValue={landingPage?.heroDescription || ""} className="w-full px-4 py-2 border rounded-md text-sm" />
-                      </div>
-                      <div className="space-y-1.5 md:col-span-2">
-                        <label className="block text-sm font-medium text-gray-700">Hero Image URL</label>
-                        <input type="text" name="heroImageUrl" defaultValue={landingPage?.heroImageUrl || ""} className="w-full px-4 py-2 border rounded-md text-sm font-mono" />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Value Section */}
-                  <div className="space-y-6">
-                    <h4 className="text-sm font-bold uppercase tracking-widest text-amber-600 border-b pb-2">Value Section</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-1.5">
-                        <label className="block text-sm font-medium text-gray-700">Value Title</label>
-                        <input type="text" name="valueTitle" defaultValue={landingPage?.valueTitle || ""} className="w-full px-4 py-2 border rounded-md text-sm" />
-                      </div>
-                      <div className="space-y-1.5 md:col-span-2">
-                        <label className="block text-sm font-medium text-gray-700">Value Description</label>
-                        <textarea name="valueDescription" rows={3} defaultValue={landingPage?.valueDescription || ""} className="w-full px-4 py-2 border rounded-md text-sm" />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Features */}
-                  <div className="space-y-6">
-                    <h4 className="text-sm font-bold uppercase tracking-widest text-amber-600 border-b pb-2">Features Section</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-1.5">
-                        <label className="block text-sm font-medium text-gray-700">Feature 1 Title</label>
-                        <input type="text" name="feature1Title" defaultValue={landingPage?.feature1Title || ""} className="w-full px-4 py-2 border rounded-md text-sm" />
-                      </div>
-                      <div className="space-y-1.5">
-                        <label className="block text-sm font-medium text-gray-700">Feature 1 Image URL</label>
-                        <input type="text" name="feature1ImageUrl" defaultValue={landingPage?.feature1ImageUrl || ""} className="w-full px-4 py-2 border rounded-md text-xs font-mono" />
-                      </div>
-                      <div className="space-y-1.5 md:col-span-2">
-                        <label className="block text-sm font-medium text-gray-700">Feature 1 Desc</label>
-                        <textarea name="feature1Description" rows={2} defaultValue={landingPage?.feature1Description || ""} className="w-full px-4 py-2 border rounded-md text-sm" />
-                      </div>
-                    </div>
-                    {/* Add Feature 2 & 3 similarly if user needs, but let's keep it compact for now or do it all */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
-                      <div className="space-y-1.5">
-                        <label className="block text-sm font-medium text-gray-700">Feature 2 Title</label>
-                        <input type="text" name="feature2Title" defaultValue={landingPage?.feature2Title || ""} className="w-full px-4 py-2 border rounded-md text-sm" />
-                      </div>
-                      <div className="space-y-1.5">
-                        <label className="block text-sm font-medium text-gray-700">Feature 2 Image URL</label>
-                        <input type="text" name="feature2ImageUrl" defaultValue={landingPage?.feature2ImageUrl || ""} className="w-full px-4 py-2 border rounded-md text-xs font-mono" />
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
-                      <div className="space-y-1.5">
-                        <label className="block text-sm font-medium text-gray-700">Feature 3 Title</label>
-                        <input type="text" name="feature3Title" defaultValue={landingPage?.feature3Title || ""} className="w-full px-4 py-2 border rounded-md text-sm" />
-                      </div>
-                      <div className="space-y-1.5">
-                        <label className="block text-sm font-medium text-gray-700">Feature 3 Image URL</label>
-                        <input type="text" name="feature3ImageUrl" defaultValue={landingPage?.feature3ImageUrl || ""} className="w-full px-4 py-2 border rounded-md text-xs font-mono" />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* CTA Section */}
-                  <div className="space-y-6">
-                    <h4 className="text-sm font-bold uppercase tracking-widest text-amber-600 border-b pb-2">CTA Section</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-1.5">
-                        <label className="block text-sm font-medium text-gray-700">CTA Title</label>
-                        <input type="text" name="ctaTitle" defaultValue={landingPage?.ctaTitle || ""} className="w-full px-4 py-2 border rounded-md text-sm" />
-                      </div>
-                      <div className="space-y-1.5">
-                        <label className="block text-sm font-medium text-gray-700">CTA Subtitle</label>
-                        <input type="text" name="ctaSubtitle" defaultValue={landingPage?.ctaSubtitle || ""} className="w-full px-4 py-2 border rounded-md text-sm" />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="pt-6 border-t flex justify-end">
-                    <button type="submit" disabled={isPending} className="px-10 py-4 bg-amber-600 text-white font-bold uppercase tracking-widest rounded-md hover:bg-amber-700 transition-all disabled:opacity-50">
-                      Update Landing Page
-                    </button>
-                  </div>
-                </form>
-              </section>
+            <div className="pb-10">
+              <LandingEditor initial={landingPage} />
             </div>
           )}
 
