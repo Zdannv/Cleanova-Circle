@@ -6,6 +6,9 @@ export const metadata = {
   description: "Belanja produk perawatan koleksi premium di Cleanova Circle.",
 };
 
+// Katalog harus selalu fresh — produk bisa ditambah/diubah admin kapan saja.
+export const dynamic = "force-dynamic";
+
 export default async function ShopPage() {
   const products = await prisma.product.findMany({
     orderBy: [{ isActive: "desc" }, { createdAt: "desc" }],

@@ -59,6 +59,7 @@ export async function addProductAction(formData: FormData) {
   });
 
   revalidatePath("/admin/products");
+  revalidatePath("/shop");
 }
 
 export async function updateProductAction(id: string, formData: FormData) {
@@ -87,6 +88,7 @@ export async function updateProductAction(id: string, formData: FormData) {
   });
 
   revalidatePath("/admin/products");
+  revalidatePath("/shop");
 }
 
 export async function deleteProductAction(id: string) {
@@ -104,4 +106,5 @@ export async function deleteProductAction(id: string) {
   }
 
   revalidatePath("/admin/products");
+  revalidatePath("/shop");
 }

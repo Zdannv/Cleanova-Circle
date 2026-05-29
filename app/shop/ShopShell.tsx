@@ -36,12 +36,6 @@ export default function ShopShell({ children }: { children: React.ReactNode }) {
               Katalog
             </Link>
             <Link
-              href="/dashboard"
-              className="text-sm font-medium px-3 py-2 rounded-full text-stone-600 hover:text-stone-900 dark:text-stone-400 transition-colors"
-            >
-              Dashboard
-            </Link>
-            <Link
               href="/shop/cart"
               className={`relative inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all ${
                 pathname === "/shop/cart"

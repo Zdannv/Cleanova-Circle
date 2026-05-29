@@ -59,7 +59,7 @@ export default async function Home() {
             <div className="flex items-center gap-2 sm:gap-3">
               <Link
                 href="/shop"
-                className="hidden sm:inline-flex items-center justify-center gap-1.5 px-4 py-2.5 text-xs font-semibold tracking-widest uppercase text-stone-900 bg-amber-400 hover:bg-amber-500 transition-all shadow hover:shadow-lg hover:shadow-amber-500/30 hover:-translate-y-0.5 dark:text-stone-900"
+                className="inline-flex items-center justify-center gap-1.5 px-4 sm:px-5 py-2.5 text-xs font-semibold tracking-widest uppercase text-stone-900 bg-amber-400 hover:bg-amber-500 transition-all shadow hover:shadow-lg hover:shadow-amber-500/30 hover:-translate-y-0.5 dark:text-stone-900"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272" />
@@ -68,18 +68,12 @@ export default async function Home() {
               </Link>
               <Link
                 href="/dashboard"
-                className="hidden md:inline-flex items-center justify-center gap-1.5 px-4 py-2.5 text-xs font-semibold tracking-widest uppercase text-stone-700 bg-white border border-stone-300 hover:border-amber-500 hover:text-amber-700 transition-all dark:bg-stone-900 dark:text-stone-300 dark:border-stone-700 dark:hover:text-amber-500 dark:hover:border-amber-500"
+                className="inline-flex items-center justify-center gap-1.5 px-4 sm:px-5 py-2.5 text-xs font-semibold tracking-widest uppercase text-white bg-stone-900 hover:bg-amber-600 transition-all shadow hover:shadow-lg hover:-translate-y-0.5 dark:bg-white dark:text-stone-900 dark:hover:bg-amber-500"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                 </svg>
-                Tips & Trik
-              </Link>
-              <Link 
-                href="/login"
-                className="inline-flex items-center justify-center px-5 sm:px-6 py-2.5 text-xs font-semibold tracking-widest uppercase text-white transition-all bg-stone-900 rounded-none border border-transparent shadow hover:bg-amber-600 dark:bg-white dark:text-stone-900 dark:hover:bg-amber-500 hover:shadow-lg hover:-translate-y-0.5"
-              >
-                Member Login
+                Tips &amp; Trik
               </Link>
             </div>
           </div>
