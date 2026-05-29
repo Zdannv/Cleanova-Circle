@@ -383,6 +383,15 @@ export default function AdminClient({
             </svg>
             Akun Pengguna
           </button>
+          <Link
+            href="/admin/products"
+            className="w-full text-left px-4 py-3 rounded-md flex items-center gap-3 font-medium transition-colors text-gray-400 hover:text-white hover:bg-gray-800/50"
+          >
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+            </svg>
+            Produk Toko
+          </Link>
           <button 
             type="button"
             onClick={() => setActiveTab("LANDING")}
@@ -934,6 +943,10 @@ export default function AdminClient({
           <svg className="w-5 h-5 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
           <span className="text-[9px] font-medium tracking-wide">User</span>
         </button>
+        <Link href="/admin/products" className="flex flex-col items-center p-2 rounded-lg text-gray-400 hover:text-gray-200">
+          <svg className="w-5 h-5 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007z" /></svg>
+          <span className="text-[9px] font-medium tracking-wide">Produk</span>
+        </Link>
         <button onClick={() => setActiveTab("LANDING")} className={`flex flex-col items-center p-2 rounded-lg ${activeTab === 'LANDING' ? 'text-blue-400 bg-gray-800' : 'text-gray-400 hover:text-gray-200'}`}>
           <svg className="w-5 h-5 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9s2.015-9 4.5-9m0 18c-5.982 0-10.833-4.851-10.833-10.833" /></svg>
           <span className="text-[9px] font-medium tracking-wide">Landing</span>

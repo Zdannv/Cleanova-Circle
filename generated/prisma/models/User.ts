@@ -211,6 +211,7 @@ export type UserWhereInput = {
   Like?: Prisma.LikeListRelationFilter
   Note?: Prisma.NoteListRelationFilter
   Progress?: Prisma.ProgressListRelationFilter
+  Order?: Prisma.OrderListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -227,6 +228,7 @@ export type UserOrderByWithRelationInput = {
   Like?: Prisma.LikeOrderByRelationAggregateInput
   Note?: Prisma.NoteOrderByRelationAggregateInput
   Progress?: Prisma.ProgressOrderByRelationAggregateInput
+  Order?: Prisma.OrderOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -246,6 +248,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   Like?: Prisma.LikeListRelationFilter
   Note?: Prisma.NoteListRelationFilter
   Progress?: Prisma.ProgressListRelationFilter
+  Order?: Prisma.OrderListRelationFilter
 }, "id" | "phone" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -290,6 +293,7 @@ export type UserCreateInput = {
   Like?: Prisma.LikeCreateNestedManyWithoutUserInput
   Note?: Prisma.NoteCreateNestedManyWithoutUserInput
   Progress?: Prisma.ProgressCreateNestedManyWithoutUserInput
+  Order?: Prisma.OrderCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -306,6 +310,7 @@ export type UserUncheckedCreateInput = {
   Like?: Prisma.LikeUncheckedCreateNestedManyWithoutUserInput
   Note?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
   Progress?: Prisma.ProgressUncheckedCreateNestedManyWithoutUserInput
+  Order?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -322,6 +327,7 @@ export type UserUpdateInput = {
   Like?: Prisma.LikeUpdateManyWithoutUserNestedInput
   Note?: Prisma.NoteUpdateManyWithoutUserNestedInput
   Progress?: Prisma.ProgressUpdateManyWithoutUserNestedInput
+  Order?: Prisma.OrderUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -338,6 +344,7 @@ export type UserUncheckedUpdateInput = {
   Like?: Prisma.LikeUncheckedUpdateManyWithoutUserNestedInput
   Note?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
   Progress?: Prisma.ProgressUncheckedUpdateManyWithoutUserNestedInput
+  Order?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -409,6 +416,11 @@ export type UserMinOrderByAggregateInput = {
   password?: Prisma.SortOrder
   role?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+}
+
+export type UserNullableScalarRelationFilter = {
+  is?: Prisma.UserWhereInput | null
+  isNot?: Prisma.UserWhereInput | null
 }
 
 export type UserCreateNestedOneWithoutBookmarkInput = {
@@ -485,6 +497,22 @@ export type EnumRoleFieldUpdateOperationsInput = {
   set?: $Enums.Role
 }
 
+export type UserCreateNestedOneWithoutOrderInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOrderInput, Prisma.UserUncheckedCreateWithoutOrderInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOrderInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutOrderNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOrderInput, Prisma.UserUncheckedCreateWithoutOrderInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOrderInput
+  upsert?: Prisma.UserUpsertWithoutOrderInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutOrderInput, Prisma.UserUpdateWithoutOrderInput>, Prisma.UserUncheckedUpdateWithoutOrderInput>
+}
+
 export type UserCreateWithoutBookmarkInput = {
   id: string
   name: string
@@ -498,6 +526,7 @@ export type UserCreateWithoutBookmarkInput = {
   Like?: Prisma.LikeCreateNestedManyWithoutUserInput
   Note?: Prisma.NoteCreateNestedManyWithoutUserInput
   Progress?: Prisma.ProgressCreateNestedManyWithoutUserInput
+  Order?: Prisma.OrderCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutBookmarkInput = {
@@ -513,6 +542,7 @@ export type UserUncheckedCreateWithoutBookmarkInput = {
   Like?: Prisma.LikeUncheckedCreateNestedManyWithoutUserInput
   Note?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
   Progress?: Prisma.ProgressUncheckedCreateNestedManyWithoutUserInput
+  Order?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutBookmarkInput = {
@@ -544,6 +574,7 @@ export type UserUpdateWithoutBookmarkInput = {
   Like?: Prisma.LikeUpdateManyWithoutUserNestedInput
   Note?: Prisma.NoteUpdateManyWithoutUserNestedInput
   Progress?: Prisma.ProgressUpdateManyWithoutUserNestedInput
+  Order?: Prisma.OrderUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBookmarkInput = {
@@ -559,6 +590,7 @@ export type UserUncheckedUpdateWithoutBookmarkInput = {
   Like?: Prisma.LikeUncheckedUpdateManyWithoutUserNestedInput
   Note?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
   Progress?: Prisma.ProgressUncheckedUpdateManyWithoutUserNestedInput
+  Order?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutLikeInput = {
@@ -574,6 +606,7 @@ export type UserCreateWithoutLikeInput = {
   Comment?: Prisma.CommentCreateNestedManyWithoutUserInput
   Note?: Prisma.NoteCreateNestedManyWithoutUserInput
   Progress?: Prisma.ProgressCreateNestedManyWithoutUserInput
+  Order?: Prisma.OrderCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutLikeInput = {
@@ -589,6 +622,7 @@ export type UserUncheckedCreateWithoutLikeInput = {
   Comment?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
   Note?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
   Progress?: Prisma.ProgressUncheckedCreateNestedManyWithoutUserInput
+  Order?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutLikeInput = {
@@ -620,6 +654,7 @@ export type UserUpdateWithoutLikeInput = {
   Comment?: Prisma.CommentUpdateManyWithoutUserNestedInput
   Note?: Prisma.NoteUpdateManyWithoutUserNestedInput
   Progress?: Prisma.ProgressUpdateManyWithoutUserNestedInput
+  Order?: Prisma.OrderUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLikeInput = {
@@ -635,6 +670,7 @@ export type UserUncheckedUpdateWithoutLikeInput = {
   Comment?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
   Note?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
   Progress?: Prisma.ProgressUncheckedUpdateManyWithoutUserNestedInput
+  Order?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCommentInput = {
@@ -650,6 +686,7 @@ export type UserCreateWithoutCommentInput = {
   Like?: Prisma.LikeCreateNestedManyWithoutUserInput
   Note?: Prisma.NoteCreateNestedManyWithoutUserInput
   Progress?: Prisma.ProgressCreateNestedManyWithoutUserInput
+  Order?: Prisma.OrderCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCommentInput = {
@@ -665,6 +702,7 @@ export type UserUncheckedCreateWithoutCommentInput = {
   Like?: Prisma.LikeUncheckedCreateNestedManyWithoutUserInput
   Note?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
   Progress?: Prisma.ProgressUncheckedCreateNestedManyWithoutUserInput
+  Order?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCommentInput = {
@@ -696,6 +734,7 @@ export type UserUpdateWithoutCommentInput = {
   Like?: Prisma.LikeUpdateManyWithoutUserNestedInput
   Note?: Prisma.NoteUpdateManyWithoutUserNestedInput
   Progress?: Prisma.ProgressUpdateManyWithoutUserNestedInput
+  Order?: Prisma.OrderUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCommentInput = {
@@ -711,6 +750,7 @@ export type UserUncheckedUpdateWithoutCommentInput = {
   Like?: Prisma.LikeUncheckedUpdateManyWithoutUserNestedInput
   Note?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
   Progress?: Prisma.ProgressUncheckedUpdateManyWithoutUserNestedInput
+  Order?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutNoteInput = {
@@ -726,6 +766,7 @@ export type UserCreateWithoutNoteInput = {
   Comment?: Prisma.CommentCreateNestedManyWithoutUserInput
   Like?: Prisma.LikeCreateNestedManyWithoutUserInput
   Progress?: Prisma.ProgressCreateNestedManyWithoutUserInput
+  Order?: Prisma.OrderCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutNoteInput = {
@@ -741,6 +782,7 @@ export type UserUncheckedCreateWithoutNoteInput = {
   Comment?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
   Like?: Prisma.LikeUncheckedCreateNestedManyWithoutUserInput
   Progress?: Prisma.ProgressUncheckedCreateNestedManyWithoutUserInput
+  Order?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutNoteInput = {
@@ -772,6 +814,7 @@ export type UserUpdateWithoutNoteInput = {
   Comment?: Prisma.CommentUpdateManyWithoutUserNestedInput
   Like?: Prisma.LikeUpdateManyWithoutUserNestedInput
   Progress?: Prisma.ProgressUpdateManyWithoutUserNestedInput
+  Order?: Prisma.OrderUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNoteInput = {
@@ -787,6 +830,7 @@ export type UserUncheckedUpdateWithoutNoteInput = {
   Comment?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
   Like?: Prisma.LikeUncheckedUpdateManyWithoutUserNestedInput
   Progress?: Prisma.ProgressUncheckedUpdateManyWithoutUserNestedInput
+  Order?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutProgressInput = {
@@ -802,6 +846,7 @@ export type UserCreateWithoutProgressInput = {
   Comment?: Prisma.CommentCreateNestedManyWithoutUserInput
   Like?: Prisma.LikeCreateNestedManyWithoutUserInput
   Note?: Prisma.NoteCreateNestedManyWithoutUserInput
+  Order?: Prisma.OrderCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutProgressInput = {
@@ -817,6 +862,7 @@ export type UserUncheckedCreateWithoutProgressInput = {
   Comment?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
   Like?: Prisma.LikeUncheckedCreateNestedManyWithoutUserInput
   Note?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
+  Order?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutProgressInput = {
@@ -848,6 +894,7 @@ export type UserUpdateWithoutProgressInput = {
   Comment?: Prisma.CommentUpdateManyWithoutUserNestedInput
   Like?: Prisma.LikeUpdateManyWithoutUserNestedInput
   Note?: Prisma.NoteUpdateManyWithoutUserNestedInput
+  Order?: Prisma.OrderUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProgressInput = {
@@ -863,6 +910,87 @@ export type UserUncheckedUpdateWithoutProgressInput = {
   Comment?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
   Like?: Prisma.LikeUncheckedUpdateManyWithoutUserNestedInput
   Note?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
+  Order?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutOrderInput = {
+  id: string
+  name: string
+  avatar?: string | null
+  phone: string
+  email?: string | null
+  password?: string | null
+  role?: $Enums.Role
+  createdAt?: Date | string
+  Bookmark?: Prisma.BookmarkCreateNestedManyWithoutUserInput
+  Comment?: Prisma.CommentCreateNestedManyWithoutUserInput
+  Like?: Prisma.LikeCreateNestedManyWithoutUserInput
+  Note?: Prisma.NoteCreateNestedManyWithoutUserInput
+  Progress?: Prisma.ProgressCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutOrderInput = {
+  id: string
+  name: string
+  avatar?: string | null
+  phone: string
+  email?: string | null
+  password?: string | null
+  role?: $Enums.Role
+  createdAt?: Date | string
+  Bookmark?: Prisma.BookmarkUncheckedCreateNestedManyWithoutUserInput
+  Comment?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
+  Like?: Prisma.LikeUncheckedCreateNestedManyWithoutUserInput
+  Note?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
+  Progress?: Prisma.ProgressUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutOrderInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutOrderInput, Prisma.UserUncheckedCreateWithoutOrderInput>
+}
+
+export type UserUpsertWithoutOrderInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutOrderInput, Prisma.UserUncheckedUpdateWithoutOrderInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutOrderInput, Prisma.UserUncheckedCreateWithoutOrderInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutOrderInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutOrderInput, Prisma.UserUncheckedUpdateWithoutOrderInput>
+}
+
+export type UserUpdateWithoutOrderInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  Bookmark?: Prisma.BookmarkUpdateManyWithoutUserNestedInput
+  Comment?: Prisma.CommentUpdateManyWithoutUserNestedInput
+  Like?: Prisma.LikeUpdateManyWithoutUserNestedInput
+  Note?: Prisma.NoteUpdateManyWithoutUserNestedInput
+  Progress?: Prisma.ProgressUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutOrderInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  Bookmark?: Prisma.BookmarkUncheckedUpdateManyWithoutUserNestedInput
+  Comment?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
+  Like?: Prisma.LikeUncheckedUpdateManyWithoutUserNestedInput
+  Note?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
+  Progress?: Prisma.ProgressUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -876,6 +1004,7 @@ export type UserCountOutputType = {
   Like: number
   Note: number
   Progress: number
+  Order: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -884,6 +1013,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   Like?: boolean | UserCountOutputTypeCountLikeArgs
   Note?: boolean | UserCountOutputTypeCountNoteArgs
   Progress?: boolean | UserCountOutputTypeCountProgressArgs
+  Order?: boolean | UserCountOutputTypeCountOrderArgs
 }
 
 /**
@@ -931,6 +1061,13 @@ export type UserCountOutputTypeCountProgressArgs<ExtArgs extends runtime.Types.E
   where?: Prisma.ProgressWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountOrderArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OrderWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -946,6 +1083,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   Like?: boolean | Prisma.User$LikeArgs<ExtArgs>
   Note?: boolean | Prisma.User$NoteArgs<ExtArgs>
   Progress?: boolean | Prisma.User$ProgressArgs<ExtArgs>
+  Order?: boolean | Prisma.User$OrderArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -989,6 +1127,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   Like?: boolean | Prisma.User$LikeArgs<ExtArgs>
   Note?: boolean | Prisma.User$NoteArgs<ExtArgs>
   Progress?: boolean | Prisma.User$ProgressArgs<ExtArgs>
+  Order?: boolean | Prisma.User$OrderArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1002,6 +1141,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     Like: Prisma.$LikePayload<ExtArgs>[]
     Note: Prisma.$NotePayload<ExtArgs>[]
     Progress: Prisma.$ProgressPayload<ExtArgs>[]
+    Order: Prisma.$OrderPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1411,6 +1551,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   Like<T extends Prisma.User$LikeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$LikeArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LikePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   Note<T extends Prisma.User$NoteArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$NoteArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   Progress<T extends Prisma.User$ProgressArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ProgressArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  Order<T extends Prisma.User$OrderArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$OrderArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1958,6 +2099,30 @@ export type User$ProgressArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.ProgressScalarFieldEnum | Prisma.ProgressScalarFieldEnum[]
+}
+
+/**
+ * User.Order
+ */
+export type User$OrderArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Order
+   */
+  select?: Prisma.OrderSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Order
+   */
+  omit?: Prisma.OrderOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OrderInclude<ExtArgs> | null
+  where?: Prisma.OrderWhereInput
+  orderBy?: Prisma.OrderOrderByWithRelationInput | Prisma.OrderOrderByWithRelationInput[]
+  cursor?: Prisma.OrderWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OrderScalarFieldEnum | Prisma.OrderScalarFieldEnum[]
 }
 
 /**

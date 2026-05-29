@@ -75,6 +75,7 @@ model User {
   Like      Like[]
   Note      Note[]
   Progress  Progress[]
+  Order     Order[]
 }
 
 model Video {
@@ -158,4 +159,66 @@ model LandingPage {
   ctaDescription    String   @default("Tingkatkan standar kebersihan dan estetika koleksi Anda hari ini juga tanpa menghabiskan budget berlebih di jasa terpadu.")
   
   updatedAt         DateTime @updatedAt @default(now())
+}
+
+
+// =====================================================
+// E-COMMERCE
+// =====================================================
+
+model Product {
+  id          String      @id @default(cuid())
+  name        String
+  slug        String      @unique
+  description String
+  price       Int         // dalam Rupiah (tanpa desimal)
+  stock       Int         @default(0)
+  imageUrl    String
+  isActive    Boolean     @default(true)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  OrderItem   OrderItem[]
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  SHIPPED
+  COMPLETED
+  CANCELLED
+}
+
+model Order {
+  id            String      @id @default(cuid())
+  userId        String?
+  status        OrderStatus @default(PENDING)
+  totalAmount   Int         // total dalam Rupiah
+  shippingName  String
+  shippingPhone String
+  shippingAddress String
+  notes         String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  User          User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+  OrderItem     OrderItem[]
+
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  productId String
+  // snapshot data produk saat checkout — supaya kalau produk diubah/dihapus, riwayat order tetap akurat
+  name      String
+  price     Int
+  quantity  Int
+  imageUrl  String
+  Order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  Product   Product @relation(fields: [productId], references: [id])
+
+  @@index([orderId])
+  @@index([productId])
 }
