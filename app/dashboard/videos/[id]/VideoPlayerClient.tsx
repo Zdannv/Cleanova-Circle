@@ -78,6 +78,8 @@ export default function VideoPlayerClient({
   isLiked?: boolean;
 }) {
   const youtubeId = getYouTubeId(video.url);
+  // Deteksi format Shorts dari raw URL (vertikal 9:16). Tidak ada perubahan schema.
+  const isShorts = typeof video.url === "string" && video.url.includes("/shorts/");
   const [isPending, startTransition] = useTransition();
   const [newNote, setNewNote] = useState("");
   const [optimisticProgress, setOptimisticProgress] = useState(initialProgress);
@@ -357,27 +359,31 @@ export default function VideoPlayerClient({
       </Link>
 
       {/* Video Player Container */}
-      <div className="bg-black rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl shadow-stone-200/50 dark:shadow-black/50 border border-stone-200 dark:border-stone-800">
-         <div className="relative pt-[56.25%] w-full">
-           {youtubeId ? (
-             <iframe
-               id="youtube-player"
-               className="absolute top-0 left-0 w-full h-full"
-               src={`https://www.youtube-nocookie.com/embed/${youtubeId}?rel=0&modestbranding=1&enablejsapi=1`}
-               title={video.title}
-               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-               allowFullScreen
-               referrerPolicy="strict-origin-when-cross-origin"
-             />
-           ) : (
-             <div className="absolute inset-0 flex flex-col items-center justify-center bg-stone-900 text-stone-400 gap-3">
-               <svg className="w-12 h-12 opacity-40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" />
-               </svg>
-               <p className="text-sm">Format URL video tidak didukung</p>
-             </div>
-           )}
-         </div>
+      <div
+        className={`bg-black overflow-hidden shadow-2xl shadow-stone-200/50 dark:shadow-black/50 border border-stone-200 dark:border-stone-800 ${
+          isShorts
+            ? "aspect-[9/16] w-full max-w-sm mx-auto rounded-xl relative"
+            : "aspect-video w-full rounded-xl relative"
+        }`}
+      >
+         {youtubeId ? (
+           <iframe
+             id="youtube-player"
+             className="absolute inset-0 w-full h-full"
+             src={`https://www.youtube-nocookie.com/embed/${youtubeId}?rel=0&modestbranding=1&enablejsapi=1`}
+             title={video.title}
+             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+             allowFullScreen
+             referrerPolicy="strict-origin-when-cross-origin"
+           />
+         ) : (
+           <div className="absolute inset-0 flex flex-col items-center justify-center bg-stone-900 text-stone-400 gap-3">
+             <svg className="w-12 h-12 opacity-40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" />
+             </svg>
+             <p className="text-sm">Format URL video tidak didukung</p>
+           </div>
+         )}
       </div>
 
       <div className="mt-4 mb-6 flex justify-end">
