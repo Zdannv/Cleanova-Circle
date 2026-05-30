@@ -183,6 +183,7 @@ model Product {
 enum OrderStatus {
   PENDING
   PAID
+  PACKED
   SHIPPED
   COMPLETED
   CANCELLED
@@ -195,6 +196,7 @@ model Order {
   totalAmount   Int         // total dalam Rupiah
   shippingName  String
   shippingPhone String
+  shippingEmail String?
   shippingAddress String
   notes         String?
   createdAt     DateTime    @default(now())

@@ -26,14 +26,16 @@ type Props = {
   isAuthenticated: boolean;
   defaultName: string;
   defaultPhone: string;
+  defaultEmail: string;
 };
 
-export default function CartClient({ isAuthenticated, defaultName, defaultPhone }: Props) {
+export default function CartClient({ isAuthenticated, defaultName, defaultPhone, defaultEmail }: Props) {
   const { items, totalQty, totalAmount, setQty, remove, clear, isHydrated } = useCart();
   const router = useRouter();
 
   const [name, setName] = useState(defaultName);
   const [phone, setPhone] = useState(defaultPhone);
+  const [email, setEmail] = useState(defaultEmail);
   const [address, setAddress] = useState("");
   const [notes, setNotes] = useState("");
 
@@ -45,8 +47,9 @@ export default function CartClient({ isAuthenticated, defaultName, defaultPhone 
   useEffect(() => {
     if (defaultName && !name) setName(defaultName);
     if (defaultPhone && !phone) setPhone(defaultPhone);
+    if (defaultEmail && !email) setEmail(defaultEmail);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [defaultName, defaultPhone]);
+  }, [defaultName, defaultPhone, defaultEmail]);
 
   // Polling cek snap.js sudah load.
   useEffect(() => {
@@ -67,6 +70,8 @@ export default function CartClient({ isAuthenticated, defaultName, defaultPhone 
   const validate = (): string | null => {
     if (items.length === 0) return "Keranjang kosong.";
     if (!name.trim()) return "Nama lengkap wajib diisi.";
+    if (!email.trim()) return "Email wajib diisi.";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) return "Format email tidak valid.";
     if (!phone.trim()) return "Nomor HP wajib diisi.";
     if (!/^[0-9+\s-]{8,20}$/.test(phone.trim())) return "Nomor HP tidak valid.";
     if (!address.trim() || address.trim().length < 10) return "Alamat lengkap minimal 10 karakter.";
@@ -95,6 +100,7 @@ export default function CartClient({ isAuthenticated, defaultName, defaultPhone 
           shipping: {
             name: name.trim(),
             phone: phone.trim(),
+            email: email.trim(),
             address: address.trim(),
             notes: notes.trim() || undefined,
           },
@@ -307,6 +313,19 @@ export default function CartClient({ isAuthenticated, defaultName, defaultPhone 
                       placeholder="08123456789"
                     />
                   </div>
+                </div>
+                <div className="space-y-1.5">
+                  <label htmlFor="ship-email" className="block text-xs font-medium text-stone-700 dark:text-stone-300">Email</label>
+                  <input
+                    id="ship-email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    className="w-full px-4 py-2.5 rounded-xl bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                    placeholder="email@anda.com"
+                  />
+                  <p className="text-[11px] text-stone-500">Untuk pengiriman bukti pembayaran dan update resi.</p>
                 </div>
                 <div className="space-y-1.5">
                   <label htmlFor="ship-address" className="block text-xs font-medium text-stone-700 dark:text-stone-300">Alamat Lengkap</label>

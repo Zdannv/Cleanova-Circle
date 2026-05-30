@@ -12,13 +12,15 @@ export default async function CartPage() {
 
   let defaultName = "";
   let defaultPhone = "";
+  let defaultEmail = "";
   if (session?.user?.id) {
     const user = await prisma.user.findUnique({
       where: { id: session.user.id },
-      select: { name: true, phone: true },
+      select: { name: true, phone: true, email: true },
     });
     defaultName = user?.name || "";
     defaultPhone = user?.phone || "";
+    defaultEmail = user?.email || "";
   }
 
   return (
@@ -26,6 +28,7 @@ export default async function CartPage() {
       isAuthenticated={!!session?.user?.id}
       defaultName={defaultName}
       defaultPhone={defaultPhone}
+      defaultEmail={defaultEmail}
     />
   );
 }

@@ -14,6 +14,7 @@ type CheckoutBody = {
   shipping: {
     name: string;
     phone: string;
+    email?: string;
     address: string;
     notes?: string;
   };
@@ -38,6 +39,13 @@ export async function POST(req: NextRequest) {
   }
   if (!shipping?.name?.trim() || !shipping?.phone?.trim() || !shipping?.address?.trim()) {
     return NextResponse.json({ error: "Data pengiriman wajib diisi (nama, telepon, alamat)." }, { status: 400 });
+  }
+  const shippingEmail = shipping.email?.trim() || "";
+  if (!shippingEmail) {
+    return NextResponse.json({ error: "Email wajib diisi." }, { status: 400 });
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(shippingEmail)) {
+    return NextResponse.json({ error: "Format email tidak valid." }, { status: 400 });
   }
 
   // Normalisasi & dedup item.
@@ -97,6 +105,7 @@ export async function POST(req: NextRequest) {
         totalAmount: total,
         shippingName: shipping.name.trim(),
         shippingPhone: shipping.phone.trim(),
+        shippingEmail: shippingEmail,
         shippingAddress: shipping.address.trim(),
         notes: shipping.notes?.trim() || null,
         OrderItem: {
@@ -132,6 +141,7 @@ export async function POST(req: NextRequest) {
       customer_details: {
         first_name: firstName,
         last_name: lastName,
+        email: shippingEmail,
         phone: shipping.phone.trim(),
         shipping_address: {
           first_name: firstName,

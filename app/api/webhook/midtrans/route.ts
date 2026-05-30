@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createHash } from "crypto";
 import prisma from "../../../../lib/prisma";
 import { coreApi, serverKey } from "../../../../lib/midtrans";
+import { sendInvoiceEmail } from "../../../../lib/mail";
 import type { OrderStatus } from "../../../../generated/prisma/client";
 
 /**
@@ -114,7 +115,7 @@ export async function POST(req: NextRequest) {
     data: { status: newStatus },
   });
 
-  // 4. Decrement stok kalau pertama kali masuk PAID.
+  // 4. Decrement stok kalau pertama kali masuk PAID, lalu kirim email invoice.
   if (newStatus === "PAID" && existing.status !== "PAID") {
     const items = await prisma.orderItem.findMany({
       where: { orderId },
@@ -129,6 +130,30 @@ export async function POST(req: NextRequest) {
           })
         )
       );
+    }
+
+    // Kirim email invoice ke pelanggan (best-effort, tidak menggagalkan webhook).
+    try {
+      const fullOrder = await prisma.order.findUnique({
+        where: { id: orderId },
+        include: { OrderItem: true },
+      });
+      if (fullOrder?.shippingEmail) {
+        await sendInvoiceEmail(fullOrder.shippingEmail, {
+          orderId: fullOrder.id,
+          customerName: fullOrder.shippingName,
+          totalAmount: fullOrder.totalAmount,
+          shippingAddress: fullOrder.shippingAddress,
+          items: fullOrder.OrderItem.map((it) => ({
+            name: it.name,
+            price: it.price,
+            quantity: it.quantity,
+          })),
+        });
+      }
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error("[midtrans-webhook] gagal kirim invoice email:", err);
     }
   }
 

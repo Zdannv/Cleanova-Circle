@@ -1580,6 +1580,7 @@ export const OrderScalarFieldEnum = {
   totalAmount: 'totalAmount',
   shippingName: 'shippingName',
   shippingPhone: 'shippingPhone',
+  shippingEmail: 'shippingEmail',
   shippingAddress: 'shippingAddress',
   notes: 'notes',
   createdAt: 'createdAt',
