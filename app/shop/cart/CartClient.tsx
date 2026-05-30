@@ -115,13 +115,29 @@ export default function CartClient({ isAuthenticated, defaultName, defaultPhone,
 
       const orderId = data.orderId as string;
 
+      // Helper: verifikasi status pembayaran ke server (fallback webhook,
+      // penting di localhost di mana webhook Midtrans tidak bisa menjangkau app).
+      const verifyPayment = async () => {
+        try {
+          await fetch("/api/checkout/verify", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ orderId }),
+          });
+        } catch {
+          // abaikan — webhook tetap akan menyinkronkan saat di produksi
+        }
+      };
+
       window.snap.pay(data.token, {
-        onSuccess: () => {
+        onSuccess: async () => {
+          await verifyPayment();
           clear();
-          alert("Pembayaran berhasil! Terima kasih sudah berbelanja di Cleanova Shop.");
+          alert("Pembayaran berhasil! Pesanan Anda otomatis masuk tahap dikemas. Bukti pembayaran dikirim ke email Anda.");
           router.push(`/shop?paid=${encodeURIComponent(orderId)}`);
         },
-        onPending: () => {
+        onPending: async () => {
+          await verifyPayment();
           clear();
           alert("Pembayaran sedang diproses. Status order akan otomatis ter-update setelah pembayaran selesai.");
           router.push(`/shop?pending=${encodeURIComponent(orderId)}`);

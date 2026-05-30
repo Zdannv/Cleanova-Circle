@@ -138,7 +138,7 @@ export async function sendInvoiceEmail(to: string, data: InvoiceData): Promise<S
     }
 
     <p style="font-size: 14px; line-height: 1.6; color: #444; margin-top: 20px;">
-      Kami akan segera memproses pesanan Anda. Anda akan menerima update via email setiap kali status pesanan berubah.
+      Pesanan Anda otomatis masuk tahap <strong>Dikemas 📦</strong>. Kami akan segera memprosesnya. Anda akan menerima update via email setiap kali status pesanan berubah.
     </p>
   `;
 

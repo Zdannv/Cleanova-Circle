@@ -44,33 +44,33 @@ export default async function Home() {
       {/* Navigation Header */}
       <nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-stone-200 dark:bg-stone-950/80 dark:border-stone-800 transition-colors duration-300">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
-            <div className="flex items-center gap-3">
+          <div className="flex justify-between items-center h-16 sm:h-20 gap-2">
+            <div className="flex items-center gap-2 sm:gap-3 min-w-0">
               <Image 
                 src={content.logoUrl} 
                 alt="Cleanova Circle Logo" 
                 width={40} height={40}
-                className="w-10 h-10 rounded-full object-contain shadow-lg shadow-amber-500/20"
+                className="w-8 h-8 sm:w-10 sm:h-10 rounded-full object-contain shadow-lg shadow-amber-500/20 flex-shrink-0"
               />
-              <span className="font-serif font-medium text-2xl tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-stone-800 to-stone-500 dark:from-stone-200 dark:to-stone-400">
+              <span className="font-serif font-medium text-base sm:text-xl lg:text-2xl tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-stone-800 to-stone-500 dark:from-stone-200 dark:to-stone-400 whitespace-nowrap truncate">
                 Cleanova Circle
               </span>
             </div>
-            <div className="flex items-center gap-2 sm:gap-3">
+            <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
               <Link
                 href="/shop"
-                className="inline-flex items-center justify-center gap-1.5 px-4 sm:px-5 py-2.5 text-xs font-semibold tracking-widest uppercase text-stone-900 bg-amber-400 hover:bg-amber-500 transition-all shadow hover:shadow-lg hover:shadow-amber-500/30 hover:-translate-y-0.5 dark:text-stone-900"
+                className="inline-flex items-center justify-center gap-1.5 px-3 sm:px-5 py-2 sm:py-2.5 text-[11px] sm:text-xs font-semibold tracking-wide sm:tracking-widest uppercase text-stone-900 bg-amber-400 hover:bg-amber-500 rounded-lg sm:rounded-none transition-all shadow hover:shadow-lg hover:shadow-amber-500/30 hover:-translate-y-0.5 dark:text-stone-900 whitespace-nowrap"
               >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272" />
                 </svg>
                 Toko
               </Link>
               <Link
                 href="/dashboard"
-                className="inline-flex items-center justify-center gap-1.5 px-4 sm:px-5 py-2.5 text-xs font-semibold tracking-widest uppercase text-white bg-stone-900 hover:bg-amber-600 transition-all shadow hover:shadow-lg hover:-translate-y-0.5 dark:bg-white dark:text-stone-900 dark:hover:bg-amber-500"
+                className="inline-flex items-center justify-center gap-1.5 px-3 sm:px-5 py-2 sm:py-2.5 text-[11px] sm:text-xs font-semibold tracking-wide sm:tracking-widest uppercase text-white bg-stone-900 hover:bg-amber-600 rounded-lg sm:rounded-none transition-all shadow hover:shadow-lg hover:-translate-y-0.5 dark:bg-white dark:text-stone-900 dark:hover:bg-amber-500 whitespace-nowrap"
               >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                 </svg>
                 Tips &amp; Trik
@@ -81,10 +81,10 @@ export default async function Home() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <section className="relative pt-28 sm:pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="absolute top-0 right-0 -mr-40 -mt-40 w-[600px] h-[600px] bg-gradient-to-bl from-amber-200/40 to-transparent rounded-full blur-3xl pointer-events-none dark:from-amber-900/20"></div>
 
-        <div className="relative flex flex-col lg:flex-row items-center gap-16">
+        <div className="relative flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
           <div className="flex-1 text-center lg:text-left space-y-8 z-10">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 border border-stone-200 dark:border-stone-800 bg-white/50 dark:bg-stone-900/50 text-stone-500 dark:text-stone-400 text-xs font-medium tracking-widest uppercase backdrop-blur-sm">
               <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>

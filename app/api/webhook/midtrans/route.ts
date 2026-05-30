@@ -1,24 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createHash } from "crypto";
-import prisma from "../../../../lib/prisma";
-import { coreApi, serverKey } from "../../../../lib/midtrans";
-import { sendInvoiceEmail } from "../../../../lib/mail";
-import type { OrderStatus } from "../../../../generated/prisma/client";
+import { serverKey } from "../../../../lib/midtrans";
+import { syncOrderPaymentStatus } from "../../../../lib/orders";
 
 /**
  * Midtrans HTTP Notification (webhook) handler.
  *
- * Logika:
  * - Verifikasi signature_key (SHA512 dari order_id + status_code + gross_amount + serverKey).
- * - Ambil status resmi via Midtrans CoreApi.transaction.notification untuk mencegah
- *   payload palsu walaupun signature lulus (defense in depth).
- * - Mapping ke Prisma OrderStatus:
- *     settlement / capture (accept) -> PAID  (a.k.a. SUCCESS)
- *     pending                       -> PENDING
- *     deny / cancel / expire        -> CANCELLED (a.k.a. FAILED)
- *     refund / partial_refund / chargeback -> CANCELLED
- * - Idempoten: kalau order sudah SHIPPED / COMPLETED, jangan turunkan statusnya.
+ * - Delegasikan update status ke syncOrderPaymentStatus() yang mengambil status resmi
+ *   langsung dari Midtrans Core API (defense in depth) dan menangani:
+ *     lunas    -> PACKED (otomatis dikemas) + kurangi stok + email invoice
+ *     gagal    -> CANCELLED
+ *     pending  -> tetap PENDING
+ * - Idempoten & fault-tolerant: SELALU membalas HTTP 200 supaya Midtrans tidak
+ *   menandai endpoint sebagai gagal / retry tanpa henti. Error internal hanya di-log.
  */
+
+// Health-check: bisa dibuka di browser untuk memastikan endpoint reachable.
+export async function GET() {
+  return NextResponse.json({ ok: true, service: "midtrans-webhook", alive: true });
+}
 
 function verifySignature(payload: any): boolean {
   if (!serverKey) return false;
@@ -30,132 +31,39 @@ function verifySignature(payload: any): boolean {
   return expected === signature_key;
 }
 
-function mapStatus(payload: {
-  transaction_status?: string;
-  fraud_status?: string;
-}): OrderStatus | null {
-  const status = payload.transaction_status;
-  const fraud = payload.fraud_status;
-
-  if (status === "settlement") return "PAID";
-  if (status === "capture") {
-    return fraud === "accept" ? "PAID" : "PENDING";
-  }
-  if (status === "pending") return "PENDING";
-  if (status === "deny" || status === "cancel" || status === "expire") return "CANCELLED";
-  if (status === "refund" || status === "partial_refund" || status === "chargeback") return "CANCELLED";
-  if (status === "failure") return "CANCELLED";
-  return null;
-}
-
 export async function POST(req: NextRequest) {
-  let payload: any;
   try {
-    payload = await req.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
-  }
-
-  // 1. Verifikasi signature.
-  if (!verifySignature(payload)) {
-    // eslint-disable-next-line no-console
-    console.warn("[midtrans-webhook] invalid signature for order", payload?.order_id);
-    return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
-  }
-
-  // 2. Re-verify ke Midtrans (defense in depth).
-  let verified: any = payload;
-  try {
-    verified = await coreApi.transaction.notification(payload);
-  } catch (err) {
-    // eslint-disable-next-line no-console
-    console.error("[midtrans-webhook] gagal verifikasi ke Midtrans:", err);
-    // Tetap lanjut pakai payload signed kalau verifikasi network gagal — Midtrans akan retry juga.
-  }
-
-  const orderId: string | undefined = verified?.order_id || payload.order_id;
-  if (!orderId) {
-    return NextResponse.json({ error: "Missing order_id" }, { status: 400 });
-  }
-
-  const newStatus = mapStatus(verified);
-  if (!newStatus) {
-    // Status tidak kita tangani — Midtrans tetap perlu 200 OK supaya tidak retry forever.
-    return NextResponse.json({ ok: true, ignored: verified?.transaction_status });
-  }
-
-  const existing = await prisma.order.findUnique({
-    where: { id: orderId },
-    select: { id: true, status: true, totalAmount: true },
-  });
-  if (!existing) {
-    return NextResponse.json({ error: "Order not found" }, { status: 404 });
-  }
-
-  // Sanity check jumlah (mencegah replay dengan amount berbeda).
-  const grossAmount = Number(verified?.gross_amount || payload.gross_amount);
-  if (Number.isFinite(grossAmount) && grossAmount !== existing.totalAmount) {
-    // eslint-disable-next-line no-console
-    console.warn(
-      `[midtrans-webhook] gross_amount mismatch for ${orderId}: got ${grossAmount}, expected ${existing.totalAmount}`
-    );
-    return NextResponse.json({ error: "Amount mismatch" }, { status: 400 });
-  }
-
-  // 3. Idempotency — jangan timpa status terminal.
-  if (existing.status === "SHIPPED" || existing.status === "COMPLETED") {
-    return NextResponse.json({ ok: true, status: existing.status, kept: true });
-  }
-  if (existing.status === newStatus) {
-    return NextResponse.json({ ok: true, status: existing.status, unchanged: true });
-  }
-
-  await prisma.order.update({
-    where: { id: orderId },
-    data: { status: newStatus },
-  });
-
-  // 4. Decrement stok kalau pertama kali masuk PAID, lalu kirim email invoice.
-  if (newStatus === "PAID" && existing.status !== "PAID") {
-    const items = await prisma.orderItem.findMany({
-      where: { orderId },
-      select: { productId: true, quantity: true },
-    });
-    if (items.length > 0) {
-      await prisma.$transaction(
-        items.map((it) =>
-          prisma.product.update({
-            where: { id: it.productId },
-            data: { stock: { decrement: it.quantity } },
-          })
-        )
-      );
-    }
-
-    // Kirim email invoice ke pelanggan (best-effort, tidak menggagalkan webhook).
+    let payload: any;
     try {
-      const fullOrder = await prisma.order.findUnique({
-        where: { id: orderId },
-        include: { OrderItem: true },
-      });
-      if (fullOrder?.shippingEmail) {
-        await sendInvoiceEmail(fullOrder.shippingEmail, {
-          orderId: fullOrder.id,
-          customerName: fullOrder.shippingName,
-          totalAmount: fullOrder.totalAmount,
-          shippingAddress: fullOrder.shippingAddress,
-          items: fullOrder.OrderItem.map((it) => ({
-            name: it.name,
-            price: it.price,
-            quantity: it.quantity,
-          })),
-        });
-      }
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.error("[midtrans-webhook] gagal kirim invoice email:", err);
+      payload = await req.json();
+    } catch {
+      // Body bukan JSON valid — tetap balas 200 supaya tidak dianggap gagal.
+      return NextResponse.json({ ok: true, ignored: "invalid json" });
     }
-  }
 
-  return NextResponse.json({ ok: true, status: newStatus });
+    const orderId: string | undefined = payload?.order_id;
+
+    // Notifikasi "Test" dari dashboard Midtrans memakai order_id dummy
+    // (mis. "payment_notif_test_xxx") yang tidak ada di database. Balas 200 OK
+    // supaya tombol "Test notification URL" sukses.
+    if (!orderId || orderId.startsWith("payment_notif_test")) {
+      return NextResponse.json({ ok: true, test: true });
+    }
+
+    // Verifikasi signature. Kalau gagal, jangan proses — tapi tetap balas 200.
+    if (!verifySignature(payload)) {
+      // eslint-disable-next-line no-console
+      console.warn("[midtrans-webhook] invalid signature for order", orderId);
+      return NextResponse.json({ ok: true, ignored: "invalid signature" });
+    }
+
+    // Sinkronisasi status (status resmi diambil ulang dari Midtrans di dalam helper).
+    const result = await syncOrderPaymentStatus(orderId);
+    return NextResponse.json({ ...result, ok: true });
+  } catch (err) {
+    // Jangan pernah lempar 500 ke Midtrans — cukup log, balas 200.
+    // eslint-disable-next-line no-console
+    console.error("[midtrans-webhook] unhandled error:", err);
+    return NextResponse.json({ ok: true, error: "logged" });
+  }
 }

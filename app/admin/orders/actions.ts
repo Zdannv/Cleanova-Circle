@@ -23,9 +23,11 @@ const ALL_STATUSES: OrderStatus[] = [
   "CANCELLED",
 ];
 
-// Transisi status yang diizinkan (fulfillment forward + cancel).
+// Transisi status yang diizinkan (fulfillment manual oleh admin).
+// Pembayaran lunas otomatis -> PACKED (lewat webhook / verify), jadi admin
+// mulai dari PACKED. Tidak ada lagi PENDING/PAID manual.
 const ALLOWED_TRANSITIONS: Record<OrderStatus, OrderStatus[]> = {
-  PENDING: ["PAID", "CANCELLED"],
+  PENDING: ["CANCELLED"],
   PAID: ["PACKED", "CANCELLED"],
   PACKED: ["SHIPPED", "CANCELLED"],
   SHIPPED: ["COMPLETED"],

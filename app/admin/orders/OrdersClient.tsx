@@ -41,7 +41,7 @@ const formatDate = (iso: string) =>
   });
 
 const STATUS_META: Record<OrderStatus, { label: string; badge: string }> = {
-  PENDING: { label: "Menunggu Bayar", badge: "bg-amber-100 text-amber-800" },
+  PENDING: { label: "Belum Dibayar", badge: "bg-stone-100 text-stone-600" },
   PAID: { label: "Dibayar", badge: "bg-blue-100 text-blue-800" },
   PACKED: { label: "Dikemas", badge: "bg-indigo-100 text-indigo-800" },
   SHIPPED: { label: "Dikirim", badge: "bg-purple-100 text-purple-800" },
@@ -51,7 +51,7 @@ const STATUS_META: Record<OrderStatus, { label: string; badge: string }> = {
 
 // Transisi yang diizinkan — mirror dari server action.
 const ALLOWED_TRANSITIONS: Record<OrderStatus, OrderStatus[]> = {
-  PENDING: ["PAID", "CANCELLED"],
+  PENDING: ["CANCELLED"],
   PAID: ["PACKED", "CANCELLED"],
   PACKED: ["SHIPPED", "CANCELLED"],
   SHIPPED: ["COMPLETED"],
@@ -63,11 +63,10 @@ const ALL_STATUSES: OrderStatus[] = ["PENDING", "PAID", "PACKED", "SHIPPED", "CO
 
 const FILTERS: { key: "ALL" | OrderStatus; label: string }[] = [
   { key: "ALL", label: "Semua" },
-  { key: "PENDING", label: "Menunggu" },
-  { key: "PAID", label: "Dibayar" },
   { key: "PACKED", label: "Dikemas" },
   { key: "SHIPPED", label: "Dikirim" },
   { key: "COMPLETED", label: "Selesai" },
+  { key: "PENDING", label: "Belum Dibayar" },
   { key: "CANCELLED", label: "Batal" },
 ];
 
