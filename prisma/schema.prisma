@@ -157,7 +157,13 @@ model LandingPage {
   ctaTitle          String   @default("Mulai Merawat")
   ctaSubtitle       String   @default("Koleksi Kesayangan Anda.")
   ctaDescription    String   @default("Tingkatkan standar kebersihan dan estetika koleksi Anda hari ini juga tanpa menghabiskan budget berlebih di jasa terpadu.")
-  
+
+  // Hero Action Buttons (CTA navigasi)
+  shopCardLabel     String   @default("Toko Cleanova")
+  shopCardTitle     String   @default("Beli Produk")
+  eduCardLabel      String   @default("Tips & Trik")
+  eduCardTitle      String   @default("Komunitas Edukasi")
+
   updatedAt         DateTime @updatedAt @default(now())
 }
 

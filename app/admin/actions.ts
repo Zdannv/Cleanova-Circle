@@ -200,7 +200,8 @@ export async function updateLandingPageAction(formData: FormData) {
     "feature1Title", "feature1Description", "feature1ImageUrl",
     "feature2Title", "feature2Description", "feature2ImageUrl",
     "feature3Title", "feature3Description", "feature3ImageUrl",
-    "ctaTitle", "ctaSubtitle", "ctaDescription"
+    "ctaTitle", "ctaSubtitle", "ctaDescription",
+    "shopCardLabel", "shopCardTitle", "eduCardLabel", "eduCardTitle"
   ];
 
   const data: any = {};

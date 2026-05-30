@@ -54,6 +54,10 @@ export type LandingPageMinAggregateOutputType = {
   ctaTitle: string | null
   ctaSubtitle: string | null
   ctaDescription: string | null
+  shopCardLabel: string | null
+  shopCardTitle: string | null
+  eduCardLabel: string | null
+  eduCardTitle: string | null
   updatedAt: Date | null
 }
 
@@ -87,6 +91,10 @@ export type LandingPageMaxAggregateOutputType = {
   ctaTitle: string | null
   ctaSubtitle: string | null
   ctaDescription: string | null
+  shopCardLabel: string | null
+  shopCardTitle: string | null
+  eduCardLabel: string | null
+  eduCardTitle: string | null
   updatedAt: Date | null
 }
 
@@ -120,6 +128,10 @@ export type LandingPageCountAggregateOutputType = {
   ctaTitle: number
   ctaSubtitle: number
   ctaDescription: number
+  shopCardLabel: number
+  shopCardTitle: number
+  eduCardLabel: number
+  eduCardTitle: number
   updatedAt: number
   _all: number
 }
@@ -155,6 +167,10 @@ export type LandingPageMinAggregateInputType = {
   ctaTitle?: true
   ctaSubtitle?: true
   ctaDescription?: true
+  shopCardLabel?: true
+  shopCardTitle?: true
+  eduCardLabel?: true
+  eduCardTitle?: true
   updatedAt?: true
 }
 
@@ -188,6 +204,10 @@ export type LandingPageMaxAggregateInputType = {
   ctaTitle?: true
   ctaSubtitle?: true
   ctaDescription?: true
+  shopCardLabel?: true
+  shopCardTitle?: true
+  eduCardLabel?: true
+  eduCardTitle?: true
   updatedAt?: true
 }
 
@@ -221,6 +241,10 @@ export type LandingPageCountAggregateInputType = {
   ctaTitle?: true
   ctaSubtitle?: true
   ctaDescription?: true
+  shopCardLabel?: true
+  shopCardTitle?: true
+  eduCardLabel?: true
+  eduCardTitle?: true
   updatedAt?: true
   _all?: true
 }
@@ -327,6 +351,10 @@ export type LandingPageGroupByOutputType = {
   ctaTitle: string
   ctaSubtitle: string
   ctaDescription: string
+  shopCardLabel: string
+  shopCardTitle: string
+  eduCardLabel: string
+  eduCardTitle: string
   updatedAt: Date
   _count: LandingPageCountAggregateOutputType | null
   _min: LandingPageMinAggregateOutputType | null
@@ -381,6 +409,10 @@ export type LandingPageWhereInput = {
   ctaTitle?: Prisma.StringFilter<"LandingPage"> | string
   ctaSubtitle?: Prisma.StringFilter<"LandingPage"> | string
   ctaDescription?: Prisma.StringFilter<"LandingPage"> | string
+  shopCardLabel?: Prisma.StringFilter<"LandingPage"> | string
+  shopCardTitle?: Prisma.StringFilter<"LandingPage"> | string
+  eduCardLabel?: Prisma.StringFilter<"LandingPage"> | string
+  eduCardTitle?: Prisma.StringFilter<"LandingPage"> | string
   updatedAt?: Prisma.DateTimeFilter<"LandingPage"> | Date | string
 }
 
@@ -414,6 +446,10 @@ export type LandingPageOrderByWithRelationInput = {
   ctaTitle?: Prisma.SortOrder
   ctaSubtitle?: Prisma.SortOrder
   ctaDescription?: Prisma.SortOrder
+  shopCardLabel?: Prisma.SortOrder
+  shopCardTitle?: Prisma.SortOrder
+  eduCardLabel?: Prisma.SortOrder
+  eduCardTitle?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
@@ -450,6 +486,10 @@ export type LandingPageWhereUniqueInput = Prisma.AtLeast<{
   ctaTitle?: Prisma.StringFilter<"LandingPage"> | string
   ctaSubtitle?: Prisma.StringFilter<"LandingPage"> | string
   ctaDescription?: Prisma.StringFilter<"LandingPage"> | string
+  shopCardLabel?: Prisma.StringFilter<"LandingPage"> | string
+  shopCardTitle?: Prisma.StringFilter<"LandingPage"> | string
+  eduCardLabel?: Prisma.StringFilter<"LandingPage"> | string
+  eduCardTitle?: Prisma.StringFilter<"LandingPage"> | string
   updatedAt?: Prisma.DateTimeFilter<"LandingPage"> | Date | string
 }, "id">
 
@@ -483,6 +523,10 @@ export type LandingPageOrderByWithAggregationInput = {
   ctaTitle?: Prisma.SortOrder
   ctaSubtitle?: Prisma.SortOrder
   ctaDescription?: Prisma.SortOrder
+  shopCardLabel?: Prisma.SortOrder
+  shopCardTitle?: Prisma.SortOrder
+  eduCardLabel?: Prisma.SortOrder
+  eduCardTitle?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.LandingPageCountOrderByAggregateInput
   _max?: Prisma.LandingPageMaxOrderByAggregateInput
@@ -522,6 +566,10 @@ export type LandingPageScalarWhereWithAggregatesInput = {
   ctaTitle?: Prisma.StringWithAggregatesFilter<"LandingPage"> | string
   ctaSubtitle?: Prisma.StringWithAggregatesFilter<"LandingPage"> | string
   ctaDescription?: Prisma.StringWithAggregatesFilter<"LandingPage"> | string
+  shopCardLabel?: Prisma.StringWithAggregatesFilter<"LandingPage"> | string
+  shopCardTitle?: Prisma.StringWithAggregatesFilter<"LandingPage"> | string
+  eduCardLabel?: Prisma.StringWithAggregatesFilter<"LandingPage"> | string
+  eduCardTitle?: Prisma.StringWithAggregatesFilter<"LandingPage"> | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"LandingPage"> | Date | string
 }
 
@@ -555,6 +603,10 @@ export type LandingPageCreateInput = {
   ctaTitle?: string
   ctaSubtitle?: string
   ctaDescription?: string
+  shopCardLabel?: string
+  shopCardTitle?: string
+  eduCardLabel?: string
+  eduCardTitle?: string
   updatedAt?: Date | string
 }
 
@@ -588,6 +640,10 @@ export type LandingPageUncheckedCreateInput = {
   ctaTitle?: string
   ctaSubtitle?: string
   ctaDescription?: string
+  shopCardLabel?: string
+  shopCardTitle?: string
+  eduCardLabel?: string
+  eduCardTitle?: string
   updatedAt?: Date | string
 }
 
@@ -621,6 +677,10 @@ export type LandingPageUpdateInput = {
   ctaTitle?: Prisma.StringFieldUpdateOperationsInput | string
   ctaSubtitle?: Prisma.StringFieldUpdateOperationsInput | string
   ctaDescription?: Prisma.StringFieldUpdateOperationsInput | string
+  shopCardLabel?: Prisma.StringFieldUpdateOperationsInput | string
+  shopCardTitle?: Prisma.StringFieldUpdateOperationsInput | string
+  eduCardLabel?: Prisma.StringFieldUpdateOperationsInput | string
+  eduCardTitle?: Prisma.StringFieldUpdateOperationsInput | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -654,6 +714,10 @@ export type LandingPageUncheckedUpdateInput = {
   ctaTitle?: Prisma.StringFieldUpdateOperationsInput | string
   ctaSubtitle?: Prisma.StringFieldUpdateOperationsInput | string
   ctaDescription?: Prisma.StringFieldUpdateOperationsInput | string
+  shopCardLabel?: Prisma.StringFieldUpdateOperationsInput | string
+  shopCardTitle?: Prisma.StringFieldUpdateOperationsInput | string
+  eduCardLabel?: Prisma.StringFieldUpdateOperationsInput | string
+  eduCardTitle?: Prisma.StringFieldUpdateOperationsInput | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -687,6 +751,10 @@ export type LandingPageCreateManyInput = {
   ctaTitle?: string
   ctaSubtitle?: string
   ctaDescription?: string
+  shopCardLabel?: string
+  shopCardTitle?: string
+  eduCardLabel?: string
+  eduCardTitle?: string
   updatedAt?: Date | string
 }
 
@@ -720,6 +788,10 @@ export type LandingPageUpdateManyMutationInput = {
   ctaTitle?: Prisma.StringFieldUpdateOperationsInput | string
   ctaSubtitle?: Prisma.StringFieldUpdateOperationsInput | string
   ctaDescription?: Prisma.StringFieldUpdateOperationsInput | string
+  shopCardLabel?: Prisma.StringFieldUpdateOperationsInput | string
+  shopCardTitle?: Prisma.StringFieldUpdateOperationsInput | string
+  eduCardLabel?: Prisma.StringFieldUpdateOperationsInput | string
+  eduCardTitle?: Prisma.StringFieldUpdateOperationsInput | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -753,6 +825,10 @@ export type LandingPageUncheckedUpdateManyInput = {
   ctaTitle?: Prisma.StringFieldUpdateOperationsInput | string
   ctaSubtitle?: Prisma.StringFieldUpdateOperationsInput | string
   ctaDescription?: Prisma.StringFieldUpdateOperationsInput | string
+  shopCardLabel?: Prisma.StringFieldUpdateOperationsInput | string
+  shopCardTitle?: Prisma.StringFieldUpdateOperationsInput | string
+  eduCardLabel?: Prisma.StringFieldUpdateOperationsInput | string
+  eduCardTitle?: Prisma.StringFieldUpdateOperationsInput | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -786,6 +862,10 @@ export type LandingPageCountOrderByAggregateInput = {
   ctaTitle?: Prisma.SortOrder
   ctaSubtitle?: Prisma.SortOrder
   ctaDescription?: Prisma.SortOrder
+  shopCardLabel?: Prisma.SortOrder
+  shopCardTitle?: Prisma.SortOrder
+  eduCardLabel?: Prisma.SortOrder
+  eduCardTitle?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
@@ -819,6 +899,10 @@ export type LandingPageMaxOrderByAggregateInput = {
   ctaTitle?: Prisma.SortOrder
   ctaSubtitle?: Prisma.SortOrder
   ctaDescription?: Prisma.SortOrder
+  shopCardLabel?: Prisma.SortOrder
+  shopCardTitle?: Prisma.SortOrder
+  eduCardLabel?: Prisma.SortOrder
+  eduCardTitle?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
@@ -852,6 +936,10 @@ export type LandingPageMinOrderByAggregateInput = {
   ctaTitle?: Prisma.SortOrder
   ctaSubtitle?: Prisma.SortOrder
   ctaDescription?: Prisma.SortOrder
+  shopCardLabel?: Prisma.SortOrder
+  shopCardTitle?: Prisma.SortOrder
+  eduCardLabel?: Prisma.SortOrder
+  eduCardTitle?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
@@ -887,6 +975,10 @@ export type LandingPageSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   ctaTitle?: boolean
   ctaSubtitle?: boolean
   ctaDescription?: boolean
+  shopCardLabel?: boolean
+  shopCardTitle?: boolean
+  eduCardLabel?: boolean
+  eduCardTitle?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["landingPage"]>
 
@@ -920,6 +1012,10 @@ export type LandingPageSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   ctaTitle?: boolean
   ctaSubtitle?: boolean
   ctaDescription?: boolean
+  shopCardLabel?: boolean
+  shopCardTitle?: boolean
+  eduCardLabel?: boolean
+  eduCardTitle?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["landingPage"]>
 
@@ -953,6 +1049,10 @@ export type LandingPageSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   ctaTitle?: boolean
   ctaSubtitle?: boolean
   ctaDescription?: boolean
+  shopCardLabel?: boolean
+  shopCardTitle?: boolean
+  eduCardLabel?: boolean
+  eduCardTitle?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["landingPage"]>
 
@@ -986,10 +1086,14 @@ export type LandingPageSelectScalar = {
   ctaTitle?: boolean
   ctaSubtitle?: boolean
   ctaDescription?: boolean
+  shopCardLabel?: boolean
+  shopCardTitle?: boolean
+  eduCardLabel?: boolean
+  eduCardTitle?: boolean
   updatedAt?: boolean
 }
 
-export type LandingPageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "logoUrl" | "heroTitle" | "heroSubtitle" | "heroDescription" | "heroImageUrl" | "whatsappUrl" | "valueTitle" | "valueDescription" | "valueCard1Title" | "valueCard1Text" | "valueCard2Title" | "valueCard2Text" | "valueCard3Title" | "valueCard3Text" | "featureTitle" | "featureSubtitle" | "feature1Title" | "feature1Description" | "feature1ImageUrl" | "feature2Title" | "feature2Description" | "feature2ImageUrl" | "feature3Title" | "feature3Description" | "feature3ImageUrl" | "ctaTitle" | "ctaSubtitle" | "ctaDescription" | "updatedAt", ExtArgs["result"]["landingPage"]>
+export type LandingPageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "logoUrl" | "heroTitle" | "heroSubtitle" | "heroDescription" | "heroImageUrl" | "whatsappUrl" | "valueTitle" | "valueDescription" | "valueCard1Title" | "valueCard1Text" | "valueCard2Title" | "valueCard2Text" | "valueCard3Title" | "valueCard3Text" | "featureTitle" | "featureSubtitle" | "feature1Title" | "feature1Description" | "feature1ImageUrl" | "feature2Title" | "feature2Description" | "feature2ImageUrl" | "feature3Title" | "feature3Description" | "feature3ImageUrl" | "ctaTitle" | "ctaSubtitle" | "ctaDescription" | "shopCardLabel" | "shopCardTitle" | "eduCardLabel" | "eduCardTitle" | "updatedAt", ExtArgs["result"]["landingPage"]>
 
 export type $LandingPagePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "LandingPage"
@@ -1024,6 +1128,10 @@ export type $LandingPagePayload<ExtArgs extends runtime.Types.Extensions.Interna
     ctaTitle: string
     ctaSubtitle: string
     ctaDescription: string
+    shopCardLabel: string
+    shopCardTitle: string
+    eduCardLabel: string
+    eduCardTitle: string
     updatedAt: Date
   }, ExtArgs["result"]["landingPage"]>
   composites: {}
@@ -1477,6 +1585,10 @@ export interface LandingPageFieldRefs {
   readonly ctaTitle: Prisma.FieldRef<"LandingPage", 'String'>
   readonly ctaSubtitle: Prisma.FieldRef<"LandingPage", 'String'>
   readonly ctaDescription: Prisma.FieldRef<"LandingPage", 'String'>
+  readonly shopCardLabel: Prisma.FieldRef<"LandingPage", 'String'>
+  readonly shopCardTitle: Prisma.FieldRef<"LandingPage", 'String'>
+  readonly eduCardLabel: Prisma.FieldRef<"LandingPage", 'String'>
+  readonly eduCardTitle: Prisma.FieldRef<"LandingPage", 'String'>
   readonly updatedAt: Prisma.FieldRef<"LandingPage", 'DateTime'>
 }
     

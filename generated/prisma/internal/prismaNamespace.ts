@@ -1551,6 +1551,10 @@ export const LandingPageScalarFieldEnum = {
   ctaTitle: 'ctaTitle',
   ctaSubtitle: 'ctaSubtitle',
   ctaDescription: 'ctaDescription',
+  shopCardLabel: 'shopCardLabel',
+  shopCardTitle: 'shopCardTitle',
+  eduCardLabel: 'eduCardLabel',
+  eduCardTitle: 'eduCardTitle',
   updatedAt: 'updatedAt'
 } as const
 

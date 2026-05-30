@@ -187,20 +187,6 @@ export default function CartClient({ isAuthenticated, defaultName, defaultPhone,
         </p>
       </header>
 
-      {/* Optional login banner — guest checkout tetap bisa, login hanya untuk auto-fill & riwayat */}
-      {!isAuthenticated && (
-        <div className="rounded-2xl border border-stone-200 dark:border-stone-800 bg-stone-50 dark:bg-stone-900 p-4 flex items-center justify-between gap-4 flex-wrap">
-          <div className="flex items-center gap-3">
-            <svg className="w-5 h-5 text-stone-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
-            </svg>
-            <p className="text-xs text-stone-600 dark:text-stone-400">
-              Belanja sebagai tamu? Silakan lanjut ke checkout. <Link href="/login?callbackUrl=/shop/cart" className="text-amber-700 dark:text-amber-500 font-medium underline-offset-2 hover:underline">Login</Link> untuk auto-fill data dan riwayat pesanan.
-            </p>
-          </div>
-        </div>
-      )}
-
       {items.length === 0 ? (
         <div className="border border-dashed border-stone-300 dark:border-stone-700 rounded-3xl py-20 text-center space-y-3">
           <div className="w-14 h-14 rounded-full bg-stone-100 dark:bg-stone-800 mx-auto grid place-items-center text-stone-400">

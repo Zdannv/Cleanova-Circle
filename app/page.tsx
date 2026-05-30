@@ -36,6 +36,10 @@ export default async function Home() {
     ctaTitle: landingPage?.ctaTitle || "Mulai Merawat",
     ctaSubtitle: landingPage?.ctaSubtitle || "Koleksi Kesayangan Anda.",
     ctaDescription: landingPage?.ctaDescription || "Tingkatkan standar kebersihan dan estetika koleksi Anda hari ini juga tanpa menghabiskan budget berlebih di jasa terpadu.",
+    shopCardLabel: landingPage?.shopCardLabel || "Toko Cleanova",
+    shopCardTitle: landingPage?.shopCardTitle || "Beli Produk",
+    eduCardLabel: landingPage?.eduCardLabel || "Tips & Trik",
+    eduCardTitle: landingPage?.eduCardTitle || "Komunitas Edukasi",
   };
 
   return (
@@ -104,55 +108,65 @@ export default async function Home() {
             
             <div className="space-y-4 pt-6">
               {/* Primary navigation CTAs — toko & tips */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-xl mx-auto lg:mx-0">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl mx-auto lg:mx-0">
                 <Link
                   href="/shop"
-                  className="group relative overflow-hidden flex items-center gap-4 px-5 py-4 rounded-2xl bg-gradient-to-br from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-white shadow-lg shadow-amber-500/30 hover:shadow-xl hover:shadow-amber-500/40 transition-all hover:-translate-y-0.5"
+                  className="group relative overflow-hidden flex flex-col gap-3 p-5 rounded-2xl bg-gradient-to-br from-amber-500 to-amber-600 text-white shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/40 transition-all duration-300 hover:-translate-y-1"
                 >
-                  <span className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.25),transparent_60%)] opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <span className="relative w-11 h-11 rounded-xl bg-white/15 grid place-items-center backdrop-blur-sm flex-shrink-0">
-                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <span className="absolute -top-8 -right-8 w-24 h-24 rounded-full bg-white/10 blur-2xl group-hover:bg-white/20 transition-colors" />
+                  <span className="relative w-12 h-12 rounded-xl bg-white/20 grid place-items-center backdrop-blur-sm">
+                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
                     </svg>
                   </span>
-                  <span className="relative flex-1 text-left">
-                    <span className="block text-[10px] uppercase tracking-widest font-semibold opacity-80">Toko Cleanova</span>
-                    <span className="block font-serif text-lg leading-tight font-medium">Beli Produk →</span>
+                  <span className="relative">
+                    <span className="block text-[10px] uppercase tracking-widest font-semibold text-white/80">{content.shopCardLabel}</span>
+                    <span className="mt-1 flex items-center gap-1.5 font-serif text-xl leading-tight font-medium">
+                      {content.shopCardTitle}
+                      <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                      </svg>
+                    </span>
                   </span>
                 </Link>
 
                 <Link
                   href="/dashboard"
-                  className="group relative overflow-hidden flex items-center gap-4 px-5 py-4 rounded-2xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 hover:border-amber-400 dark:hover:border-amber-500 text-stone-900 dark:text-white shadow hover:shadow-lg transition-all hover:-translate-y-0.5"
+                  className="group relative overflow-hidden flex flex-col gap-3 p-5 rounded-2xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 hover:border-amber-400 dark:hover:border-amber-500 text-stone-900 dark:text-white shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
                 >
-                  <span className="relative w-11 h-11 rounded-xl bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 grid place-items-center flex-shrink-0">
-                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <span className="relative w-12 h-12 rounded-xl bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 grid place-items-center">
+                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5" />
                     </svg>
                   </span>
-                  <span className="relative flex-1 text-left">
-                    <span className="block text-[10px] uppercase tracking-widest font-semibold text-stone-500 dark:text-stone-400">Tips &amp; Trik</span>
-                    <span className="block font-serif text-lg leading-tight font-medium">Komunitas Edukasi →</span>
+                  <span className="relative">
+                    <span className="block text-[10px] uppercase tracking-widest font-semibold text-stone-500 dark:text-stone-400">{content.eduCardLabel}</span>
+                    <span className="mt-1 flex items-center gap-1.5 font-serif text-xl leading-tight font-medium">
+                      {content.eduCardTitle}
+                      <svg className="w-4 h-4 text-amber-600 dark:text-amber-400 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                      </svg>
+                    </span>
                   </span>
                 </Link>
               </div>
 
               {/* Secondary CTAs — WhatsApp & scroll to value */}
-              <div className="flex flex-col sm:flex-row items-stretch justify-center lg:justify-start gap-3 pt-1">
+              <div className="flex flex-col sm:flex-row items-stretch justify-center lg:justify-start gap-3">
                 <a 
                   href={content.whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group relative inline-flex items-center justify-center gap-3 px-7 py-3.5 text-sm font-semibold tracking-wide uppercase text-white bg-green-600 hover:bg-green-700 transition-all shadow-xl hover:shadow-green-600/30 w-full sm:w-auto rounded-md"
+                  className="group inline-flex items-center justify-center gap-2.5 px-6 py-3 text-xs font-semibold tracking-wide uppercase text-white bg-green-600 hover:bg-green-700 transition-all shadow-lg shadow-green-600/20 hover:shadow-green-600/40 w-full sm:w-auto rounded-xl"
                 >
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
                   </svg>
                   Gabung via WhatsApp
                 </a>
                 <a 
                   href="#value" 
-                  className="inline-flex flex-row items-center justify-center gap-2 px-7 py-3.5 text-sm font-semibold tracking-wide uppercase text-stone-900 bg-transparent border border-stone-300 hover:bg-stone-100 transition-colors dark:text-stone-300 dark:border-stone-700 dark:hover:bg-stone-900 w-full sm:w-auto rounded-md"
+                  className="inline-flex flex-row items-center justify-center gap-2 px-6 py-3 text-xs font-semibold tracking-wide uppercase text-stone-700 bg-transparent border border-stone-300 hover:border-stone-400 hover:bg-stone-100 transition-colors dark:text-stone-300 dark:border-stone-700 dark:hover:bg-stone-900 w-full sm:w-auto rounded-xl"
                 >
                   Pelajari Manfaatnya
                 </a>

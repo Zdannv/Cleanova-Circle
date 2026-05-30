@@ -34,6 +34,10 @@ export type LandingPageData = {
   ctaTitle: string;
   ctaSubtitle: string;
   ctaDescription: string;
+  shopCardLabel: string;
+  shopCardTitle: string;
+  eduCardLabel: string;
+  eduCardTitle: string;
 };
 
 const DEFAULTS: LandingPageData = {
@@ -65,6 +69,10 @@ const DEFAULTS: LandingPageData = {
   ctaTitle: "Mulai Merawat",
   ctaSubtitle: "Koleksi Kesayangan Anda.",
   ctaDescription: "",
+  shopCardLabel: "Toko Cleanova",
+  shopCardTitle: "Beli Produk",
+  eduCardLabel: "Tips & Trik",
+  eduCardTitle: "Komunitas Edukasi",
 };
 
 type Section = "HEADER" | "HERO" | "VALUE" | "FEATURES" | "CTA";
@@ -205,6 +213,20 @@ export default function LandingEditor({ initial }: { initial: LandingPageData | 
                   folder="landing/hero"
                   aspect="aspect-[4/5]"
                 />
+
+                <div className="border-t border-gray-200 pt-4 space-y-4">
+                  <p className="text-xs font-bold uppercase tracking-wider text-amber-600">Tombol Aksi (CTA)</p>
+                  <div className="border border-gray-200 rounded-lg p-4 bg-amber-50/30 space-y-3">
+                    <p className="text-[11px] font-semibold text-gray-600">Kartu Toko (mengarah ke /shop)</p>
+                    <Field label="Label kecil" value={data.shopCardLabel} onChange={(v) => set("shopCardLabel", v)} compact />
+                    <Field label="Judul tombol" value={data.shopCardTitle} onChange={(v) => set("shopCardTitle", v)} compact />
+                  </div>
+                  <div className="border border-gray-200 rounded-lg p-4 bg-gray-50/40 space-y-3">
+                    <p className="text-[11px] font-semibold text-gray-600">Kartu Edukasi (mengarah ke /dashboard)</p>
+                    <Field label="Label kecil" value={data.eduCardLabel} onChange={(v) => set("eduCardLabel", v)} compact />
+                    <Field label="Judul tombol" value={data.eduCardTitle} onChange={(v) => set("eduCardTitle", v)} compact />
+                  </div>
+                </div>
               </div>
             )}
 
@@ -363,29 +385,32 @@ function LandingPreview({
 }) {
   const ring = (s: Section) =>
     highlight === s
-      ? "ring-2 ring-amber-500 ring-offset-2 ring-offset-stone-100"
-      : "ring-1 ring-stone-200 hover:ring-stone-300";
+      ? "ring-2 ring-amber-500 ring-offset-2 ring-offset-stone-200"
+      : "ring-1 ring-transparent hover:ring-stone-300";
 
   return (
-    <div className="p-4 space-y-4 text-stone-900">
+    <div className="p-4 space-y-3">
       {/* Header */}
       <button
         type="button"
         onClick={() => onJump("HEADER")}
-        className={`block w-full text-left bg-white rounded-md p-3 transition ${ring("HEADER")}`}
+        className={`block w-full text-left bg-[#fafaf9] rounded-lg p-3 transition ${ring("HEADER")}`}
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             {data.logoUrl ? (
-              <div className="relative w-7 h-7 rounded-full overflow-hidden bg-stone-100">
+              <div className="relative w-7 h-7 rounded-full overflow-hidden bg-white shadow-sm">
                 <Image src={data.logoUrl} alt="logo" fill className="object-contain" unoptimized />
               </div>
             ) : (
               <div className="w-7 h-7 rounded-full bg-stone-200 grid place-items-center text-[9px] text-stone-500">logo</div>
             )}
-            <span className="font-serif text-sm">Cleanova Circle</span>
+            <span className="font-serif text-sm text-stone-800">Cleanova Circle</span>
           </div>
-          <span className="text-[9px] uppercase tracking-widest bg-stone-900 text-white px-2 py-1 rounded-sm">Member Login</span>
+          <div className="flex items-center gap-1">
+            <span className="text-[8px] uppercase tracking-widest bg-amber-400 text-stone-900 px-2 py-1 rounded font-bold">Toko</span>
+            <span className="text-[8px] uppercase tracking-widest bg-stone-900 text-white px-2 py-1 rounded font-bold">Tips &amp; Trik</span>
+          </div>
         </div>
       </button>
 
@@ -393,24 +418,44 @@ function LandingPreview({
       <button
         type="button"
         onClick={() => onJump("HERO")}
-        className={`block w-full text-left bg-white rounded-md p-4 transition ${ring("HERO")}`}
+        className={`block w-full text-left bg-[#fafaf9] rounded-lg p-4 transition ${ring("HERO")}`}
       >
         <div className="grid grid-cols-2 gap-3 items-center">
           <div className="space-y-2">
-            <span className="inline-block text-[8px] uppercase tracking-widest text-stone-500 border border-stone-200 px-2 py-0.5">Komunitas Premium</span>
-            <h1 className="text-base font-serif leading-tight">
+            <span className="inline-flex items-center gap-1 text-[7px] uppercase tracking-widest text-stone-500 border border-stone-300 px-1.5 py-0.5 rounded-sm">
+              <span className="w-1 h-1 rounded-full bg-amber-500" /> Komunitas Premium
+            </span>
+            <h1 className="text-sm font-serif leading-tight text-stone-900">
               {data.heroTitle || <span className="text-stone-400 italic">Hero title…</span>}<br />
-              <span className="italic text-amber-600">{data.heroSubtitle || "—"}</span>
+              <span className="italic text-amber-600 font-medium">{data.heroSubtitle || "—"}</span>
             </h1>
-            <p className="text-[10px] text-stone-600 line-clamp-3">
+            <p className="text-[9px] text-stone-600 line-clamp-2 leading-relaxed">
               {data.heroDescription || <span className="italic text-stone-400">Deskripsi hero…</span>}
             </p>
-            <div className="flex gap-1.5 pt-1">
-              <span className="text-[8px] bg-green-600 text-white px-2 py-1 rounded-sm">Gabung WhatsApp</span>
-              <span className="text-[8px] border border-stone-300 px-2 py-1 rounded-sm">Pelajari</span>
+
+            {/* CTA cards mini — match real design */}
+            <div className="grid grid-cols-2 gap-1.5 pt-1">
+              <div className="rounded-lg bg-gradient-to-br from-amber-500 to-amber-600 text-white p-2">
+                <div className="w-5 h-5 rounded bg-white/20 grid place-items-center mb-1">
+                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272" /></svg>
+                </div>
+                <p className="text-[6px] uppercase tracking-widest text-white/80 font-semibold leading-tight">{data.shopCardLabel || "Toko"}</p>
+                <p className="font-serif text-[10px] font-medium leading-tight">{data.shopCardTitle || "Beli Produk"} →</p>
+              </div>
+              <div className="rounded-lg bg-white border border-stone-200 text-stone-900 p-2">
+                <div className="w-5 h-5 rounded bg-amber-50 text-amber-700 grid place-items-center mb-1">
+                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347M12 13.489a50.702 50.702 0 0 1 7.74-3.342" /></svg>
+                </div>
+                <p className="text-[6px] uppercase tracking-widest text-stone-500 font-semibold leading-tight">{data.eduCardLabel || "Tips & Trik"}</p>
+                <p className="font-serif text-[10px] font-medium leading-tight">{data.eduCardTitle || "Edukasi"} →</p>
+              </div>
+            </div>
+            <div className="flex gap-1.5">
+              <span className="text-[7px] bg-green-600 text-white px-2 py-0.5 rounded">WhatsApp</span>
+              <span className="text-[7px] border border-stone-300 text-stone-600 px-2 py-0.5 rounded">Pelajari</span>
             </div>
           </div>
-          <div className="aspect-[4/5] relative bg-stone-200 rounded overflow-hidden">
+          <div className="aspect-[4/5] relative bg-stone-200 rounded overflow-hidden shadow-md">
             {data.heroImageUrl ? (
               <Image src={data.heroImageUrl} alt="hero" fill className="object-cover" unoptimized />
             ) : (
@@ -424,19 +469,19 @@ function LandingPreview({
       <button
         type="button"
         onClick={() => onJump("VALUE")}
-        className={`block w-full text-left rounded-md p-4 transition bg-stone-900 text-stone-100 ${ring("VALUE")}`}
+        className={`block w-full text-left rounded-lg p-4 transition bg-stone-900 text-stone-100 ${ring("VALUE")}`}
       >
-        <h2 className="text-sm font-serif text-center">{data.valueTitle || <span className="italic text-stone-500">Value title…</span>}</h2>
+        <h2 className="text-sm font-serif text-center font-light">{data.valueTitle || <span className="italic text-stone-500">Value title…</span>}</h2>
         <div className="w-8 h-px bg-amber-500 mx-auto my-2" />
-        <p className="text-[10px] text-stone-300 text-center line-clamp-2">{data.valueDescription || <span className="italic text-stone-500">Deskripsi value…</span>}</p>
+        <p className="text-[9px] text-stone-300 text-center line-clamp-2 leading-relaxed font-light">{data.valueDescription || <span className="italic text-stone-500">Deskripsi value…</span>}</p>
         <div className="grid grid-cols-3 gap-2 mt-3">
-          {[1, 2, 3].map(i => {
-            const t = (data as any)[`valueCard${i}Title`] as string;
-            const x = (data as any)[`valueCard${i}Text`] as string;
+          {([1, 2, 3] as const).map(i => {
+            const t = data[`valueCard${i}Title` as keyof LandingPageData];
+            const x = data[`valueCard${i}Text` as keyof LandingPageData];
             return (
-              <div key={i} className="border border-stone-700 bg-stone-950/40 p-2 rounded">
-                <p className="text-amber-400 italic text-[10px] font-semibold mb-1">{t || `Kartu ${i}`}</p>
-                <p className="text-[9px] text-stone-400 line-clamp-3">{x || <span className="italic text-stone-600">Teks…</span>}</p>
+              <div key={i} className="border border-stone-800 bg-stone-950/50 p-2 rounded">
+                <p className="text-amber-500 italic text-[9px] font-serif mb-1">{t || `Kartu ${i}`}</p>
+                <p className="text-[8px] text-stone-400 line-clamp-3 font-light">{x || <span className="italic text-stone-600">Teks…</span>}</p>
               </div>
             );
           })}
@@ -447,26 +492,26 @@ function LandingPreview({
       <button
         type="button"
         onClick={() => onJump("FEATURES")}
-        className={`block w-full text-left bg-white rounded-md p-4 transition ${ring("FEATURES")}`}
+        className={`block w-full text-left bg-white rounded-lg p-4 transition ${ring("FEATURES")}`}
       >
-        <p className="text-[9px] uppercase tracking-widest text-amber-600 font-semibold">{data.featureSubtitle || "Subtitle"}</p>
-        <h2 className="text-sm font-serif mt-1">{data.featureTitle || <span className="italic text-stone-400">Feature title…</span>}</h2>
+        <p className="text-[8px] uppercase tracking-widest text-amber-600 font-semibold">{data.featureSubtitle || "Subtitle"}</p>
+        <h2 className="text-sm font-serif mt-1 text-stone-900">{data.featureTitle || <span className="italic text-stone-400">Feature title…</span>}</h2>
         <div className="grid grid-cols-3 gap-2 mt-3">
-          {[1, 2, 3].map(i => {
-            const t = (data as any)[`feature${i}Title`] as string;
-            const d = (data as any)[`feature${i}Description`] as string;
-            const img = (data as any)[`feature${i}ImageUrl`] as string;
+          {([1, 2, 3] as const).map(i => {
+            const t = data[`feature${i}Title` as keyof LandingPageData];
+            const d = data[`feature${i}Description` as keyof LandingPageData];
+            const img = data[`feature${i}ImageUrl` as keyof LandingPageData];
             return (
               <div key={i}>
                 <div className="aspect-[4/3] bg-stone-100 rounded relative overflow-hidden mb-1.5">
                   {img ? (
                     <Image src={img} alt={t} fill className="object-cover" unoptimized />
                   ) : (
-                    <div className="absolute inset-0 grid place-items-center text-[9px] text-stone-500">No image</div>
+                    <div className="absolute inset-0 grid place-items-center text-[8px] text-stone-500">No image</div>
                   )}
                 </div>
-                <p className="font-serif text-[11px] mb-0.5 line-clamp-1">{t || `Fitur ${i}`}</p>
-                <p className="text-[9px] text-stone-500 line-clamp-3">{d || <span className="italic">Deskripsi…</span>}</p>
+                <p className="font-serif text-[10px] mb-0.5 line-clamp-1 text-stone-900">{t || `Fitur ${i}`}</p>
+                <p className="text-[8px] text-stone-500 line-clamp-2 font-light">{d || <span className="italic">Deskripsi…</span>}</p>
               </div>
             );
           })}
@@ -477,14 +522,14 @@ function LandingPreview({
       <button
         type="button"
         onClick={() => onJump("CTA")}
-        className={`block w-full text-left rounded-md p-4 transition bg-stone-900 text-white text-center ${ring("CTA")}`}
+        className={`block w-full text-left rounded-lg p-4 transition bg-stone-900 text-white text-center border border-amber-900/40 ${ring("CTA")}`}
       >
         <h2 className="text-sm font-serif">
           {data.ctaTitle || <span className="italic text-stone-500">CTA title…</span>}<br />
-          <span className="italic text-amber-500">{data.ctaSubtitle || "—"}</span>
+          <span className="italic text-amber-500 font-light">{data.ctaSubtitle || "—"}</span>
         </h2>
-        <p className="text-[10px] text-stone-300 mt-1.5 line-clamp-2">{data.ctaDescription || <span className="italic text-stone-500">Deskripsi CTA…</span>}</p>
-        <span className="inline-block mt-2 text-[9px] uppercase tracking-widest bg-amber-500 text-stone-900 font-bold px-3 py-1.5 rounded-sm">
+        <p className="text-[9px] text-stone-300 mt-1.5 line-clamp-2 font-light">{data.ctaDescription || <span className="italic text-stone-500">Deskripsi CTA…</span>}</p>
+        <span className="inline-block mt-2 text-[8px] uppercase tracking-widest bg-amber-500 text-stone-900 font-bold px-3 py-1.5 rounded">
           Berlangganan Sekarang
         </span>
       </button>

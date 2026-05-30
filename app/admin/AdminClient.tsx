@@ -86,6 +86,10 @@ type LandingPage = {
   ctaTitle: string;
   ctaSubtitle: string;
   ctaDescription: string;
+  shopCardLabel: string;
+  shopCardTitle: string;
+  eduCardLabel: string;
+  eduCardTitle: string;
 } | null;
 
 export default function AdminClient({
