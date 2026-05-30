@@ -201,3 +201,149 @@ export async function getRates(
     return { success: true, pricing: [getFallbackRate()], fallback: true };
   }
 }
+
+
+/* ============================================================
+ * CREATE ORDER (Panggil Kurir / Pick-up)
+ * ============================================================ */
+
+export type CreateOrderInput = {
+  id: string;
+  shippingName: string;
+  shippingPhone: string;
+  shippingEmail?: string | null;
+  shippingAddress: string;
+  destinationAreaId?: string | null;
+  destinationPostalCode?: number | string | null;
+  courier: string;          // courier_company, mis. "jne"
+  courierService: string;   // courier_type, mis. "reg"
+  notes?: string | null;
+};
+
+export type CreateOrderItemInput = {
+  name: string;
+  value: number;     // harga per unit
+  quantity: number;
+  weight: number;    // gram per unit
+};
+
+type CreateOrderResult =
+  | { success: true; waybill: string | null; trackingId: string | null; biteshipOrderId: string | null; raw: any }
+  | { success: false; error: string };
+
+/**
+ * Buat order pengiriman di Biteship (POST /v1/orders) — memicu pick-up kurir.
+ *
+ * Origin dibaca dari env:
+ *  - ORIGIN_CONTACT_NAME, ORIGIN_CONTACT_PHONE, ORIGIN_ADDRESS, ORIGIN_POSTAL_CODE
+ *    (opsional: ORIGIN_AREA_ID)
+ *
+ * delivery_type dapat dikonfigurasi via env BITESHIP_DELIVERY_TYPE (default "now",
+ * sesuai dokumentasi Biteship: nilai valid "now" / "scheduled" — "now" langsung
+ * generate waybill).
+ */
+export async function createBiteshipOrder(
+  order: CreateOrderInput,
+  items: CreateOrderItemInput[]
+): Promise<CreateOrderResult> {
+  const apiKey = getApiKey();
+  if (!apiKey) {
+    return { success: false, error: "BITESHIP_API_KEY belum diset." };
+  }
+
+  const originContactName = process.env.ORIGIN_CONTACT_NAME || "";
+  const originContactPhone = process.env.ORIGIN_CONTACT_PHONE || "";
+  const originAddress = process.env.ORIGIN_ADDRESS || "";
+  const originPostalCode = process.env.ORIGIN_POSTAL_CODE || "";
+  const originAreaId = process.env.ORIGIN_AREA_ID || "";
+
+  if (!originContactName || !originContactPhone || !originAddress) {
+    return {
+      success: false,
+      error: "Data origin belum lengkap (ORIGIN_CONTACT_NAME / ORIGIN_CONTACT_PHONE / ORIGIN_ADDRESS).",
+    };
+  }
+  if (!originPostalCode && !originAreaId) {
+    return { success: false, error: "ORIGIN_POSTAL_CODE / ORIGIN_AREA_ID belum diset." };
+  }
+  if (!order.courier || !order.courierService) {
+    return { success: false, error: "Kurir order belum lengkap." };
+  }
+  if (!order.destinationAreaId && !order.destinationPostalCode) {
+    return { success: false, error: "Tujuan order tidak punya area id / kode pos." };
+  }
+
+  // Kurir 'flat' adalah fallback internal (bukan kurir Biteship asli) — tidak bisa pickup.
+  if (order.courier === "flat") {
+    return {
+      success: false,
+      error: "Order ini memakai ongkir flat (fallback), tidak bisa request pickup otomatis ke Biteship.",
+    };
+  }
+
+  const deliveryType = process.env.BITESHIP_DELIVERY_TYPE || "now";
+
+  const body: Record<string, unknown> = {
+    origin_contact_name: originContactName,
+    origin_contact_phone: originContactPhone,
+    origin_address: originAddress,
+    destination_contact_name: order.shippingName,
+    destination_contact_phone: order.shippingPhone,
+    destination_address: order.shippingAddress,
+    courier_company: order.courier,
+    courier_type: order.courierService,
+    delivery_type: deliveryType,
+    order_note: order.notes || undefined,
+    reference_id: order.id,
+    items: items.map((it) => ({
+      name: it.name.slice(0, 100),
+      value: Math.max(0, Math.round(it.value)),
+      quantity: Math.max(1, Math.round(it.quantity)),
+      weight: Math.max(1, Math.round(it.weight)),
+    })),
+  };
+
+  if (order.shippingEmail) body.destination_contact_email = order.shippingEmail;
+
+  // Origin: pakai area id kalau ada, plus postal code kalau tersedia.
+  if (originAreaId) body.origin_area_id = originAreaId;
+  if (originPostalCode) body.origin_postal_code = Number(originPostalCode) || originPostalCode;
+
+  // Destination: area id kalau ada, kalau tidak kode pos.
+  if (order.destinationAreaId) {
+    body.destination_area_id = order.destinationAreaId;
+  } else if (order.destinationPostalCode) {
+    body.destination_postal_code = Number(order.destinationPostalCode) || order.destinationPostalCode;
+  }
+
+  try {
+    const res = await fetch(`${BITESHIP_BASE_URL}/v1/orders`, {
+      method: "POST",
+      headers: {
+        authorization: apiKey,
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(body),
+      cache: "no-store",
+    });
+
+    const data = await res.json().catch(() => null);
+
+    if (!res.ok || !data?.success) {
+      return {
+        success: false,
+        error: data?.error || data?.message || `Biteship create order error (${res.status}).`,
+      };
+    }
+
+    const waybill: string | null = data?.courier?.waybill_id ?? null;
+    const trackingId: string | null = data?.courier?.tracking_id ?? null;
+    const biteshipOrderId: string | null = data?.id ?? null;
+
+    return { success: true, waybill, trackingId, biteshipOrderId, raw: data };
+  } catch (err: any) {
+    // eslint-disable-next-line no-console
+    console.error("[biteship] createBiteshipOrder error:", err?.message || err);
+    return { success: false, error: "Gagal menghubungi Biteship saat membuat order." };
+  }
+}

@@ -155,6 +155,7 @@ export async function POST(req: NextRequest) {
         shippingCost,
         courier,
         courierService,
+        destinationAreaId,
         notes: shipping.notes?.trim() || null,
         OrderItem: {
           create: itemSnapshots,

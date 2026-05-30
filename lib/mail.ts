@@ -174,12 +174,24 @@ const STATUS_TEMPLATES: Record<StatusKind, { subject: string; title: string; mes
 export async function sendOrderStatusEmail(
   to: string,
   status: StatusKind,
-  opts: { orderId: string; customerName: string }
+  opts: { orderId: string; customerName: string; trackingNumber?: string | null }
 ): Promise<SendResult> {
   const tpl = STATUS_TEMPLATES[status];
+
+  // Khusus SHIPPED: tampilkan nomor resi kalau tersedia.
+  const trackingBlock =
+    status === "SHIPPED" && opts.trackingNumber
+      ? `<div style="background-color:#eff6ff; border:1px solid #bfdbfe; padding:14px 16px; border-radius:8px; margin:18px 0;">
+          <p style="margin:0; font-size:12px; text-transform:uppercase; letter-spacing:0.5px; color:#1e40af; font-weight:700;">Nomor Resi Anda</p>
+          <p style="margin:6px 0 0; font-size:18px; font-family: monospace; font-weight:700; color:#1e3a8a; letter-spacing:1px;">${opts.trackingNumber}</p>
+          <p style="margin:6px 0 0; font-size:12px; color:#3b82f6;">Gunakan nomor resi ini untuk melacak paket Anda di situs kurir.</p>
+        </div>`
+      : "";
+
   const body = `
     <p style="font-size: 15px;">Halo <strong>${opts.customerName}</strong>,</p>
     <p style="font-size: 15px; line-height: 1.6; color: #444;">${tpl.message}</p>
+    ${trackingBlock}
     <div style="background-color:#fafaf9; border:1px solid #e7e5e4; padding:14px 16px; border-radius:8px; margin:18px 0;">
       <p style="margin:0; font-size:13px; color:#78716c;">Order ID</p>
       <p style="margin:4px 0 0; font-size:14px; font-family: monospace; color:#1c1917;">${opts.orderId}</p>

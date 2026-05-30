@@ -208,6 +208,7 @@ model Order {
   shippingCost  Int         @default(0) // ongkir dari Biteship
   courier        String?    // contoh: 'jne'
   courierService String?    // contoh: 'reg'
+  destinationAreaId String? // Biteship area id tujuan (untuk create order/pickup)
   trackingNumber String?    // nomor resi
   notes         String?
   createdAt     DateTime    @default(now())
