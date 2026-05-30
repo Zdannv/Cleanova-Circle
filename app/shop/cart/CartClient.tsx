@@ -65,6 +65,7 @@ export default function CartClient({ defaultName, defaultPhone, defaultEmail }: 
   const [rates, setRates] = useState<Rate[]>([]);
   const [ratesLoading, setRatesLoading] = useState(false);
   const [ratesError, setRatesError] = useState<string | null>(null);
+  const [ratesFallback, setRatesFallback] = useState(false);
   const [selectedRateKey, setSelectedRateKey] = useState<string>("");
 
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -142,6 +143,7 @@ export default function CartClient({ defaultName, defaultPhone, defaultEmail }: 
     const fetchRates = async () => {
       setRatesLoading(true);
       setRatesError(null);
+      setRatesFallback(false);
       setRates([]);
       setSelectedRateKey("");
       try {
@@ -161,6 +163,11 @@ export default function CartClient({ defaultName, defaultPhone, defaultEmail }: 
         } else {
           const sorted = [...data.pricing].sort((a: Rate, b: Rate) => a.price - b.price);
           setRates(sorted);
+          setRatesFallback(data.fallback === true);
+          // Auto-pilih kalau cuma satu opsi (mis. fallback flat rate).
+          if (sorted.length === 1) {
+            setSelectedRateKey(`${sorted[0].courier_code}|${sorted[0].courier_service_code}`);
+          }
         }
       } catch {
         if (!cancelled) setRatesError("Gagal mengambil ongkir. Coba lagi.");
@@ -540,7 +547,13 @@ export default function CartClient({ defaultName, defaultPhone, defaultEmail }: 
                     )}
 
                     {!ratesLoading && !ratesError && rates.length > 0 && (
-                      <ul className="space-y-2 max-h-72 overflow-y-auto pr-1">
+                      <>
+                        {ratesFallback && (
+                          <p className="text-[11px] text-amber-600 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800/40 rounded-lg px-3 py-2">
+                            Tarif kurir real-time sedang tidak tersedia. Menampilkan ongkir standar.
+                          </p>
+                        )}
+                        <ul className="space-y-2 max-h-72 overflow-y-auto pr-1">
                         {rates.map((r) => {
                           const key = rateKey(r);
                           const active = key === selectedRateKey;
@@ -573,7 +586,8 @@ export default function CartClient({ defaultName, defaultPhone, defaultEmail }: 
                             </li>
                           );
                         })}
-                      </ul>
+                        </ul>
+                      </>
                     )}
                   </div>
                 )}

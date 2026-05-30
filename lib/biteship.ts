@@ -42,8 +42,22 @@ export type CourierRate = {
 };
 
 type GetRatesResult =
-  | { success: true; pricing: CourierRate[] }
+  | { success: true; pricing: CourierRate[]; fallback?: boolean }
   | { success: false; error: string; pricing: [] };
+
+/** Ongkir flat sebagai jaring pengaman saat Biteship tidak bisa dipanggil. */
+export function getFallbackRate(): CourierRate {
+  const price = Number(process.env.SHIPPING_FALLBACK_COST) || 20000;
+  return {
+    courier_code: "flat",
+    courier_name: "Pengiriman Reguler (Flat Rate)",
+    courier_service_code: "reg",
+    courier_service_name: "Reguler",
+    description: "Estimasi ongkir standar",
+    duration: "2-3 hari",
+    price,
+  };
+}
 
 /**
  * Cari area (kecamatan / kode pos) berdasarkan input teks.
@@ -106,18 +120,18 @@ export async function getRates(
   couriers?: string
 ): Promise<GetRatesResult> {
   const apiKey = getApiKey();
-  if (!apiKey) {
-    return { success: false, error: "BITESHIP_API_KEY belum diset.", pricing: [] };
-  }
-
   const originPostalCode = process.env.ORIGIN_POSTAL_CODE || "";
   const originAreaId = process.env.ORIGIN_AREA_ID || "";
 
-  if (!originPostalCode && !originAreaId) {
-    return { success: false, error: "ORIGIN_POSTAL_CODE belum diset.", pricing: [] };
-  }
   if (!destinationAreaId) {
     return { success: false, error: "Area tujuan wajib dipilih.", pricing: [] };
+  }
+
+  // Kalau konfigurasi dasar belum ada, langsung pakai fallback (jangan blokir checkout).
+  if (!apiKey || (!originPostalCode && !originAreaId)) {
+    // eslint-disable-next-line no-console
+    console.warn("[biteship] konfigurasi belum lengkap — pakai ongkir fallback.");
+    return { success: true, pricing: [getFallbackRate()], fallback: true };
   }
 
   // Berat minimal 1 gram, dibulatkan ke integer.
@@ -158,31 +172,32 @@ export async function getRates(
 
     const data = await res.json().catch(() => null);
 
-    if (!res.ok || !data?.success) {
-      return {
-        success: false,
-        error: data?.error || data?.message || `Biteship rates error (${res.status}).`,
-        pricing: [],
-      };
+    // Gagal (saldo habis, error server, dll) -> jatuh ke fallback, JANGAN macetkan checkout.
+    if (!res.ok || !data?.success || !Array.isArray(data.pricing) || data.pricing.length === 0) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        "[biteship] rates gagal/kosong — pakai ongkir fallback:",
+        data?.error || data?.message || `status ${res.status}`
+      );
+      return { success: true, pricing: [getFallbackRate()], fallback: true };
     }
 
-    const pricing: CourierRate[] = Array.isArray(data.pricing)
-      ? data.pricing.map((p: any) => ({
-          courier_code: p.courier_code,
-          courier_name: p.courier_name,
-          courier_service_code: p.courier_service_code,
-          courier_service_name: p.courier_service_name,
-          description: p.description,
-          duration: p.duration,
-          price: p.price,
-          shipping_fee: p.shipping_fee,
-        }))
-      : [];
+    const pricing: CourierRate[] = data.pricing.map((p: any) => ({
+      courier_code: p.courier_code,
+      courier_name: p.courier_name,
+      courier_service_code: p.courier_service_code,
+      courier_service_name: p.courier_service_name,
+      description: p.description,
+      duration: p.duration,
+      price: p.price,
+      shipping_fee: p.shipping_fee,
+    }));
 
     return { success: true, pricing };
   } catch (err: any) {
+    // Error jaringan / lainnya -> fallback.
     // eslint-disable-next-line no-console
-    console.error("[biteship] getRates error:", err?.message || err);
-    return { success: false, error: "Gagal menghubungi Biteship.", pricing: [] };
+    console.error("[biteship] getRates error — pakai ongkir fallback:", err?.message || err);
+    return { success: true, pricing: [getFallbackRate()], fallback: true };
   }
 }

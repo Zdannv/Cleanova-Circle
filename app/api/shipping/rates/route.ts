@@ -39,7 +39,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, pricing: [], error: result.error });
     }
 
-    return NextResponse.json({ success: true, pricing: result.pricing });
+    return NextResponse.json({
+      success: true,
+      pricing: result.pricing,
+      fallback: "fallback" in result ? result.fallback === true : false,
+    });
   } catch (err: any) {
     // eslint-disable-next-line no-console
     console.error("[api/shipping/rates] error:", err?.message || err);
