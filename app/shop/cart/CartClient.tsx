@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -29,8 +29,24 @@ type Props = {
   defaultEmail: string;
 };
 
-export default function CartClient({ isAuthenticated, defaultName, defaultPhone, defaultEmail }: Props) {
-  const { items, totalQty, totalAmount, setQty, remove, clear, isHydrated } = useCart();
+type Area = {
+  id: string;
+  name: string;
+  postal_code: number | string;
+};
+
+type Rate = {
+  courier_code: string;
+  courier_name: string;
+  courier_service_code: string;
+  courier_service_name: string;
+  description?: string;
+  duration?: string;
+  price: number;
+};
+
+export default function CartClient({ defaultName, defaultPhone, defaultEmail }: Props) {
+  const { items, totalQty, totalAmount, totalWeight, setQty, remove, clear, isHydrated } = useCart();
   const router = useRouter();
 
   const [name, setName] = useState(defaultName);
@@ -39,9 +55,28 @@ export default function CartClient({ isAuthenticated, defaultName, defaultPhone,
   const [address, setAddress] = useState("");
   const [notes, setNotes] = useState("");
 
+  // --- Shipping (Biteship) ---
+  const [areaQuery, setAreaQuery] = useState("");
+  const [areaResults, setAreaResults] = useState<Area[]>([]);
+  const [areaOpen, setAreaOpen] = useState(false);
+  const [areaLoading, setAreaLoading] = useState(false);
+  const [selectedArea, setSelectedArea] = useState<Area | null>(null);
+
+  const [rates, setRates] = useState<Rate[]>([]);
+  const [ratesLoading, setRatesLoading] = useState(false);
+  const [ratesError, setRatesError] = useState<string | null>(null);
+  const [selectedRateKey, setSelectedRateKey] = useState<string>("");
+
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [snapReady, setSnapReady] = useState<boolean>(false);
+
+  const rateKey = (r: Rate) => `${r.courier_code}|${r.courier_service_code}`;
+  const selectedRate = rates.find((r) => rateKey(r) === selectedRateKey) || null;
+  const shippingCost = selectedRate?.price ?? 0;
+  // Berat total minimal 1 gram; fallback 500g/item kalau data berat kosong (cart lama).
+  const effectiveWeight = Math.max(totalWeight, items.length * 500, 1);
+  const grandTotal = totalAmount + shippingCost;
 
   // Pre-fill ulang kalau session datang setelah render awal.
   useEffect(() => {
@@ -67,6 +102,86 @@ export default function CartClient({ isAuthenticated, defaultName, defaultPhone,
     return () => window.clearInterval(t);
   }, []);
 
+  // Debounced autocomplete area.
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => {
+    // Kalau sudah memilih area dan query masih sama, jangan cari lagi.
+    if (selectedArea && areaQuery === selectedArea.name) return;
+    if (areaQuery.trim().length < 3) {
+      setAreaResults([]);
+      return;
+    }
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(async () => {
+      setAreaLoading(true);
+      try {
+        const res = await fetch(`/api/shipping/areas?input=${encodeURIComponent(areaQuery.trim())}`);
+        const data = await res.json().catch(() => ({}));
+        setAreaResults(Array.isArray(data?.areas) ? data.areas : []);
+        setAreaOpen(true);
+      } catch {
+        setAreaResults([]);
+      } finally {
+        setAreaLoading(false);
+      }
+    }, 450);
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [areaQuery]);
+
+  // Ambil ongkir setiap kali area terpilih / isi keranjang berubah.
+  useEffect(() => {
+    if (!selectedArea) {
+      setRates([]);
+      setSelectedRateKey("");
+      return;
+    }
+    let cancelled = false;
+    const fetchRates = async () => {
+      setRatesLoading(true);
+      setRatesError(null);
+      setRates([]);
+      setSelectedRateKey("");
+      try {
+        const res = await fetch("/api/shipping/rates", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            destinationAreaId: selectedArea.id,
+            weight: effectiveWeight,
+          }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (cancelled) return;
+        if (!data?.success || !Array.isArray(data.pricing) || data.pricing.length === 0) {
+          setRatesError(data?.error || "Ongkir tidak tersedia untuk tujuan ini.");
+          setRates([]);
+        } else {
+          const sorted = [...data.pricing].sort((a: Rate, b: Rate) => a.price - b.price);
+          setRates(sorted);
+        }
+      } catch {
+        if (!cancelled) setRatesError("Gagal mengambil ongkir. Coba lagi.");
+      } finally {
+        if (!cancelled) setRatesLoading(false);
+      }
+    };
+    fetchRates();
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedArea, totalWeight, totalQty]);
+
+  const handleSelectArea = (area: Area) => {
+    setSelectedArea(area);
+    setAreaQuery(area.name);
+    setAreaOpen(false);
+    setAreaResults([]);
+  };
+
   const validate = (): string | null => {
     if (items.length === 0) return "Keranjang kosong.";
     if (!name.trim()) return "Nama lengkap wajib diisi.";
@@ -74,7 +189,9 @@ export default function CartClient({ isAuthenticated, defaultName, defaultPhone,
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) return "Format email tidak valid.";
     if (!phone.trim()) return "Nomor HP wajib diisi.";
     if (!/^[0-9+\s-]{8,20}$/.test(phone.trim())) return "Nomor HP tidak valid.";
-    if (!address.trim() || address.trim().length < 10) return "Alamat lengkap minimal 10 karakter.";
+    if (!selectedArea) return "Pilih kecamatan / kode pos tujuan terlebih dahulu.";
+    if (!address.trim() || address.trim().length < 10) return "Alamat lengkap (jalan/detail) minimal 10 karakter.";
+    if (!selectedRate) return "Pilih kurir pengiriman terlebih dahulu.";
     return null;
   };
 
@@ -92,6 +209,9 @@ export default function CartClient({ isAuthenticated, defaultName, defaultPhone,
 
     setIsSubmitting(true);
     try {
+      // Gabungkan area + alamat detail untuk shippingAddress.
+      const fullAddress = `${address.trim()} — ${selectedArea!.name}`;
+
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -101,8 +221,12 @@ export default function CartClient({ isAuthenticated, defaultName, defaultPhone,
             name: name.trim(),
             phone: phone.trim(),
             email: email.trim(),
-            address: address.trim(),
+            address: fullAddress,
             notes: notes.trim() || undefined,
+            destinationAreaId: selectedArea!.id,
+            shippingCost,
+            courier: selectedRate!.courier_code,
+            courierService: selectedRate!.courier_service_code,
           },
         }),
       });
@@ -115,8 +239,6 @@ export default function CartClient({ isAuthenticated, defaultName, defaultPhone,
 
       const orderId = data.orderId as string;
 
-      // Helper: verifikasi status pembayaran ke server (fallback webhook,
-      // penting di localhost di mana webhook Midtrans tidak bisa menjangkau app).
       const verifyPayment = async () => {
         try {
           await fetch("/api/checkout/verify", {
@@ -149,7 +271,6 @@ export default function CartClient({ isAuthenticated, defaultName, defaultPhone,
           setIsSubmitting(false);
         },
         onClose: () => {
-          // User menutup popup tanpa membayar — biarkan keranjang.
           setIsSubmitting(false);
         },
       });
@@ -329,8 +450,63 @@ export default function CartClient({ isAuthenticated, defaultName, defaultPhone,
                   />
                   <p className="text-[11px] text-stone-500">Untuk pengiriman bukti pembayaran dan update resi.</p>
                 </div>
+
+                {/* Area autocomplete */}
+                <div className="space-y-1.5 relative">
+                  <label htmlFor="ship-area" className="block text-xs font-medium text-stone-700 dark:text-stone-300">Kecamatan / Kode Pos Tujuan</label>
+                  <div className="relative">
+                    <input
+                      id="ship-area"
+                      type="text"
+                      value={areaQuery}
+                      onChange={(e) => {
+                        setAreaQuery(e.target.value);
+                        setSelectedArea(null);
+                      }}
+                      onFocus={() => { if (areaResults.length > 0) setAreaOpen(true); }}
+                      autoComplete="off"
+                      className="w-full px-4 py-2.5 rounded-xl bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                      placeholder="Ketik kecamatan atau kode pos, mis. Cilandak / 12430"
+                    />
+                    {areaLoading && (
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                        <svg className="w-4 h-4 animate-spin text-amber-500" viewBox="0 0 24 24" fill="none">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+                        </svg>
+                      </div>
+                    )}
+                    {selectedArea && !areaLoading && (
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2 text-emerald-500">
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                      </div>
+                    )}
+                  </div>
+
+                  {areaOpen && areaResults.length > 0 && !selectedArea && (
+                    <ul className="absolute z-20 mt-1 w-full max-h-60 overflow-y-auto bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 rounded-xl shadow-lg">
+                      {areaResults.map((area) => (
+                        <li key={area.id}>
+                          <button
+                            type="button"
+                            onClick={() => handleSelectArea(area)}
+                            className="w-full text-left px-4 py-2.5 text-xs text-stone-700 dark:text-stone-300 hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-colors border-b border-stone-100 dark:border-stone-800 last:border-0"
+                          >
+                            {area.name}
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  {!selectedArea && (
+                    <p className="text-[11px] text-stone-500">Pilih dari daftar yang muncul agar ongkir bisa dihitung.</p>
+                  )}
+                </div>
+
                 <div className="space-y-1.5">
-                  <label htmlFor="ship-address" className="block text-xs font-medium text-stone-700 dark:text-stone-300">Alamat Lengkap</label>
+                  <label htmlFor="ship-address" className="block text-xs font-medium text-stone-700 dark:text-stone-300">Alamat Lengkap (Jalan, No. Rumah, RT/RW, Patokan)</label>
                   <textarea
                     id="ship-address"
                     rows={3}
@@ -338,9 +514,70 @@ export default function CartClient({ isAuthenticated, defaultName, defaultPhone,
                     onChange={(e) => setAddress(e.target.value)}
                     required
                     className="w-full px-4 py-2.5 rounded-xl bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent resize-y"
-                    placeholder="Jl. Mawar No. 12, Kel. Cipete, Kec. Cilandak, Jakarta Selatan, 12420"
+                    placeholder="Jl. Mawar No. 12, RT 8/RW 4, dekat masjid An-Nur"
                   />
                 </div>
+
+                {/* Courier rates */}
+                {selectedArea && (
+                  <div className="space-y-2">
+                    <label className="block text-xs font-medium text-stone-700 dark:text-stone-300">Pilih Kurir</label>
+
+                    {ratesLoading && (
+                      <div className="flex items-center gap-2 text-xs text-stone-500 py-3">
+                        <svg className="w-4 h-4 animate-spin text-amber-500" viewBox="0 0 24 24" fill="none">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+                        </svg>
+                        Menghitung ongkir…
+                      </div>
+                    )}
+
+                    {!ratesLoading && ratesError && (
+                      <div className="p-3 bg-rose-50 text-rose-700 border border-rose-200 dark:bg-rose-900/20 dark:text-rose-300 dark:border-rose-800/40 rounded-xl text-xs">
+                        ⚠ {ratesError}
+                      </div>
+                    )}
+
+                    {!ratesLoading && !ratesError && rates.length > 0 && (
+                      <ul className="space-y-2 max-h-72 overflow-y-auto pr-1">
+                        {rates.map((r) => {
+                          const key = rateKey(r);
+                          const active = key === selectedRateKey;
+                          return (
+                            <li key={key}>
+                              <button
+                                type="button"
+                                onClick={() => setSelectedRateKey(key)}
+                                className={`w-full text-left flex items-center gap-3 p-3 rounded-xl border transition-all ${
+                                  active
+                                    ? "border-amber-500 bg-amber-50 dark:bg-amber-900/20 ring-1 ring-amber-500"
+                                    : "border-stone-200 dark:border-stone-700 hover:border-stone-300 dark:hover:border-stone-600"
+                                }`}
+                              >
+                                <span className={`w-4 h-4 rounded-full border-2 flex-shrink-0 grid place-items-center ${active ? "border-amber-500" : "border-stone-300"}`}>
+                                  {active && <span className="w-2 h-2 rounded-full bg-amber-500" />}
+                                </span>
+                                <span className="flex-1 min-w-0">
+                                  <span className="block text-xs font-semibold text-stone-900 dark:text-white">
+                                    {r.courier_name} · {r.courier_service_name}
+                                  </span>
+                                  <span className="block text-[11px] text-stone-500">
+                                    {r.duration ? `Estimasi ${r.duration}` : r.description || "—"}
+                                  </span>
+                                </span>
+                                <span className="text-sm font-bold text-stone-900 dark:text-white whitespace-nowrap">
+                                  {formatRupiah(r.price)}
+                                </span>
+                              </button>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    )}
+                  </div>
+                )}
+
                 <div className="space-y-1.5">
                   <label htmlFor="ship-notes" className="block text-xs font-medium text-stone-700 dark:text-stone-300">Catatan (opsional)</label>
                   <input
@@ -367,13 +604,22 @@ export default function CartClient({ isAuthenticated, defaultName, defaultPhone,
                   <span className="text-stone-500">Subtotal ({totalQty} item)</span>
                   <span className="font-medium tabular-nums">{formatRupiah(totalAmount)}</span>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between items-center">
                   <span className="text-stone-500">Ongkir</span>
-                  <span className="text-xs text-stone-400 italic">Dihitung saat pembayaran</span>
+                  {selectedRate ? (
+                    <span className="font-medium tabular-nums">{formatRupiah(shippingCost)}</span>
+                  ) : (
+                    <span className="text-xs text-stone-400 italic">Pilih kurir dulu</span>
+                  )}
                 </div>
+                {selectedRate && (
+                  <p className="text-[11px] text-stone-400 -mt-1">
+                    {selectedRate.courier_name} · {selectedRate.courier_service_name}
+                  </p>
+                )}
                 <div className="border-t border-stone-200 dark:border-stone-800 pt-3 flex justify-between items-baseline">
                   <span className="font-semibold">Total</span>
-                  <span className="text-lg font-bold text-amber-600 tabular-nums">{formatRupiah(totalAmount)}</span>
+                  <span className="text-lg font-bold text-amber-600 tabular-nums">{formatRupiah(grandTotal)}</span>
                 </div>
 
                 {errorMsg && (
@@ -385,7 +631,7 @@ export default function CartClient({ isAuthenticated, defaultName, defaultPhone,
                 <button
                   type="button"
                   onClick={handleCheckout}
-                  disabled={isSubmitting || items.length === 0}
+                  disabled={isSubmitting || items.length === 0 || !selectedRate}
                   className="w-full mt-2 inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-amber-600 hover:bg-amber-700 text-white text-sm font-bold uppercase tracking-widest rounded-full transition-all shadow-lg shadow-amber-600/20 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? (

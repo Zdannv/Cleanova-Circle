@@ -36,6 +36,7 @@ export async function addProductAction(formData: FormData) {
   const imageUrl = (formData.get("imageUrl") as string)?.trim();
   const price = toIntSafe(formData.get("price"));
   const stock = toIntSafe(formData.get("stock"));
+  const weight = toIntSafe(formData.get("weight"), 500);
   const isActive = formData.get("isActive") === "on" || formData.get("isActive") === "true";
 
   if (!name) throw new Error("Nama produk wajib diisi.");
@@ -53,6 +54,7 @@ export async function addProductAction(formData: FormData) {
       description: description || "",
       price,
       stock,
+      weight: weight > 0 ? weight : 500,
       imageUrl,
       isActive,
     },
@@ -70,6 +72,7 @@ export async function updateProductAction(id: string, formData: FormData) {
   const imageUrl = (formData.get("imageUrl") as string)?.trim();
   const price = toIntSafe(formData.get("price"));
   const stock = toIntSafe(formData.get("stock"));
+  const weight = toIntSafe(formData.get("weight"), 500);
   const isActive = formData.get("isActive") === "on" || formData.get("isActive") === "true";
 
   if (!name) throw new Error("Nama produk wajib diisi.");
@@ -82,6 +85,7 @@ export async function updateProductAction(id: string, formData: FormData) {
       description: description || "",
       price,
       stock,
+      weight: weight > 0 ? weight : 500,
       imageUrl,
       isActive,
     },

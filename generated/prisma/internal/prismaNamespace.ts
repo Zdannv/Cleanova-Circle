@@ -1568,6 +1568,7 @@ export const ProductScalarFieldEnum = {
   description: 'description',
   price: 'price',
   stock: 'stock',
+  weight: 'weight',
   imageUrl: 'imageUrl',
   isActive: 'isActive',
   createdAt: 'createdAt',
@@ -1586,6 +1587,10 @@ export const OrderScalarFieldEnum = {
   shippingPhone: 'shippingPhone',
   shippingEmail: 'shippingEmail',
   shippingAddress: 'shippingAddress',
+  shippingCost: 'shippingCost',
+  courier: 'courier',
+  courierService: 'courierService',
+  trackingNumber: 'trackingNumber',
   notes: 'notes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

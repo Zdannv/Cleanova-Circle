@@ -12,6 +12,7 @@ type Product = {
   description: string;
   price: number;
   stock: number;
+  weight: number;
   imageUrl: string;
   isActive: boolean;
 };
@@ -27,6 +28,7 @@ export default function CatalogClient({ products }: { products: Product[] }) {
       price: p.price,
       imageUrl: p.imageUrl,
       stock: p.stock,
+      weight: p.weight,
       quantity: 1,
     });
     setJustAdded(p.id);

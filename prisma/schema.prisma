@@ -179,6 +179,7 @@ model Product {
   description String
   price       Int         // dalam Rupiah (tanpa desimal)
   stock       Int         @default(0)
+  weight      Int         @default(500) // berat dalam gram (untuk hitung ongkir)
   imageUrl    String
   isActive    Boolean     @default(true)
   createdAt   DateTime    @default(now())
@@ -199,11 +200,15 @@ model Order {
   id            String      @id @default(cuid())
   userId        String?
   status        OrderStatus @default(PENDING)
-  totalAmount   Int         // total dalam Rupiah
+  totalAmount   Int         // total dalam Rupiah (produk + ongkir)
   shippingName  String
   shippingPhone String
   shippingEmail String?
   shippingAddress String
+  shippingCost  Int         @default(0) // ongkir dari Biteship
+  courier        String?    // contoh: 'jne'
+  courierService String?    // contoh: 'reg'
+  trackingNumber String?    // nomor resi
   notes         String?
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt

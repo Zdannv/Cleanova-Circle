@@ -29,11 +29,13 @@ export type AggregateProduct = {
 export type ProductAvgAggregateOutputType = {
   price: number | null
   stock: number | null
+  weight: number | null
 }
 
 export type ProductSumAggregateOutputType = {
   price: number | null
   stock: number | null
+  weight: number | null
 }
 
 export type ProductMinAggregateOutputType = {
@@ -43,6 +45,7 @@ export type ProductMinAggregateOutputType = {
   description: string | null
   price: number | null
   stock: number | null
+  weight: number | null
   imageUrl: string | null
   isActive: boolean | null
   createdAt: Date | null
@@ -56,6 +59,7 @@ export type ProductMaxAggregateOutputType = {
   description: string | null
   price: number | null
   stock: number | null
+  weight: number | null
   imageUrl: string | null
   isActive: boolean | null
   createdAt: Date | null
@@ -69,6 +73,7 @@ export type ProductCountAggregateOutputType = {
   description: number
   price: number
   stock: number
+  weight: number
   imageUrl: number
   isActive: number
   createdAt: number
@@ -80,11 +85,13 @@ export type ProductCountAggregateOutputType = {
 export type ProductAvgAggregateInputType = {
   price?: true
   stock?: true
+  weight?: true
 }
 
 export type ProductSumAggregateInputType = {
   price?: true
   stock?: true
+  weight?: true
 }
 
 export type ProductMinAggregateInputType = {
@@ -94,6 +101,7 @@ export type ProductMinAggregateInputType = {
   description?: true
   price?: true
   stock?: true
+  weight?: true
   imageUrl?: true
   isActive?: true
   createdAt?: true
@@ -107,6 +115,7 @@ export type ProductMaxAggregateInputType = {
   description?: true
   price?: true
   stock?: true
+  weight?: true
   imageUrl?: true
   isActive?: true
   createdAt?: true
@@ -120,6 +129,7 @@ export type ProductCountAggregateInputType = {
   description?: true
   price?: true
   stock?: true
+  weight?: true
   imageUrl?: true
   isActive?: true
   createdAt?: true
@@ -220,6 +230,7 @@ export type ProductGroupByOutputType = {
   description: string
   price: number
   stock: number
+  weight: number
   imageUrl: string
   isActive: boolean
   createdAt: Date
@@ -256,6 +267,7 @@ export type ProductWhereInput = {
   description?: Prisma.StringFilter<"Product"> | string
   price?: Prisma.IntFilter<"Product"> | number
   stock?: Prisma.IntFilter<"Product"> | number
+  weight?: Prisma.IntFilter<"Product"> | number
   imageUrl?: Prisma.StringFilter<"Product"> | string
   isActive?: Prisma.BoolFilter<"Product"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Product"> | Date | string
@@ -270,6 +282,7 @@ export type ProductOrderByWithRelationInput = {
   description?: Prisma.SortOrder
   price?: Prisma.SortOrder
   stock?: Prisma.SortOrder
+  weight?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -287,6 +300,7 @@ export type ProductWhereUniqueInput = Prisma.AtLeast<{
   description?: Prisma.StringFilter<"Product"> | string
   price?: Prisma.IntFilter<"Product"> | number
   stock?: Prisma.IntFilter<"Product"> | number
+  weight?: Prisma.IntFilter<"Product"> | number
   imageUrl?: Prisma.StringFilter<"Product"> | string
   isActive?: Prisma.BoolFilter<"Product"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Product"> | Date | string
@@ -301,6 +315,7 @@ export type ProductOrderByWithAggregationInput = {
   description?: Prisma.SortOrder
   price?: Prisma.SortOrder
   stock?: Prisma.SortOrder
+  weight?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -322,6 +337,7 @@ export type ProductScalarWhereWithAggregatesInput = {
   description?: Prisma.StringWithAggregatesFilter<"Product"> | string
   price?: Prisma.IntWithAggregatesFilter<"Product"> | number
   stock?: Prisma.IntWithAggregatesFilter<"Product"> | number
+  weight?: Prisma.IntWithAggregatesFilter<"Product"> | number
   imageUrl?: Prisma.StringWithAggregatesFilter<"Product"> | string
   isActive?: Prisma.BoolWithAggregatesFilter<"Product"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Product"> | Date | string
@@ -335,6 +351,7 @@ export type ProductCreateInput = {
   description: string
   price: number
   stock?: number
+  weight?: number
   imageUrl: string
   isActive?: boolean
   createdAt?: Date | string
@@ -349,6 +366,7 @@ export type ProductUncheckedCreateInput = {
   description: string
   price: number
   stock?: number
+  weight?: number
   imageUrl: string
   isActive?: boolean
   createdAt?: Date | string
@@ -363,6 +381,7 @@ export type ProductUpdateInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.IntFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
+  weight?: Prisma.IntFieldUpdateOperationsInput | number
   imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -377,6 +396,7 @@ export type ProductUncheckedUpdateInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.IntFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
+  weight?: Prisma.IntFieldUpdateOperationsInput | number
   imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -391,6 +411,7 @@ export type ProductCreateManyInput = {
   description: string
   price: number
   stock?: number
+  weight?: number
   imageUrl: string
   isActive?: boolean
   createdAt?: Date | string
@@ -404,6 +425,7 @@ export type ProductUpdateManyMutationInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.IntFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
+  weight?: Prisma.IntFieldUpdateOperationsInput | number
   imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -417,6 +439,7 @@ export type ProductUncheckedUpdateManyInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.IntFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
+  weight?: Prisma.IntFieldUpdateOperationsInput | number
   imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -430,6 +453,7 @@ export type ProductCountOrderByAggregateInput = {
   description?: Prisma.SortOrder
   price?: Prisma.SortOrder
   stock?: Prisma.SortOrder
+  weight?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -439,6 +463,7 @@ export type ProductCountOrderByAggregateInput = {
 export type ProductAvgOrderByAggregateInput = {
   price?: Prisma.SortOrder
   stock?: Prisma.SortOrder
+  weight?: Prisma.SortOrder
 }
 
 export type ProductMaxOrderByAggregateInput = {
@@ -448,6 +473,7 @@ export type ProductMaxOrderByAggregateInput = {
   description?: Prisma.SortOrder
   price?: Prisma.SortOrder
   stock?: Prisma.SortOrder
+  weight?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -461,6 +487,7 @@ export type ProductMinOrderByAggregateInput = {
   description?: Prisma.SortOrder
   price?: Prisma.SortOrder
   stock?: Prisma.SortOrder
+  weight?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -470,6 +497,7 @@ export type ProductMinOrderByAggregateInput = {
 export type ProductSumOrderByAggregateInput = {
   price?: Prisma.SortOrder
   stock?: Prisma.SortOrder
+  weight?: Prisma.SortOrder
 }
 
 export type ProductScalarRelationFilter = {
@@ -498,6 +526,7 @@ export type ProductCreateWithoutOrderItemInput = {
   description: string
   price: number
   stock?: number
+  weight?: number
   imageUrl: string
   isActive?: boolean
   createdAt?: Date | string
@@ -511,6 +540,7 @@ export type ProductUncheckedCreateWithoutOrderItemInput = {
   description: string
   price: number
   stock?: number
+  weight?: number
   imageUrl: string
   isActive?: boolean
   createdAt?: Date | string
@@ -540,6 +570,7 @@ export type ProductUpdateWithoutOrderItemInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.IntFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
+  weight?: Prisma.IntFieldUpdateOperationsInput | number
   imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -553,6 +584,7 @@ export type ProductUncheckedUpdateWithoutOrderItemInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.IntFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
+  weight?: Prisma.IntFieldUpdateOperationsInput | number
   imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -597,6 +629,7 @@ export type ProductSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   description?: boolean
   price?: boolean
   stock?: boolean
+  weight?: boolean
   imageUrl?: boolean
   isActive?: boolean
   createdAt?: boolean
@@ -612,6 +645,7 @@ export type ProductSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   description?: boolean
   price?: boolean
   stock?: boolean
+  weight?: boolean
   imageUrl?: boolean
   isActive?: boolean
   createdAt?: boolean
@@ -625,6 +659,7 @@ export type ProductSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   description?: boolean
   price?: boolean
   stock?: boolean
+  weight?: boolean
   imageUrl?: boolean
   isActive?: boolean
   createdAt?: boolean
@@ -638,13 +673,14 @@ export type ProductSelectScalar = {
   description?: boolean
   price?: boolean
   stock?: boolean
+  weight?: boolean
   imageUrl?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ProductOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "slug" | "description" | "price" | "stock" | "imageUrl" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
+export type ProductOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "slug" | "description" | "price" | "stock" | "weight" | "imageUrl" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
 export type ProductInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   OrderItem?: boolean | Prisma.Product$OrderItemArgs<ExtArgs>
   _count?: boolean | Prisma.ProductCountOutputTypeDefaultArgs<ExtArgs>
@@ -664,6 +700,7 @@ export type $ProductPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     description: string
     price: number
     stock: number
+    weight: number
     imageUrl: string
     isActive: boolean
     createdAt: Date
@@ -1098,6 +1135,7 @@ export interface ProductFieldRefs {
   readonly description: Prisma.FieldRef<"Product", 'String'>
   readonly price: Prisma.FieldRef<"Product", 'Int'>
   readonly stock: Prisma.FieldRef<"Product", 'Int'>
+  readonly weight: Prisma.FieldRef<"Product", 'Int'>
   readonly imageUrl: Prisma.FieldRef<"Product", 'String'>
   readonly isActive: Prisma.FieldRef<"Product", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Product", 'DateTime'>

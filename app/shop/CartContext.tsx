@@ -19,12 +19,15 @@ export type CartLine = {
   quantity: number;
   /** stok produk saat ditambahkan, untuk batas qty */
   stock: number;
+  /** berat per unit dalam gram (untuk hitung ongkir) */
+  weight: number;
 };
 
 type CartCtx = {
   items: CartLine[];
   totalQty: number;
   totalAmount: number;
+  totalWeight: number;
   add: (line: Omit<CartLine, "quantity"> & { quantity?: number }) => void;
   setQty: (productId: string, qty: number) => void;
   remove: (productId: string) => void;
@@ -75,6 +78,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
             price: line.price,
             imageUrl: line.imageUrl,
             stock: line.stock,
+            weight: line.weight,
             quantity: Math.min(qty, line.stock),
           },
         ];
@@ -89,6 +93,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         price: line.price,
         imageUrl: line.imageUrl,
         stock: line.stock,
+        weight: line.weight,
       };
       return next;
     });
@@ -115,17 +120,20 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const totals = useMemo(() => {
     let qty = 0;
     let amount = 0;
+    let weight = 0;
     for (const it of items) {
       qty += it.quantity;
       amount += it.quantity * it.price;
+      weight += it.quantity * (it.weight || 0);
     }
-    return { qty, amount };
+    return { qty, amount, weight };
   }, [items]);
 
   const value: CartCtx = {
     items,
     totalQty: totals.qty,
     totalAmount: totals.amount,
+    totalWeight: totals.weight,
     add,
     setQty,
     remove,

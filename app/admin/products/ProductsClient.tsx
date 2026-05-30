@@ -17,6 +17,7 @@ type Product = {
   description: string;
   price: number;
   stock: number;
+  weight: number;
   imageUrl: string;
   isActive: boolean;
   createdAt: Date;
@@ -41,6 +42,7 @@ export default function ProductsClient({
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState<string>("");
   const [stock, setStock] = useState<string>("");
+  const [weight, setWeight] = useState<string>("");
   const [imageUrl, setImageUrl] = useState("");
   const [isActive, setIsActive] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -53,6 +55,7 @@ export default function ProductsClient({
     setDescription("");
     setPrice("");
     setStock("");
+    setWeight("");
     setImageUrl("");
     setIsActive(true);
     setErrorMsg(null);
@@ -65,6 +68,7 @@ export default function ProductsClient({
     setDescription(p.description);
     setPrice(String(p.price));
     setStock(String(p.stock));
+    setWeight(String(p.weight));
     setImageUrl(p.imageUrl);
     setIsActive(p.isActive);
     setErrorMsg(null);
@@ -89,6 +93,7 @@ export default function ProductsClient({
     fd.append("description", description.trim());
     fd.append("price", price || "0");
     fd.append("stock", stock || "0");
+    fd.append("weight", weight || "500");
     fd.append("imageUrl", imageUrl);
     fd.append("isActive", isActive ? "true" : "false");
 
@@ -188,7 +193,7 @@ export default function ProductsClient({
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 <div className="space-y-1.5">
                   <label htmlFor="p-price" className="block text-sm font-medium text-gray-700">Harga (Rp)</label>
                   <input
@@ -219,7 +224,29 @@ export default function ProductsClient({
                     placeholder="20"
                   />
                 </div>
+
+                <div className="space-y-1.5 col-span-2 sm:col-span-1">
+                  <label htmlFor="p-weight" className="block text-sm font-medium text-gray-700">Berat (gram)</label>
+                  <input
+                    id="p-weight"
+                    type="number"
+                    min={1}
+                    value={weight}
+                    onChange={(e) => setWeight(e.target.value)}
+                    required
+                    className="w-full px-4 py-2.5 rounded-md border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                    placeholder="500"
+                  />
+                  {weight && (
+                    <p className="text-[11px] text-gray-500">
+                      {(parseInt(weight, 10) || 0) >= 1000
+                        ? `${((parseInt(weight, 10) || 0) / 1000).toLocaleString("id-ID")} kg`
+                        : `${parseInt(weight, 10) || 0} gram`}
+                    </p>
+                  )}
+                </div>
               </div>
+              <p className="text-[11px] text-gray-500 -mt-2">Berat dipakai untuk menghitung ongkir otomatis (Biteship). Default 500 gram jika kosong.</p>
 
               <div className="space-y-1.5">
                 <label htmlFor="p-desc" className="block text-sm font-medium text-gray-700">Deskripsi</label>
@@ -291,6 +318,7 @@ export default function ProductsClient({
                     <th className="px-6 py-4">Produk</th>
                     <th className="px-6 py-4 w-32">Harga</th>
                     <th className="px-6 py-4 w-20 text-center">Stok</th>
+                    <th className="px-6 py-4 w-24 text-center">Berat</th>
                     <th className="px-6 py-4 w-24 text-center">Status</th>
                     <th className="px-6 py-4 w-40 text-center">Aksi</th>
                   </tr>
@@ -318,6 +346,9 @@ export default function ProductsClient({
                         <span className={`text-sm font-semibold ${p.stock === 0 ? "text-rose-600" : "text-gray-900"}`}>
                           {p.stock}
                         </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-600">
+                        {p.weight >= 1000 ? `${(p.weight / 1000).toLocaleString("id-ID")} kg` : `${p.weight} g`}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-center">
                         {p.isActive ? (

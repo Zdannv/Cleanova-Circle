@@ -22,6 +22,7 @@ export default async function ShopPage() {
     description: p.description,
     price: p.price,
     stock: p.stock,
+    weight: p.weight,
     imageUrl: p.imageUrl,
     isActive: p.isActive,
   }));

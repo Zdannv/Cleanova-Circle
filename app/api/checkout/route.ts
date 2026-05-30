@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/route";
 import prisma from "../../../lib/prisma";
 import { snap } from "../../../lib/midtrans";
+import { getRates } from "../../../lib/biteship";
 
 type CartItem = {
   productId: string;
@@ -17,6 +18,10 @@ type CheckoutBody = {
     email?: string;
     address: string;
     notes?: string;
+    destinationAreaId?: string;
+    shippingCost?: number;
+    courier?: string;
+    courierService?: string;
   };
 };
 
@@ -46,6 +51,13 @@ export async function POST(req: NextRequest) {
   }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(shippingEmail)) {
     return NextResponse.json({ error: "Format email tidak valid." }, { status: 400 });
+  }
+
+  const destinationAreaId = shipping.destinationAreaId?.trim() || "";
+  const courier = shipping.courier?.trim() || "";
+  const courierService = shipping.courierService?.trim() || "";
+  if (!destinationAreaId || !courier || !courierService) {
+    return NextResponse.json({ error: "Kurir dan tujuan pengiriman wajib dipilih." }, { status: 400 });
   }
 
   // Normalisasi & dedup item.
@@ -82,13 +94,44 @@ export async function POST(req: NextRequest) {
     }
   }
 
+  // 2b. Hitung ulang ongkir di server via Biteship (jangan percaya nilai dari client).
+  let totalWeight = 0;
+  for (const p of products) {
+    const qty = normalized.get(p.id) || 0;
+    totalWeight += (p.weight || 500) * qty;
+  }
+  totalWeight = Math.max(1, totalWeight);
+
+  let shippingCost = 0;
+  try {
+    const rateResult = await getRates(destinationAreaId, totalWeight, courier);
+    if (!rateResult.success) {
+      return NextResponse.json(
+        { error: rateResult.error || "Gagal memvalidasi ongkir." },
+        { status: 400 }
+      );
+    }
+    const matched = rateResult.pricing.find(
+      (r) => r.courier_code === courier && r.courier_service_code === courierService
+    );
+    if (!matched) {
+      return NextResponse.json(
+        { error: "Layanan kurir yang dipilih tidak tersedia. Silakan pilih ulang." },
+        { status: 400 }
+      );
+    }
+    shippingCost = matched.price;
+  } catch {
+    return NextResponse.json({ error: "Gagal menghitung ongkir." }, { status: 502 });
+  }
+
   // 3. Buat Order + OrderItem dalam transaksi DB. Status default PENDING.
-  //    userId boleh null (guest).
+  //    userId boleh null (guest). totalAmount = produk + ongkir.
   const order = await prisma.$transaction(async (tx) => {
-    let total = 0;
+    let itemsTotal = 0;
     const itemSnapshots = products.map((p) => {
       const qty = normalized.get(p.id) || 0;
-      total += p.price * qty;
+      itemsTotal += p.price * qty;
       return {
         productId: p.id,
         name: p.name,
@@ -98,15 +141,20 @@ export async function POST(req: NextRequest) {
       };
     });
 
+    const grandTotal = itemsTotal + shippingCost;
+
     const created = await tx.order.create({
       data: {
         userId, // null untuk guest
         status: "PENDING",
-        totalAmount: total,
+        totalAmount: grandTotal,
         shippingName: shipping.name.trim(),
         shippingPhone: shipping.phone.trim(),
         shippingEmail: shippingEmail,
         shippingAddress: shipping.address.trim(),
+        shippingCost,
+        courier,
+        courierService,
         notes: shipping.notes?.trim() || null,
         OrderItem: {
           create: itemSnapshots,
@@ -126,17 +174,29 @@ export async function POST(req: NextRequest) {
 
   // 5. Request Snap token ke Midtrans.
   try {
+    // item_details harus berjumlah sama dengan gross_amount. Ongkir
+    // dimasukkan sebagai line item terpisah.
+    const itemDetails = order.OrderItem.map((it) => ({
+      id: it.productId,
+      price: it.price,
+      quantity: it.quantity,
+      name: it.name.slice(0, 50), // Midtrans max 50 chars
+    }));
+    if (order.shippingCost > 0) {
+      itemDetails.push({
+        id: "SHIPPING",
+        price: order.shippingCost,
+        quantity: 1,
+        name: `Ongkir ${courier.toUpperCase()} ${courierService.toUpperCase()}`.slice(0, 50),
+      });
+    }
+
     const parameter: any = {
       transaction_details: {
         order_id: order.id,
         gross_amount: order.totalAmount,
       },
-      item_details: order.OrderItem.map((it) => ({
-        id: it.productId,
-        price: it.price,
-        quantity: it.quantity,
-        name: it.name.slice(0, 50), // Midtrans max 50 chars
-      })),
+      item_details: itemDetails,
       // Customer details diambil langsung dari shipping (guest-friendly).
       customer_details: {
         first_name: firstName,
