@@ -58,6 +58,11 @@ export async function updateOrderStatusAction(
 
   const trimmedTracking = trackingNumber?.trim() || "";
 
+  // Mengirim wajib pakai resi — tidak mungkin kirim tanpa nomor resi.
+  if (target === "SHIPPED" && !trimmedTracking && !order.trackingNumber) {
+    throw new Error("Nomor resi wajib diisi sebelum pesanan dikirim.");
+  }
+
   // Kalau status sama tapi ada resi baru, tetap simpan resinya.
   if (order.status === target && !trimmedTracking) {
     return;

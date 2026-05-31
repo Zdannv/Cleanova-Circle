@@ -243,6 +243,9 @@ export default function OrdersClient({
                   {filtered.map((o) => {
                     const meta = STATUS_META[o.status];
                     const nextOptions = ALLOWED_TRANSITIONS[o.status];
+                    // SHIPPED tidak boleh dipilih langsung dari dropdown — harus lewat
+                    // tombol "Panggil Kurir" / "Kirim Manual" yang mewajibkan nomor resi.
+                    const dropdownOptions = nextOptions.filter((s) => s !== "SHIPPED");
                     const isRowPending = pendingId === o.id;
                     const isExpanded = expanded === o.id;
                     return (
@@ -284,24 +287,26 @@ export default function OrdersClient({
                               <span className="text-xs text-gray-400 italic">Status final</span>
                             ) : (
                               <div className="space-y-2">
-                                <select
-                                  value={o.status}
-                                  disabled={isRowPending}
-                                  onChange={(e) => {
-                                    const v = e.target.value as OrderStatus;
-                                    if (v !== o.status) handleChange(o.id, v);
-                                  }}
-                                  className="w-full px-3 py-2 text-xs font-medium rounded-md border border-gray-300 bg-white focus:ring-2 focus:ring-gray-900 focus:border-gray-900 disabled:opacity-50 cursor-pointer"
-                                >
-                                  <option value={o.status} disabled>
-                                    {STATUS_META[o.status].label} (saat ini)
-                                  </option>
-                                  {nextOptions.map((s) => (
-                                    <option key={s} value={s}>
-                                      Ubah ke: {STATUS_META[s].label}
+                                {dropdownOptions.length > 0 && (
+                                  <select
+                                    value={o.status}
+                                    disabled={isRowPending}
+                                    onChange={(e) => {
+                                      const v = e.target.value as OrderStatus;
+                                      if (v !== o.status) handleChange(o.id, v);
+                                    }}
+                                    className="w-full px-3 py-2 text-xs font-medium rounded-md border border-gray-300 bg-white focus:ring-2 focus:ring-gray-900 focus:border-gray-900 disabled:opacity-50 cursor-pointer"
+                                  >
+                                    <option value={o.status} disabled>
+                                      {STATUS_META[o.status].label} (saat ini)
                                     </option>
-                                  ))}
-                                </select>
+                                    {dropdownOptions.map((s) => (
+                                      <option key={s} value={s}>
+                                        Ubah ke: {STATUS_META[s].label}
+                                      </option>
+                                    ))}
+                                  </select>
+                                )}
 
                                 {o.status === "PACKED" && o.courier && o.courier !== "flat" && (
                                   <button
@@ -327,7 +332,7 @@ export default function OrdersClient({
                                     <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                       <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                                     </svg>
-                                    Kirim Manual (input resi)
+                                    {o.courier === "flat" || !o.courier ? "Kirim + Input Resi" : "Kirim Manual (input resi)"}
                                   </button>
                                 )}
                               </div>
