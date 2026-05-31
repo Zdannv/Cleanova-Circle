@@ -40,7 +40,6 @@ export default function CatalogClient({ products }: { products: Product[] }) {
       {/* Hero */}
       <header className="space-y-3">
         <span className="inline-flex items-center gap-2 text-[10px] uppercase tracking-widest text-amber-700 dark:text-amber-500 font-semibold bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-800/40 px-3 py-1 rounded-full">
-          <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
           Cleanova Shop
         </span>
         <h1 className="text-3xl md:text-5xl font-serif font-light tracking-tight text-stone-900 dark:text-white leading-tight">

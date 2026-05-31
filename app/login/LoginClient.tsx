@@ -5,6 +5,7 @@ import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import PasswordInput from "../components/PasswordInput";
 
 export default function LoginClient() {
   const router = useRouter();
@@ -85,13 +86,12 @@ export default function LoginClient() {
 
           <div className="space-y-1.5">
             <label className="block text-sm font-medium tracking-wide text-stone-700 dark:text-stone-300">Password</label>
-            <input
-              type="password"
+            <PasswordInput
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-3.5 rounded-xl bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 text-stone-900 dark:text-white placeholder-stone-400 dark:placeholder-stone-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
+              onChange={setPassword}
               placeholder="Masukkan password Anda"
               required
+              autoComplete="current-password"
             />
           </div>
 
@@ -119,10 +119,6 @@ export default function LoginClient() {
           <Link href="/register" className="text-amber-600 dark:text-amber-500 font-semibold hover:underline">
             Daftar di sini
           </Link>
-        </p>
-
-        <p className="mt-3 text-center text-sm text-stone-500 dark:text-stone-400 font-light">
-          Belum berlangganan? <a href="https://wa.me/6287855310680?text=Halo%20Admin%20Cleanova,%20saya%20tertarik%20untuk%20mendaftar%20langganan%20web%20edukasi%20Cleanova%20Circle." target="_blank" rel="noopener noreferrer" className="text-amber-600 dark:text-amber-500 font-medium hover:underline">Hubungi Admin</a>
         </p>
       </div>
     </div>

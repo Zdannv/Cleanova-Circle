@@ -187,7 +187,7 @@ export default function LandingEditor({ initial }: { initial: LandingPageData | 
           <div className="p-6 space-y-6 max-h-[75vh] overflow-y-auto">
             {activeSection === "HEADER" && (
               <div className="space-y-5">
-                <SectionTitle title="Header & WhatsApp" desc="Logo dan tautan kontak yang muncul di navigasi atas." />
+                <SectionTitle title="Header & Kontak" desc="Logo dan tautan WhatsApp admin (untuk tanya produk/CP)." />
                 <ImageUploadField
                   label="Logo"
                   value={data.logoUrl}
@@ -196,7 +196,7 @@ export default function LandingEditor({ initial }: { initial: LandingPageData | 
                   aspect="aspect-square w-32"
                   hint="Disarankan kotak (1:1), format PNG transparan."
                 />
-                <Field label="WhatsApp URL" value={data.whatsappUrl} onChange={(v) => set("whatsappUrl", v)} mono placeholder="https://wa.me/62..." />
+                <Field label="WhatsApp Admin URL (CP / tanya produk)" value={data.whatsappUrl} onChange={(v) => set("whatsappUrl", v)} mono placeholder="https://wa.me/62..." />
               </div>
             )}
 
@@ -422,8 +422,8 @@ function LandingPreview({
       >
         <div className="grid grid-cols-2 gap-3 items-center">
           <div className="space-y-2">
-            <span className="inline-flex items-center gap-1 text-[7px] uppercase tracking-widest text-stone-500 border border-stone-300 px-1.5 py-0.5 rounded-sm">
-              <span className="w-1 h-1 rounded-full bg-amber-500" /> Komunitas Premium
+            <span className="inline-flex items-center gap-1 text-[7px] uppercase tracking-widest text-amber-700 bg-amber-50 border border-amber-200 px-1.5 py-0.5 rounded-sm font-semibold">
+              Perawatan Premium
             </span>
             <h1 className="text-sm font-serif leading-tight text-stone-900">
               {data.heroTitle || <span className="text-stone-400 italic">Hero title…</span>}<br />
@@ -451,7 +451,7 @@ function LandingPreview({
               </div>
             </div>
             <div className="flex gap-1.5">
-              <span className="text-[7px] bg-green-600 text-white px-2 py-0.5 rounded">WhatsApp</span>
+              <span className="text-[7px] bg-green-600 text-white px-2 py-0.5 rounded">Tanya Admin</span>
               <span className="text-[7px] border border-stone-300 text-stone-600 px-2 py-0.5 rounded">Pelajari</span>
             </div>
           </div>
@@ -530,7 +530,7 @@ function LandingPreview({
         </h2>
         <p className="text-[9px] text-stone-300 mt-1.5 line-clamp-2 font-light">{data.ctaDescription || <span className="italic text-stone-500">Deskripsi CTA…</span>}</p>
         <span className="inline-block mt-2 text-[8px] uppercase tracking-widest bg-amber-500 text-stone-900 font-bold px-3 py-1.5 rounded">
-          Berlangganan Sekarang
+          Daftar Gratis
         </span>
       </button>
     </div>

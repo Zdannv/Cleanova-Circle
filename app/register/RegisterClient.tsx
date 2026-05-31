@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { registerUserAction } from "./actions";
+import PasswordInput from "../components/PasswordInput";
 
 export default function RegisterClient() {
   const router = useRouter();
@@ -13,6 +14,8 @@ export default function RegisterClient() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [acceptsMarketing, setAcceptsMarketing] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -24,6 +27,7 @@ export default function RegisterClient() {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) return setError("Format email tidak valid.");
     if (password.length < 6) return setError("Password minimal 6 karakter.");
     if (password !== confirmPassword) return setError("Konfirmasi password tidak cocok.");
+    if (!acceptsMarketing) return setError("Anda harus menyetujui penerimaan informasi promo untuk mendaftar.");
 
     setLoading(true);
     try {
@@ -103,25 +107,23 @@ export default function RegisterClient() {
 
           <div className="space-y-1.5">
             <label className="block text-sm font-medium tracking-wide text-stone-700 dark:text-stone-300">Password</label>
-            <input
-              type="password"
+            <PasswordInput
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-3.5 rounded-xl bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 text-stone-900 dark:text-white placeholder-stone-400 dark:placeholder-stone-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
+              onChange={setPassword}
               placeholder="Minimal 6 karakter"
               required
+              autoComplete="new-password"
             />
           </div>
 
           <div className="space-y-1.5">
             <label className="block text-sm font-medium tracking-wide text-stone-700 dark:text-stone-300">Konfirmasi Password</label>
-            <input
-              type="password"
+            <PasswordInput
               value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full px-4 py-3.5 rounded-xl bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 text-stone-900 dark:text-white placeholder-stone-400 dark:placeholder-stone-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
+              onChange={setConfirmPassword}
               placeholder="Ulangi password Anda"
               required
+              autoComplete="new-password"
             />
           </div>
 
@@ -130,10 +132,11 @@ export default function RegisterClient() {
               type="checkbox"
               checked={acceptsMarketing}
               onChange={(e) => setAcceptsMarketing(e.target.checked)}
+              required
               className="mt-0.5 w-4 h-4 rounded border-stone-300 text-amber-600 focus:ring-amber-500 flex-shrink-0"
             />
             <span className="text-xs text-stone-600 dark:text-stone-400 leading-relaxed">
-              Saya setuju menerima informasi promo, tips kebersihan, dan penawaran menarik dari Cleanova.
+              Saya setuju menerima informasi promo, tips kebersihan, dan penawaran menarik dari Cleanova. <span className="text-amber-600 dark:text-amber-500 font-medium">(wajib)</span>
             </span>
           </label>
 

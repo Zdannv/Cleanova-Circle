@@ -32,6 +32,9 @@ export async function registerUserAction(input: RegisterInput): Promise<Register
   if (password.length < 6) {
     return { success: false, error: "Password minimal 6 karakter." };
   }
+  if (!acceptsMarketing) {
+    return { success: false, error: "Persetujuan penerimaan informasi promo wajib dicentang." };
+  }
 
   // Cek email sudah terdaftar.
   const existing = await prisma.user.findUnique({ where: { email } });
