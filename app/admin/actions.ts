@@ -26,6 +26,8 @@ export async function addVideoAction(formData: FormData) {
     ? toolsString.split(",").map((t) => t.trim()).filter(Boolean)
     : [];
 
+  const isFeatured = formData.get("isFeatured") === "on" || formData.get("isFeatured") === "true";
+
   await prisma.video.create({
     data: {
       id: `vid_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
@@ -34,6 +36,7 @@ export async function addVideoAction(formData: FormData) {
       url,
       categoryId,
       toolsNeeded,
+      isFeatured,
     },
   });
 
@@ -54,6 +57,8 @@ export async function updateVideoAction(id: string, formData: FormData) {
     ? toolsString.split(",").map((t) => t.trim()).filter(Boolean)
     : [];
 
+  const isFeatured = formData.get("isFeatured") === "on" || formData.get("isFeatured") === "true";
+
   await prisma.video.update({
     where: { id },
     data: {
@@ -62,6 +67,7 @@ export async function updateVideoAction(id: string, formData: FormData) {
       url,
       categoryId,
       toolsNeeded,
+      isFeatured,
     },
   });
 
@@ -138,6 +144,7 @@ export async function addArticleAction(formData: FormData) {
   const coverImage = formData.get("coverImage") as string;
   const tag = formData.get("tag") as string;
   const excerpt = (formData.get("excerpt") as string)?.trim() || "";
+  const isFeatured = formData.get("isFeatured") === "on" || formData.get("isFeatured") === "true";
 
   const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
 
@@ -148,6 +155,7 @@ export async function addArticleAction(formData: FormData) {
       content,
       coverImage,
       excerpt,
+      isFeatured,
       tag: tag || "Artikel"
     }
   });
@@ -164,6 +172,7 @@ export async function updateArticleAction(id: string, formData: FormData) {
   const coverImage = formData.get("coverImage") as string;
   const tag = formData.get("tag") as string;
   const excerpt = (formData.get("excerpt") as string)?.trim() || "";
+  const isFeatured = formData.get("isFeatured") === "on" || formData.get("isFeatured") === "true";
 
   const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
 
@@ -178,6 +187,7 @@ export async function updateArticleAction(id: string, formData: FormData) {
       content: safeContent,
       coverImage,
       excerpt,
+      isFeatured,
       tag: tag || "Artikel"
     }
   });

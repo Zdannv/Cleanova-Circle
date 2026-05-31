@@ -85,6 +85,7 @@ model Video {
   url         String
   categoryId  String?
   toolsNeeded String[]      @default([])
+  isFeatured  Boolean       @default(false)
   createdAt   DateTime      @default(now())
   Bookmark    Bookmark[]
   Category    Category?     @relation(fields: [categoryId], references: [id])
@@ -114,6 +115,7 @@ model Article {
   excerpt     String   @default("")
   content     String
   tag         String   @default("Artikel")
+  isFeatured  Boolean  @default(false)
   createdAt   DateTime @default(now())
 }
 

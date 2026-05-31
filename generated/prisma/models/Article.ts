@@ -32,6 +32,7 @@ export type ArticleMinAggregateOutputType = {
   excerpt: string | null
   content: string | null
   tag: string | null
+  isFeatured: boolean | null
   createdAt: Date | null
 }
 
@@ -43,6 +44,7 @@ export type ArticleMaxAggregateOutputType = {
   excerpt: string | null
   content: string | null
   tag: string | null
+  isFeatured: boolean | null
   createdAt: Date | null
 }
 
@@ -54,6 +56,7 @@ export type ArticleCountAggregateOutputType = {
   excerpt: number
   content: number
   tag: number
+  isFeatured: number
   createdAt: number
   _all: number
 }
@@ -67,6 +70,7 @@ export type ArticleMinAggregateInputType = {
   excerpt?: true
   content?: true
   tag?: true
+  isFeatured?: true
   createdAt?: true
 }
 
@@ -78,6 +82,7 @@ export type ArticleMaxAggregateInputType = {
   excerpt?: true
   content?: true
   tag?: true
+  isFeatured?: true
   createdAt?: true
 }
 
@@ -89,6 +94,7 @@ export type ArticleCountAggregateInputType = {
   excerpt?: true
   content?: true
   tag?: true
+  isFeatured?: true
   createdAt?: true
   _all?: true
 }
@@ -173,6 +179,7 @@ export type ArticleGroupByOutputType = {
   excerpt: string
   content: string
   tag: string
+  isFeatured: boolean
   createdAt: Date
   _count: ArticleCountAggregateOutputType | null
   _min: ArticleMinAggregateOutputType | null
@@ -205,6 +212,7 @@ export type ArticleWhereInput = {
   excerpt?: Prisma.StringFilter<"Article"> | string
   content?: Prisma.StringFilter<"Article"> | string
   tag?: Prisma.StringFilter<"Article"> | string
+  isFeatured?: Prisma.BoolFilter<"Article"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Article"> | Date | string
 }
 
@@ -216,6 +224,7 @@ export type ArticleOrderByWithRelationInput = {
   excerpt?: Prisma.SortOrder
   content?: Prisma.SortOrder
   tag?: Prisma.SortOrder
+  isFeatured?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -230,6 +239,7 @@ export type ArticleWhereUniqueInput = Prisma.AtLeast<{
   excerpt?: Prisma.StringFilter<"Article"> | string
   content?: Prisma.StringFilter<"Article"> | string
   tag?: Prisma.StringFilter<"Article"> | string
+  isFeatured?: Prisma.BoolFilter<"Article"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Article"> | Date | string
 }, "id" | "slug">
 
@@ -241,6 +251,7 @@ export type ArticleOrderByWithAggregationInput = {
   excerpt?: Prisma.SortOrder
   content?: Prisma.SortOrder
   tag?: Prisma.SortOrder
+  isFeatured?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.ArticleCountOrderByAggregateInput
   _max?: Prisma.ArticleMaxOrderByAggregateInput
@@ -258,6 +269,7 @@ export type ArticleScalarWhereWithAggregatesInput = {
   excerpt?: Prisma.StringWithAggregatesFilter<"Article"> | string
   content?: Prisma.StringWithAggregatesFilter<"Article"> | string
   tag?: Prisma.StringWithAggregatesFilter<"Article"> | string
+  isFeatured?: Prisma.BoolWithAggregatesFilter<"Article"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Article"> | Date | string
 }
 
@@ -269,6 +281,7 @@ export type ArticleCreateInput = {
   excerpt?: string
   content: string
   tag?: string
+  isFeatured?: boolean
   createdAt?: Date | string
 }
 
@@ -280,6 +293,7 @@ export type ArticleUncheckedCreateInput = {
   excerpt?: string
   content: string
   tag?: string
+  isFeatured?: boolean
   createdAt?: Date | string
 }
 
@@ -291,6 +305,7 @@ export type ArticleUpdateInput = {
   excerpt?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   tag?: Prisma.StringFieldUpdateOperationsInput | string
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -302,6 +317,7 @@ export type ArticleUncheckedUpdateInput = {
   excerpt?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   tag?: Prisma.StringFieldUpdateOperationsInput | string
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -313,6 +329,7 @@ export type ArticleCreateManyInput = {
   excerpt?: string
   content: string
   tag?: string
+  isFeatured?: boolean
   createdAt?: Date | string
 }
 
@@ -324,6 +341,7 @@ export type ArticleUpdateManyMutationInput = {
   excerpt?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   tag?: Prisma.StringFieldUpdateOperationsInput | string
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -335,6 +353,7 @@ export type ArticleUncheckedUpdateManyInput = {
   excerpt?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   tag?: Prisma.StringFieldUpdateOperationsInput | string
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -346,6 +365,7 @@ export type ArticleCountOrderByAggregateInput = {
   excerpt?: Prisma.SortOrder
   content?: Prisma.SortOrder
   tag?: Prisma.SortOrder
+  isFeatured?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -357,6 +377,7 @@ export type ArticleMaxOrderByAggregateInput = {
   excerpt?: Prisma.SortOrder
   content?: Prisma.SortOrder
   tag?: Prisma.SortOrder
+  isFeatured?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -368,6 +389,7 @@ export type ArticleMinOrderByAggregateInput = {
   excerpt?: Prisma.SortOrder
   content?: Prisma.SortOrder
   tag?: Prisma.SortOrder
+  isFeatured?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -381,6 +403,7 @@ export type ArticleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   excerpt?: boolean
   content?: boolean
   tag?: boolean
+  isFeatured?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["article"]>
 
@@ -392,6 +415,7 @@ export type ArticleSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   excerpt?: boolean
   content?: boolean
   tag?: boolean
+  isFeatured?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["article"]>
 
@@ -403,6 +427,7 @@ export type ArticleSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   excerpt?: boolean
   content?: boolean
   tag?: boolean
+  isFeatured?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["article"]>
 
@@ -414,10 +439,11 @@ export type ArticleSelectScalar = {
   excerpt?: boolean
   content?: boolean
   tag?: boolean
+  isFeatured?: boolean
   createdAt?: boolean
 }
 
-export type ArticleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "slug" | "coverImage" | "excerpt" | "content" | "tag" | "createdAt", ExtArgs["result"]["article"]>
+export type ArticleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "slug" | "coverImage" | "excerpt" | "content" | "tag" | "isFeatured" | "createdAt", ExtArgs["result"]["article"]>
 
 export type $ArticlePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Article"
@@ -430,6 +456,7 @@ export type $ArticlePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     excerpt: string
     content: string
     tag: string
+    isFeatured: boolean
     createdAt: Date
   }, ExtArgs["result"]["article"]>
   composites: {}
@@ -861,6 +888,7 @@ export interface ArticleFieldRefs {
   readonly excerpt: Prisma.FieldRef<"Article", 'String'>
   readonly content: Prisma.FieldRef<"Article", 'String'>
   readonly tag: Prisma.FieldRef<"Article", 'String'>
+  readonly isFeatured: Prisma.FieldRef<"Article", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Article", 'DateTime'>
 }
     

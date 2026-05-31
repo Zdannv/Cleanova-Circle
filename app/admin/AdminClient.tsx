@@ -44,6 +44,7 @@ type Video = {
   categoryId: string | null;
   Category?: Category | null;
   toolsNeeded: string[];
+  isFeatured?: boolean;
   createdAt: Date;
 };
 
@@ -55,6 +56,7 @@ type Article = {
   excerpt: string;
   content: string;
   tag: string;
+  isFeatured?: boolean;
   createdAt: Date;
 };
 
@@ -500,6 +502,18 @@ export default function AdminClient({
                       <label htmlFor="description" className="block text-sm font-medium text-gray-700">Deskripsi Lengkap</label>
                       <textarea id="description" name="description" rows={3} required defaultValue={editingVideo?.description || ""} className="w-full px-4 py-2.5 rounded-md border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-y" placeholder="Tulis deskripsi konten video..."></textarea>
                     </div>
+
+                    <div className="md:col-span-2">
+                      <label className="flex items-center gap-2.5 cursor-pointer select-none bg-amber-50 border border-amber-200 rounded-md px-4 py-3">
+                        <input
+                          type="checkbox"
+                          name="isFeatured"
+                          defaultChecked={editingVideo?.isFeatured || false}
+                          className="w-4 h-4 rounded border-gray-300 text-amber-600 focus:ring-amber-500"
+                        />
+                        <span className="text-sm font-medium text-amber-800">Tampilkan di Carousel Dashboard</span>
+                      </label>
+                    </div>
                   </div>
 
                   <div className="mt-6 flex justify-end gap-3">
@@ -879,6 +893,15 @@ export default function AdminClient({
                       <p className="text-xs text-gray-500">{articleContent.length.toLocaleString()} karakter · {articleContent.split('\n').filter(Boolean).length} baris teks</p>
                     )}
                   </div>
+                  <label className="flex items-center gap-2.5 cursor-pointer select-none bg-amber-50 border border-amber-200 rounded-md px-4 py-3">
+                    <input
+                      type="checkbox"
+                      name="isFeatured"
+                      defaultChecked={editingArticle?.isFeatured || false}
+                      className="w-4 h-4 rounded border-gray-300 text-amber-600 focus:ring-amber-500"
+                    />
+                    <span className="text-sm font-medium text-amber-800">Tampilkan di Carousel Dashboard</span>
+                  </label>
                   <div className="pt-2 flex gap-3">
                      {editingArticle && (
                        <button type="button" onClick={resetArticleForm} className="flex-1 py-2.5 bg-white border border-gray-300 text-gray-700 font-medium rounded-md shadow-sm transition-colors text-sm" disabled={isPending || isUploadingCover}>Batal</button>

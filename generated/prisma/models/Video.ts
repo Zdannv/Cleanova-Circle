@@ -30,6 +30,7 @@ export type VideoMinAggregateOutputType = {
   description: string | null
   url: string | null
   categoryId: string | null
+  isFeatured: boolean | null
   createdAt: Date | null
 }
 
@@ -39,6 +40,7 @@ export type VideoMaxAggregateOutputType = {
   description: string | null
   url: string | null
   categoryId: string | null
+  isFeatured: boolean | null
   createdAt: Date | null
 }
 
@@ -49,6 +51,7 @@ export type VideoCountAggregateOutputType = {
   url: number
   categoryId: number
   toolsNeeded: number
+  isFeatured: number
   createdAt: number
   _all: number
 }
@@ -60,6 +63,7 @@ export type VideoMinAggregateInputType = {
   description?: true
   url?: true
   categoryId?: true
+  isFeatured?: true
   createdAt?: true
 }
 
@@ -69,6 +73,7 @@ export type VideoMaxAggregateInputType = {
   description?: true
   url?: true
   categoryId?: true
+  isFeatured?: true
   createdAt?: true
 }
 
@@ -79,6 +84,7 @@ export type VideoCountAggregateInputType = {
   url?: true
   categoryId?: true
   toolsNeeded?: true
+  isFeatured?: true
   createdAt?: true
   _all?: true
 }
@@ -162,6 +168,7 @@ export type VideoGroupByOutputType = {
   url: string
   categoryId: string | null
   toolsNeeded: string[]
+  isFeatured: boolean
   createdAt: Date
   _count: VideoCountAggregateOutputType | null
   _min: VideoMinAggregateOutputType | null
@@ -193,6 +200,7 @@ export type VideoWhereInput = {
   url?: Prisma.StringFilter<"Video"> | string
   categoryId?: Prisma.StringNullableFilter<"Video"> | string | null
   toolsNeeded?: Prisma.StringNullableListFilter<"Video">
+  isFeatured?: Prisma.BoolFilter<"Video"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Video"> | Date | string
   Bookmark?: Prisma.BookmarkListRelationFilter
   Category?: Prisma.XOR<Prisma.CategoryNullableScalarRelationFilter, Prisma.CategoryWhereInput> | null
@@ -209,6 +217,7 @@ export type VideoOrderByWithRelationInput = {
   url?: Prisma.SortOrder
   categoryId?: Prisma.SortOrderInput | Prisma.SortOrder
   toolsNeeded?: Prisma.SortOrder
+  isFeatured?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   Bookmark?: Prisma.BookmarkOrderByRelationAggregateInput
   Category?: Prisma.CategoryOrderByWithRelationInput
@@ -228,6 +237,7 @@ export type VideoWhereUniqueInput = Prisma.AtLeast<{
   url?: Prisma.StringFilter<"Video"> | string
   categoryId?: Prisma.StringNullableFilter<"Video"> | string | null
   toolsNeeded?: Prisma.StringNullableListFilter<"Video">
+  isFeatured?: Prisma.BoolFilter<"Video"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Video"> | Date | string
   Bookmark?: Prisma.BookmarkListRelationFilter
   Category?: Prisma.XOR<Prisma.CategoryNullableScalarRelationFilter, Prisma.CategoryWhereInput> | null
@@ -244,6 +254,7 @@ export type VideoOrderByWithAggregationInput = {
   url?: Prisma.SortOrder
   categoryId?: Prisma.SortOrderInput | Prisma.SortOrder
   toolsNeeded?: Prisma.SortOrder
+  isFeatured?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.VideoCountOrderByAggregateInput
   _max?: Prisma.VideoMaxOrderByAggregateInput
@@ -260,6 +271,7 @@ export type VideoScalarWhereWithAggregatesInput = {
   url?: Prisma.StringWithAggregatesFilter<"Video"> | string
   categoryId?: Prisma.StringNullableWithAggregatesFilter<"Video"> | string | null
   toolsNeeded?: Prisma.StringNullableListFilter<"Video">
+  isFeatured?: Prisma.BoolWithAggregatesFilter<"Video"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Video"> | Date | string
 }
 
@@ -269,6 +281,7 @@ export type VideoCreateInput = {
   description: string
   url: string
   toolsNeeded?: Prisma.VideoCreatetoolsNeededInput | string[]
+  isFeatured?: boolean
   createdAt?: Date | string
   Bookmark?: Prisma.BookmarkCreateNestedManyWithoutVideoInput
   Category?: Prisma.CategoryCreateNestedOneWithoutVideosInput
@@ -285,6 +298,7 @@ export type VideoUncheckedCreateInput = {
   url: string
   categoryId?: string | null
   toolsNeeded?: Prisma.VideoCreatetoolsNeededInput | string[]
+  isFeatured?: boolean
   createdAt?: Date | string
   Bookmark?: Prisma.BookmarkUncheckedCreateNestedManyWithoutVideoInput
   Comment?: Prisma.CommentUncheckedCreateNestedManyWithoutVideoInput
@@ -299,6 +313,7 @@ export type VideoUpdateInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   toolsNeeded?: Prisma.VideoUpdatetoolsNeededInput | string[]
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   Bookmark?: Prisma.BookmarkUpdateManyWithoutVideoNestedInput
   Category?: Prisma.CategoryUpdateOneWithoutVideosNestedInput
@@ -315,6 +330,7 @@ export type VideoUncheckedUpdateInput = {
   url?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   toolsNeeded?: Prisma.VideoUpdatetoolsNeededInput | string[]
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   Bookmark?: Prisma.BookmarkUncheckedUpdateManyWithoutVideoNestedInput
   Comment?: Prisma.CommentUncheckedUpdateManyWithoutVideoNestedInput
@@ -330,6 +346,7 @@ export type VideoCreateManyInput = {
   url: string
   categoryId?: string | null
   toolsNeeded?: Prisma.VideoCreatetoolsNeededInput | string[]
+  isFeatured?: boolean
   createdAt?: Date | string
 }
 
@@ -339,6 +356,7 @@ export type VideoUpdateManyMutationInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   toolsNeeded?: Prisma.VideoUpdatetoolsNeededInput | string[]
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -349,6 +367,7 @@ export type VideoUncheckedUpdateManyInput = {
   url?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   toolsNeeded?: Prisma.VideoUpdatetoolsNeededInput | string[]
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -372,6 +391,7 @@ export type VideoCountOrderByAggregateInput = {
   url?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   toolsNeeded?: Prisma.SortOrder
+  isFeatured?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -381,6 +401,7 @@ export type VideoMaxOrderByAggregateInput = {
   description?: Prisma.SortOrder
   url?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
+  isFeatured?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -390,6 +411,7 @@ export type VideoMinOrderByAggregateInput = {
   description?: Prisma.SortOrder
   url?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
+  isFeatured?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -530,6 +552,7 @@ export type VideoCreateWithoutBookmarkInput = {
   description: string
   url: string
   toolsNeeded?: Prisma.VideoCreatetoolsNeededInput | string[]
+  isFeatured?: boolean
   createdAt?: Date | string
   Category?: Prisma.CategoryCreateNestedOneWithoutVideosInput
   Comment?: Prisma.CommentCreateNestedManyWithoutVideoInput
@@ -545,6 +568,7 @@ export type VideoUncheckedCreateWithoutBookmarkInput = {
   url: string
   categoryId?: string | null
   toolsNeeded?: Prisma.VideoCreatetoolsNeededInput | string[]
+  isFeatured?: boolean
   createdAt?: Date | string
   Comment?: Prisma.CommentUncheckedCreateNestedManyWithoutVideoInput
   Like?: Prisma.LikeUncheckedCreateNestedManyWithoutVideoInput
@@ -574,6 +598,7 @@ export type VideoUpdateWithoutBookmarkInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   toolsNeeded?: Prisma.VideoUpdatetoolsNeededInput | string[]
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   Category?: Prisma.CategoryUpdateOneWithoutVideosNestedInput
   Comment?: Prisma.CommentUpdateManyWithoutVideoNestedInput
@@ -589,6 +614,7 @@ export type VideoUncheckedUpdateWithoutBookmarkInput = {
   url?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   toolsNeeded?: Prisma.VideoUpdatetoolsNeededInput | string[]
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   Comment?: Prisma.CommentUncheckedUpdateManyWithoutVideoNestedInput
   Like?: Prisma.LikeUncheckedUpdateManyWithoutVideoNestedInput
@@ -602,6 +628,7 @@ export type VideoCreateWithoutLikeInput = {
   description: string
   url: string
   toolsNeeded?: Prisma.VideoCreatetoolsNeededInput | string[]
+  isFeatured?: boolean
   createdAt?: Date | string
   Bookmark?: Prisma.BookmarkCreateNestedManyWithoutVideoInput
   Category?: Prisma.CategoryCreateNestedOneWithoutVideosInput
@@ -617,6 +644,7 @@ export type VideoUncheckedCreateWithoutLikeInput = {
   url: string
   categoryId?: string | null
   toolsNeeded?: Prisma.VideoCreatetoolsNeededInput | string[]
+  isFeatured?: boolean
   createdAt?: Date | string
   Bookmark?: Prisma.BookmarkUncheckedCreateNestedManyWithoutVideoInput
   Comment?: Prisma.CommentUncheckedCreateNestedManyWithoutVideoInput
@@ -646,6 +674,7 @@ export type VideoUpdateWithoutLikeInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   toolsNeeded?: Prisma.VideoUpdatetoolsNeededInput | string[]
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   Bookmark?: Prisma.BookmarkUpdateManyWithoutVideoNestedInput
   Category?: Prisma.CategoryUpdateOneWithoutVideosNestedInput
@@ -661,6 +690,7 @@ export type VideoUncheckedUpdateWithoutLikeInput = {
   url?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   toolsNeeded?: Prisma.VideoUpdatetoolsNeededInput | string[]
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   Bookmark?: Prisma.BookmarkUncheckedUpdateManyWithoutVideoNestedInput
   Comment?: Prisma.CommentUncheckedUpdateManyWithoutVideoNestedInput
@@ -674,6 +704,7 @@ export type VideoCreateWithoutCommentInput = {
   description: string
   url: string
   toolsNeeded?: Prisma.VideoCreatetoolsNeededInput | string[]
+  isFeatured?: boolean
   createdAt?: Date | string
   Bookmark?: Prisma.BookmarkCreateNestedManyWithoutVideoInput
   Category?: Prisma.CategoryCreateNestedOneWithoutVideosInput
@@ -689,6 +720,7 @@ export type VideoUncheckedCreateWithoutCommentInput = {
   url: string
   categoryId?: string | null
   toolsNeeded?: Prisma.VideoCreatetoolsNeededInput | string[]
+  isFeatured?: boolean
   createdAt?: Date | string
   Bookmark?: Prisma.BookmarkUncheckedCreateNestedManyWithoutVideoInput
   Like?: Prisma.LikeUncheckedCreateNestedManyWithoutVideoInput
@@ -718,6 +750,7 @@ export type VideoUpdateWithoutCommentInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   toolsNeeded?: Prisma.VideoUpdatetoolsNeededInput | string[]
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   Bookmark?: Prisma.BookmarkUpdateManyWithoutVideoNestedInput
   Category?: Prisma.CategoryUpdateOneWithoutVideosNestedInput
@@ -733,6 +766,7 @@ export type VideoUncheckedUpdateWithoutCommentInput = {
   url?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   toolsNeeded?: Prisma.VideoUpdatetoolsNeededInput | string[]
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   Bookmark?: Prisma.BookmarkUncheckedUpdateManyWithoutVideoNestedInput
   Like?: Prisma.LikeUncheckedUpdateManyWithoutVideoNestedInput
@@ -746,6 +780,7 @@ export type VideoCreateWithoutNoteInput = {
   description: string
   url: string
   toolsNeeded?: Prisma.VideoCreatetoolsNeededInput | string[]
+  isFeatured?: boolean
   createdAt?: Date | string
   Bookmark?: Prisma.BookmarkCreateNestedManyWithoutVideoInput
   Category?: Prisma.CategoryCreateNestedOneWithoutVideosInput
@@ -761,6 +796,7 @@ export type VideoUncheckedCreateWithoutNoteInput = {
   url: string
   categoryId?: string | null
   toolsNeeded?: Prisma.VideoCreatetoolsNeededInput | string[]
+  isFeatured?: boolean
   createdAt?: Date | string
   Bookmark?: Prisma.BookmarkUncheckedCreateNestedManyWithoutVideoInput
   Comment?: Prisma.CommentUncheckedCreateNestedManyWithoutVideoInput
@@ -790,6 +826,7 @@ export type VideoUpdateWithoutNoteInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   toolsNeeded?: Prisma.VideoUpdatetoolsNeededInput | string[]
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   Bookmark?: Prisma.BookmarkUpdateManyWithoutVideoNestedInput
   Category?: Prisma.CategoryUpdateOneWithoutVideosNestedInput
@@ -805,6 +842,7 @@ export type VideoUncheckedUpdateWithoutNoteInput = {
   url?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   toolsNeeded?: Prisma.VideoUpdatetoolsNeededInput | string[]
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   Bookmark?: Prisma.BookmarkUncheckedUpdateManyWithoutVideoNestedInput
   Comment?: Prisma.CommentUncheckedUpdateManyWithoutVideoNestedInput
@@ -818,6 +856,7 @@ export type VideoCreateWithoutProgressInput = {
   description: string
   url: string
   toolsNeeded?: Prisma.VideoCreatetoolsNeededInput | string[]
+  isFeatured?: boolean
   createdAt?: Date | string
   Bookmark?: Prisma.BookmarkCreateNestedManyWithoutVideoInput
   Category?: Prisma.CategoryCreateNestedOneWithoutVideosInput
@@ -833,6 +872,7 @@ export type VideoUncheckedCreateWithoutProgressInput = {
   url: string
   categoryId?: string | null
   toolsNeeded?: Prisma.VideoCreatetoolsNeededInput | string[]
+  isFeatured?: boolean
   createdAt?: Date | string
   Bookmark?: Prisma.BookmarkUncheckedCreateNestedManyWithoutVideoInput
   Comment?: Prisma.CommentUncheckedCreateNestedManyWithoutVideoInput
@@ -862,6 +902,7 @@ export type VideoUpdateWithoutProgressInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   toolsNeeded?: Prisma.VideoUpdatetoolsNeededInput | string[]
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   Bookmark?: Prisma.BookmarkUpdateManyWithoutVideoNestedInput
   Category?: Prisma.CategoryUpdateOneWithoutVideosNestedInput
@@ -877,6 +918,7 @@ export type VideoUncheckedUpdateWithoutProgressInput = {
   url?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   toolsNeeded?: Prisma.VideoUpdatetoolsNeededInput | string[]
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   Bookmark?: Prisma.BookmarkUncheckedUpdateManyWithoutVideoNestedInput
   Comment?: Prisma.CommentUncheckedUpdateManyWithoutVideoNestedInput
@@ -890,6 +932,7 @@ export type VideoCreateWithoutCategoryInput = {
   description: string
   url: string
   toolsNeeded?: Prisma.VideoCreatetoolsNeededInput | string[]
+  isFeatured?: boolean
   createdAt?: Date | string
   Bookmark?: Prisma.BookmarkCreateNestedManyWithoutVideoInput
   Comment?: Prisma.CommentCreateNestedManyWithoutVideoInput
@@ -904,6 +947,7 @@ export type VideoUncheckedCreateWithoutCategoryInput = {
   description: string
   url: string
   toolsNeeded?: Prisma.VideoCreatetoolsNeededInput | string[]
+  isFeatured?: boolean
   createdAt?: Date | string
   Bookmark?: Prisma.BookmarkUncheckedCreateNestedManyWithoutVideoInput
   Comment?: Prisma.CommentUncheckedCreateNestedManyWithoutVideoInput
@@ -948,6 +992,7 @@ export type VideoScalarWhereInput = {
   url?: Prisma.StringFilter<"Video"> | string
   categoryId?: Prisma.StringNullableFilter<"Video"> | string | null
   toolsNeeded?: Prisma.StringNullableListFilter<"Video">
+  isFeatured?: Prisma.BoolFilter<"Video"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Video"> | Date | string
 }
 
@@ -957,6 +1002,7 @@ export type VideoCreateManyCategoryInput = {
   description: string
   url: string
   toolsNeeded?: Prisma.VideoCreatetoolsNeededInput | string[]
+  isFeatured?: boolean
   createdAt?: Date | string
 }
 
@@ -966,6 +1012,7 @@ export type VideoUpdateWithoutCategoryInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   toolsNeeded?: Prisma.VideoUpdatetoolsNeededInput | string[]
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   Bookmark?: Prisma.BookmarkUpdateManyWithoutVideoNestedInput
   Comment?: Prisma.CommentUpdateManyWithoutVideoNestedInput
@@ -980,6 +1027,7 @@ export type VideoUncheckedUpdateWithoutCategoryInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   toolsNeeded?: Prisma.VideoUpdatetoolsNeededInput | string[]
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   Bookmark?: Prisma.BookmarkUncheckedUpdateManyWithoutVideoNestedInput
   Comment?: Prisma.CommentUncheckedUpdateManyWithoutVideoNestedInput
@@ -994,6 +1042,7 @@ export type VideoUncheckedUpdateManyWithoutCategoryInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   toolsNeeded?: Prisma.VideoUpdatetoolsNeededInput | string[]
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -1071,6 +1120,7 @@ export type VideoSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   url?: boolean
   categoryId?: boolean
   toolsNeeded?: boolean
+  isFeatured?: boolean
   createdAt?: boolean
   Bookmark?: boolean | Prisma.Video$BookmarkArgs<ExtArgs>
   Category?: boolean | Prisma.Video$CategoryArgs<ExtArgs>
@@ -1088,6 +1138,7 @@ export type VideoSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   url?: boolean
   categoryId?: boolean
   toolsNeeded?: boolean
+  isFeatured?: boolean
   createdAt?: boolean
   Category?: boolean | Prisma.Video$CategoryArgs<ExtArgs>
 }, ExtArgs["result"]["video"]>
@@ -1099,6 +1150,7 @@ export type VideoSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   url?: boolean
   categoryId?: boolean
   toolsNeeded?: boolean
+  isFeatured?: boolean
   createdAt?: boolean
   Category?: boolean | Prisma.Video$CategoryArgs<ExtArgs>
 }, ExtArgs["result"]["video"]>
@@ -1110,10 +1162,11 @@ export type VideoSelectScalar = {
   url?: boolean
   categoryId?: boolean
   toolsNeeded?: boolean
+  isFeatured?: boolean
   createdAt?: boolean
 }
 
-export type VideoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "url" | "categoryId" | "toolsNeeded" | "createdAt", ExtArgs["result"]["video"]>
+export type VideoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "url" | "categoryId" | "toolsNeeded" | "isFeatured" | "createdAt", ExtArgs["result"]["video"]>
 export type VideoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   Bookmark?: boolean | Prisma.Video$BookmarkArgs<ExtArgs>
   Category?: boolean | Prisma.Video$CategoryArgs<ExtArgs>
@@ -1147,6 +1200,7 @@ export type $VideoPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     url: string
     categoryId: string | null
     toolsNeeded: string[]
+    isFeatured: boolean
     createdAt: Date
   }, ExtArgs["result"]["video"]>
   composites: {}
@@ -1583,6 +1637,7 @@ export interface VideoFieldRefs {
   readonly url: Prisma.FieldRef<"Video", 'String'>
   readonly categoryId: Prisma.FieldRef<"Video", 'String'>
   readonly toolsNeeded: Prisma.FieldRef<"Video", 'String[]'>
+  readonly isFeatured: Prisma.FieldRef<"Video", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Video", 'DateTime'>
 }
     

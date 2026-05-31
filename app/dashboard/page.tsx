@@ -140,6 +140,13 @@ export default async function DashboardPage() {
     }),
   ]);
 
+  // Featured items untuk carousel — gabungan video & artikel yang ditandai admin.
+  const featuredArticles = await prisma.article.findMany({
+    where: { isFeatured: true },
+    orderBy: { createdAt: "desc" },
+  });
+  const featuredVideos = videos.filter((v) => (v as any).isFeatured);
+
   // Fallback aman — akan kosong jika model Like belum dikenali client
   let popularData: { videoId: string; _count: { videoId: number } }[] = [];
   try {
@@ -191,15 +198,44 @@ export default async function DashboardPage() {
     ),
   };
 
+  // Bangun item carousel dari konten yang ditandai "featured" (video + artikel).
+  const featuredArticleItems = featuredArticles.map((a) => ({
+    src: a.coverImage,
+    tag: a.tag,
+    title: a.title,
+    slug: a.slug,
+    description: a.excerpt,
+    type: "article" as const,
+  }));
+
+  const featuredVideoItems = featuredVideos.map((v) => {
+    const ytId = getYouTubeId(v.url);
+    return {
+      src: ytId ? `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg` : "",
+      tag: (v as any).Category?.name || "Video",
+      title: v.title,
+      videoId: v.id,
+      description: v.description,
+      type: "video" as const,
+    };
+  });
+
+  // Gabungkan & acak ringan (artikel dulu lalu video, atau campur by recency).
+  const featuredItems = [...featuredArticleItems, ...featuredVideoItems];
+
+  const hasFeatured = featuredItems.length > 0;
   const hasArticles = articles.length > 0;
-  
-  const carouselImages = hasArticles 
-    ? articles.map(a => ({
+
+  const carouselImages = hasFeatured
+    ? featuredItems
+    : hasArticles
+    ? articles.map((a) => ({
         src: a.coverImage,
         tag: a.tag,
         title: a.title,
         slug: a.slug,
-        description: a.excerpt
+        description: a.excerpt,
+        type: "article" as const,
       }))
     : [
         { src: "/landing-page/631737903_17891967126423715_6807031068574707597_n..jpg", tag: "EKSKLUSIF", title: "Teknik Memoles Cincin Berlian Pudar" },

@@ -158,6 +158,7 @@ export const VideoScalarFieldEnum = {
   url: 'url',
   categoryId: 'categoryId',
   toolsNeeded: 'toolsNeeded',
+  isFeatured: 'isFeatured',
   createdAt: 'createdAt'
 } as const
 
@@ -181,6 +182,7 @@ export const ArticleScalarFieldEnum = {
   excerpt: 'excerpt',
   content: 'content',
   tag: 'tag',
+  isFeatured: 'isFeatured',
   createdAt: 'createdAt'
 } as const
 
