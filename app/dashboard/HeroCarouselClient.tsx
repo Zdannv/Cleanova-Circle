@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import Link from "next/link";
 
-type CarouselImage = { src: string; tag: string; title: string; slug?: string; };
+type CarouselImage = { src: string; tag: string; title: string; slug?: string; description?: string; };
 
 export default function HeroCarouselClient({ images }: { images: CarouselImage[] }) {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -54,7 +54,7 @@ export default function HeroCarouselClient({ images }: { images: CarouselImage[]
               <div className="absolute bottom-6 left-6 right-6 md:bottom-8 md:left-8 md:right-8">
                 <span className="inline-block px-3 py-1 bg-amber-500/90 backdrop-blur-sm text-white text-[10px] md:text-xs font-bold tracking-wider rounded-md mb-3">{item.tag}</span>
                 <h3 className="text-white font-serif text-xl md:text-3xl font-medium leading-tight max-w-lg mb-2">{item.title}</h3>
-                <p className="text-stone-300 text-sm hidden md:block">Pelajari rahasia dan trik jitu persembahan instruktur profesional Cleanova Circle khusus untuk Anda di sini.</p>
+                <p className="text-stone-300 text-sm hidden md:block line-clamp-2">{item.description?.trim() || "Pelajari rahasia dan trik jitu persembahan instruktur profesional Cleanova Circle khusus untuk Anda di sini."}</p>
               </div>
             </div>
           );

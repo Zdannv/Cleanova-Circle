@@ -137,6 +137,7 @@ export async function addArticleAction(formData: FormData) {
   const content = formData.get("content") as string;
   const coverImage = formData.get("coverImage") as string;
   const tag = formData.get("tag") as string;
+  const excerpt = (formData.get("excerpt") as string)?.trim() || "";
 
   const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
 
@@ -146,6 +147,7 @@ export async function addArticleAction(formData: FormData) {
       slug: `${slug}-${Math.random().toString(36).substring(2, 6)}`,
       content,
       coverImage,
+      excerpt,
       tag: tag || "Artikel"
     }
   });
@@ -161,6 +163,7 @@ export async function updateArticleAction(id: string, formData: FormData) {
   const content = formData.get("content") as string;
   const coverImage = formData.get("coverImage") as string;
   const tag = formData.get("tag") as string;
+  const excerpt = (formData.get("excerpt") as string)?.trim() || "";
 
   const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
 
@@ -174,6 +177,7 @@ export async function updateArticleAction(id: string, formData: FormData) {
       slug: `${slug}-${Math.random().toString(36).substring(2, 6)}`,
       content: safeContent,
       coverImage,
+      excerpt,
       tag: tag || "Artikel"
     }
   });

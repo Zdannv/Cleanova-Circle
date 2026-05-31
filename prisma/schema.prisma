@@ -111,6 +111,7 @@ model Article {
   title       String
   slug        String   @unique
   coverImage  String
+  excerpt     String   @default("")
   content     String
   tag         String   @default("Artikel")
   createdAt   DateTime @default(now())

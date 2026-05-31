@@ -29,6 +29,7 @@ export type ArticleMinAggregateOutputType = {
   title: string | null
   slug: string | null
   coverImage: string | null
+  excerpt: string | null
   content: string | null
   tag: string | null
   createdAt: Date | null
@@ -39,6 +40,7 @@ export type ArticleMaxAggregateOutputType = {
   title: string | null
   slug: string | null
   coverImage: string | null
+  excerpt: string | null
   content: string | null
   tag: string | null
   createdAt: Date | null
@@ -49,6 +51,7 @@ export type ArticleCountAggregateOutputType = {
   title: number
   slug: number
   coverImage: number
+  excerpt: number
   content: number
   tag: number
   createdAt: number
@@ -61,6 +64,7 @@ export type ArticleMinAggregateInputType = {
   title?: true
   slug?: true
   coverImage?: true
+  excerpt?: true
   content?: true
   tag?: true
   createdAt?: true
@@ -71,6 +75,7 @@ export type ArticleMaxAggregateInputType = {
   title?: true
   slug?: true
   coverImage?: true
+  excerpt?: true
   content?: true
   tag?: true
   createdAt?: true
@@ -81,6 +86,7 @@ export type ArticleCountAggregateInputType = {
   title?: true
   slug?: true
   coverImage?: true
+  excerpt?: true
   content?: true
   tag?: true
   createdAt?: true
@@ -164,6 +170,7 @@ export type ArticleGroupByOutputType = {
   title: string
   slug: string
   coverImage: string
+  excerpt: string
   content: string
   tag: string
   createdAt: Date
@@ -195,6 +202,7 @@ export type ArticleWhereInput = {
   title?: Prisma.StringFilter<"Article"> | string
   slug?: Prisma.StringFilter<"Article"> | string
   coverImage?: Prisma.StringFilter<"Article"> | string
+  excerpt?: Prisma.StringFilter<"Article"> | string
   content?: Prisma.StringFilter<"Article"> | string
   tag?: Prisma.StringFilter<"Article"> | string
   createdAt?: Prisma.DateTimeFilter<"Article"> | Date | string
@@ -205,6 +213,7 @@ export type ArticleOrderByWithRelationInput = {
   title?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   coverImage?: Prisma.SortOrder
+  excerpt?: Prisma.SortOrder
   content?: Prisma.SortOrder
   tag?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -218,6 +227,7 @@ export type ArticleWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.ArticleWhereInput | Prisma.ArticleWhereInput[]
   title?: Prisma.StringFilter<"Article"> | string
   coverImage?: Prisma.StringFilter<"Article"> | string
+  excerpt?: Prisma.StringFilter<"Article"> | string
   content?: Prisma.StringFilter<"Article"> | string
   tag?: Prisma.StringFilter<"Article"> | string
   createdAt?: Prisma.DateTimeFilter<"Article"> | Date | string
@@ -228,6 +238,7 @@ export type ArticleOrderByWithAggregationInput = {
   title?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   coverImage?: Prisma.SortOrder
+  excerpt?: Prisma.SortOrder
   content?: Prisma.SortOrder
   tag?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -244,6 +255,7 @@ export type ArticleScalarWhereWithAggregatesInput = {
   title?: Prisma.StringWithAggregatesFilter<"Article"> | string
   slug?: Prisma.StringWithAggregatesFilter<"Article"> | string
   coverImage?: Prisma.StringWithAggregatesFilter<"Article"> | string
+  excerpt?: Prisma.StringWithAggregatesFilter<"Article"> | string
   content?: Prisma.StringWithAggregatesFilter<"Article"> | string
   tag?: Prisma.StringWithAggregatesFilter<"Article"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Article"> | Date | string
@@ -254,6 +266,7 @@ export type ArticleCreateInput = {
   title: string
   slug: string
   coverImage: string
+  excerpt?: string
   content: string
   tag?: string
   createdAt?: Date | string
@@ -264,6 +277,7 @@ export type ArticleUncheckedCreateInput = {
   title: string
   slug: string
   coverImage: string
+  excerpt?: string
   content: string
   tag?: string
   createdAt?: Date | string
@@ -274,6 +288,7 @@ export type ArticleUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   coverImage?: Prisma.StringFieldUpdateOperationsInput | string
+  excerpt?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   tag?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -284,6 +299,7 @@ export type ArticleUncheckedUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   coverImage?: Prisma.StringFieldUpdateOperationsInput | string
+  excerpt?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   tag?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -294,6 +310,7 @@ export type ArticleCreateManyInput = {
   title: string
   slug: string
   coverImage: string
+  excerpt?: string
   content: string
   tag?: string
   createdAt?: Date | string
@@ -304,6 +321,7 @@ export type ArticleUpdateManyMutationInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   coverImage?: Prisma.StringFieldUpdateOperationsInput | string
+  excerpt?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   tag?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -314,6 +332,7 @@ export type ArticleUncheckedUpdateManyInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   coverImage?: Prisma.StringFieldUpdateOperationsInput | string
+  excerpt?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   tag?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -324,6 +343,7 @@ export type ArticleCountOrderByAggregateInput = {
   title?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   coverImage?: Prisma.SortOrder
+  excerpt?: Prisma.SortOrder
   content?: Prisma.SortOrder
   tag?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -334,6 +354,7 @@ export type ArticleMaxOrderByAggregateInput = {
   title?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   coverImage?: Prisma.SortOrder
+  excerpt?: Prisma.SortOrder
   content?: Prisma.SortOrder
   tag?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -344,6 +365,7 @@ export type ArticleMinOrderByAggregateInput = {
   title?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   coverImage?: Prisma.SortOrder
+  excerpt?: Prisma.SortOrder
   content?: Prisma.SortOrder
   tag?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -356,6 +378,7 @@ export type ArticleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   title?: boolean
   slug?: boolean
   coverImage?: boolean
+  excerpt?: boolean
   content?: boolean
   tag?: boolean
   createdAt?: boolean
@@ -366,6 +389,7 @@ export type ArticleSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   title?: boolean
   slug?: boolean
   coverImage?: boolean
+  excerpt?: boolean
   content?: boolean
   tag?: boolean
   createdAt?: boolean
@@ -376,6 +400,7 @@ export type ArticleSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   title?: boolean
   slug?: boolean
   coverImage?: boolean
+  excerpt?: boolean
   content?: boolean
   tag?: boolean
   createdAt?: boolean
@@ -386,12 +411,13 @@ export type ArticleSelectScalar = {
   title?: boolean
   slug?: boolean
   coverImage?: boolean
+  excerpt?: boolean
   content?: boolean
   tag?: boolean
   createdAt?: boolean
 }
 
-export type ArticleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "slug" | "coverImage" | "content" | "tag" | "createdAt", ExtArgs["result"]["article"]>
+export type ArticleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "slug" | "coverImage" | "excerpt" | "content" | "tag" | "createdAt", ExtArgs["result"]["article"]>
 
 export type $ArticlePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Article"
@@ -401,6 +427,7 @@ export type $ArticlePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     title: string
     slug: string
     coverImage: string
+    excerpt: string
     content: string
     tag: string
     createdAt: Date
@@ -831,6 +858,7 @@ export interface ArticleFieldRefs {
   readonly title: Prisma.FieldRef<"Article", 'String'>
   readonly slug: Prisma.FieldRef<"Article", 'String'>
   readonly coverImage: Prisma.FieldRef<"Article", 'String'>
+  readonly excerpt: Prisma.FieldRef<"Article", 'String'>
   readonly content: Prisma.FieldRef<"Article", 'String'>
   readonly tag: Prisma.FieldRef<"Article", 'String'>
   readonly createdAt: Prisma.FieldRef<"Article", 'DateTime'>

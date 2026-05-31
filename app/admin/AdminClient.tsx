@@ -52,6 +52,7 @@ type Article = {
   title: string;
   slug: string;
   coverImage: string;
+  excerpt: string;
   content: string;
   tag: string;
   createdAt: Date;
@@ -723,6 +724,17 @@ export default function AdminClient({
                   <div className="space-y-1.5">
                     <label htmlFor="tag" className="block text-sm font-medium text-gray-700">Tag / Kategori</label>
                     <input type="text" id="tag" name="tag" defaultValue={editingArticle?.tag || "Artikel"} className="w-full px-4 py-2.5 rounded-md border border-gray-300 focus:ring-2 focus:ring-blue-500 text-sm" placeholder="Contoh: TIPS & TRIK" />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label htmlFor="excerpt" className="block text-sm font-medium text-gray-700">Deskripsi Singkat <span className="text-xs font-normal text-gray-400">(tampil di carousel dashboard)</span></label>
+                    <textarea
+                      id="excerpt"
+                      name="excerpt"
+                      rows={2}
+                      defaultValue={editingArticle?.excerpt || ""}
+                      className="w-full px-4 py-2.5 rounded-md border border-gray-300 focus:ring-2 focus:ring-blue-500 text-sm resize-y"
+                      placeholder="Ringkasan singkat 1-2 kalimat yang muncul di kartu carousel."
+                    />
                   </div>
                   <div className="space-y-1.5">
                     <label htmlFor="coverImageFile" className="block text-sm font-medium text-gray-700">Cover Image</label>

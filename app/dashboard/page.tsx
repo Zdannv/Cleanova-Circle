@@ -198,7 +198,8 @@ export default async function DashboardPage() {
         src: a.coverImage,
         tag: a.tag,
         title: a.title,
-        slug: a.slug
+        slug: a.slug,
+        description: a.excerpt
       }))
     : [
         { src: "/landing-page/631737903_17891967126423715_6807031068574707597_n..jpg", tag: "EKSKLUSIF", title: "Teknik Memoles Cincin Berlian Pudar" },

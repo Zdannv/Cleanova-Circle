@@ -62,7 +62,7 @@ export default async function ArticlesPage() {
                   {article.title}
                 </h3>
                 <p className="text-sm text-stone-500 dark:text-stone-400 line-clamp-3 mt-auto font-light leading-relaxed">
-                  {stripMarkdown(article.content).substring(0, 150)}...
+                  {article.excerpt?.trim() || `${stripMarkdown(article.content).substring(0, 150)}...`}
                 </p>
                 <div className="mt-4 pt-4 border-t border-stone-100 dark:border-stone-800 flex items-center justify-between text-xs font-medium text-stone-400 dark:text-stone-500">
                   <span className="flex items-center gap-1 hover:text-amber-600 transition-colors group-hover:text-amber-600">

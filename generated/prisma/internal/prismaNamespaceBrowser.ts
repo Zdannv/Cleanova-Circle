@@ -178,6 +178,7 @@ export const ArticleScalarFieldEnum = {
   title: 'title',
   slug: 'slug',
   coverImage: 'coverImage',
+  excerpt: 'excerpt',
   content: 'content',
   tag: 'tag',
   createdAt: 'createdAt'
