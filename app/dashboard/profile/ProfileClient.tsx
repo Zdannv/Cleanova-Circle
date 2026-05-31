@@ -10,7 +10,7 @@ import { updateProfileAction } from "./actions";
 type UserData = {
   id: string;
   name: string;
-  phone: string;
+  phone: string | null;
   email: string | null;
   avatar: string | null;
   password?: string | null;
@@ -178,7 +178,7 @@ export default function ProfileClient({
                   <input 
                     type="text" 
                     id="phone" 
-                    defaultValue={user.phone}
+                    defaultValue={user.phone || ""}
                     disabled
                     className="w-full px-4 py-3 rounded-xl bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 text-stone-500 dark:text-stone-400 cursor-not-allowed opacity-70" 
                   />

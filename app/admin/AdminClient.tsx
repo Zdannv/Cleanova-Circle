@@ -31,7 +31,7 @@ type User = {
   id: string;
   name: string;
   email: string | null;
-  phone: string;
+  phone: string | null;
   role: "USER" | "ADMIN";
   createdAt: Date;
 };

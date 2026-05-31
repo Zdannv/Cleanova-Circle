@@ -65,10 +65,11 @@ model User {
   id        String     @id
   name      String
   avatar    String?    @default("1.png")
-  phone     String     @unique
+  phone     String?    @unique
   email     String?    @unique
   password  String?
   role      Role       @default(USER)
+  acceptsMarketing Boolean @default(true)
   createdAt DateTime   @default(now())
   Bookmark  Bookmark[]
   Comment   Comment[]

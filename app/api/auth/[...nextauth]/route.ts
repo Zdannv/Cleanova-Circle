@@ -1,31 +1,44 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import bcrypt from "bcryptjs";
 import prisma from "../../../../lib/prisma"; // Adjust relative path since @/ might not be configured as expected
 
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
-      name: "Phone / Temporary Password",
+      name: "Phone-Email / Password",
       credentials: {
-        phone: { label: "Phone Number", type: "text", placeholder: "e.g., 08123456789" },
-        password: { label: "Temporary Password", type: "password" }
+        phone: { label: "Phone or Email", type: "text", placeholder: "08123456789 atau email@anda.com" },
+        password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
         if (!credentials?.phone || !credentials?.password) {
-          throw new Error("Phone and Password are required");
+          throw new Error("Phone/Email dan Password wajib diisi");
         }
 
+        // Identifier bisa berupa nomor telepon ATAU email (untuk user self-register).
+        const identifier = credentials.phone.trim();
+        const isEmail = identifier.includes("@");
+
         const user = await prisma.user.findUnique({
-          where: { phone: credentials.phone }
+          where: isEmail
+            ? { email: identifier.toLowerCase() }
+            : { phone: identifier },
         });
 
         if (!user) {
           throw new Error("User not found");
         }
 
-        // Validate Password 
+        // Validasi password.
         if (user.password) {
-          if (credentials.password !== user.password) {
+          // Password tersimpan bisa berupa hash bcrypt (self-register) atau
+          // plaintext (data lama dari admin). Tangani keduanya.
+          const looksHashed = /^\$2[aby]\$/.test(user.password);
+          const valid = looksHashed
+            ? await bcrypt.compare(credentials.password, user.password)
+            : credentials.password === user.password;
+          if (!valid) {
             throw new Error("Invalid password");
           }
         } else {
