@@ -30,9 +30,12 @@ export default function LoginClient() {
     if (result?.error) {
       setError(result.error);
       setLoading(false);
-    } else {
-      router.push("/dashboard");
+    } else if (result?.ok) {
+      // Biarkan loading tetap aktif selama proses redirect
+      // Refresh dulu untuk sinkronisasi cookie sesi dari server
       router.refresh();
+      // Baru redirect ke dashboard setelah state ter-refresh
+      router.push("/dashboard");
     }
   };
 
