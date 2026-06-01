@@ -21,21 +21,27 @@ export default function LoginClient() {
     setLoading(true);
     setError("");
 
-    const result = await signIn("credentials", {
-      redirect: false,
-      phone,
-      password,
-    });
+    try {
+      const res = await signIn("credentials", {
+        redirect: false,
+        phone,
+        password,
+      });
 
-    if (result?.error) {
-      setError(result.error);
+      if (res?.error) {
+        setError(res.error);
+        setLoading(false);
+        return;
+      }
+
+      if (res?.ok) {
+        // Hard navigation untuk memotong masalah cache Next.js router
+        // Browser akan langsung memuat ulang halaman dashboard
+        window.location.href = "/dashboard";
+      }
+    } catch (error) {
+      setError("Terjadi kesalahan saat login. Silakan coba lagi.");
       setLoading(false);
-    } else if (result?.ok) {
-      // Biarkan loading tetap aktif selama proses redirect
-      // Refresh dulu untuk sinkronisasi cookie sesi dari server
-      router.refresh();
-      // Baru redirect ke dashboard setelah state ter-refresh
-      router.push("/dashboard");
     }
   };
 
