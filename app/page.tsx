@@ -21,8 +21,8 @@ export default async function Home() {
     heroImageUrl: landingPage?.heroImageUrl || "/landing-page/671129876_17900392704423715_6523539329292204971_n..jpg",
     
     // Education Section (Section 3) - utilizing all feature fields for CMS editability
-    eduSubtitle: landingPage?.featureSubtitle || "Eksklusif Untuk Member",
-    eduTitle: landingPage?.featureTitle || "Akses Aksesibilitas Tak Terbatas",
+    eduSubtitle: landingPage?.featureSubtitle || "Cleanova Circle",
+    eduTitle: landingPage?.featureTitle || "Komunitas dan Web Edukasi untuk membersihkan barang anda",
     feature1Title: landingPage?.feature1Title || "DIY Hacks & Tricks",
     feature1Description: landingPage?.feature1Description || "Pelajari rahasia merawat perak, emas, hingga berlian menggunakan bahan-bahan aman yang bisa Anda temukan di rumah.",
     feature1ImageUrl: landingPage?.feature1ImageUrl || "/landing-page/656353206_17897386137423715_5989968134986280728_n..jpg",
@@ -190,7 +190,7 @@ export default async function Home() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
             <span className="text-amber-600 dark:text-amber-500 text-xs font-semibold tracking-wider uppercase bg-amber-50 dark:bg-amber-950/40 border border-amber-150 dark:border-amber-900/30 px-3.5 py-1.5 rounded-full">
-              E-Commerce Pilar
+              Cleanova Shop
             </span>
             <h2 className="text-3xl sm:text-4xl font-serif font-light text-stone-900 dark:text-white leading-tight">
               Koleksi Produk <span className="italic text-amber-600 dark:text-amber-500 font-medium">Perawatan Utama</span>
