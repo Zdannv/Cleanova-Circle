@@ -55,17 +55,17 @@ const DEFAULTS: LandingPageData = {
   valueCard2Text: "Edukasi perawatan mendalam dan produk pendukung dalam satu genggaman.",
   valueCard3Title: "Transaksi & Pengiriman Aman",
   valueCard3Text: "Terintegrasi langsung dengan kurir terpercaya dan gateway pembayaran yang aman.",
-  featureTitle: "Gabung Cleanova Circle: Ribuan Tips & Video Panduan Merawat Barang Kesayangan Anda Gratis!",
-  featureSubtitle: "Cleanova Circle",
+  featureTitle: "Akses Aksesibilitas Tak Terbatas",
+  featureSubtitle: "Eksklusif Untuk Member",
   feature1Title: "DIY Hacks & Tricks",
-  feature1Description: "",
-  feature1ImageUrl: "",
+  feature1Description: "Pelajari rahasia merawat perak, emas, hingga berlian menggunakan bahan-bahan aman yang bisa Anda temukan di rumah.",
+  feature1ImageUrl: "/landing-page/656353206_17897386137423715_5989968134986280728_n..jpg",
   feature2Title: "Step-by-Step Video",
-  feature2Description: "",
-  feature2ImageUrl: "",
+  feature2Description: "Tonton panduan visual visual untuk proses restorasi perhiasan kusam mulai dari persiapan hingga tahap pemolesan akhir.",
+  feature2ImageUrl: "/landing-page/656701773_17898483894423715_5763756912223990821_n..jpg",
   feature3Title: "Product Rating & Guide",
-  feature3Description: "",
-  feature3ImageUrl: "",
+  feature3Description: "Rekomendasi independen dan panduan dosis pemakaian produk pembersih pabrikan dari para kurator pengalaman.",
+  feature3ImageUrl: "/landing-page/656817205_17899009773423715_4292222626302527645_n..jpg",
   ctaTitle: "Mulai Merawat",
   ctaSubtitle: "Koleksi Kesayangan Anda.",
   ctaDescription: "Tingkatkan standar kebersihan dan estetika koleksi Anda hari ini juga tanpa menghabiskan budget berlebih di jasa terpadu.",
@@ -229,10 +229,37 @@ export default function LandingEditor({ initial }: { initial: LandingPageData | 
             )}
 
             {activeSection === "FEATURES" && (
-              <div className="space-y-5">
-                <SectionTitle title="Section Cleanova Circle (Edukasi)" desc="Bagian Lead Magnet &amp; Edukasi di Landing Page." />
-                <Field label="Subtitle / Nama Komunitas" value={data.featureSubtitle} onChange={(v) => set("featureSubtitle", v)} />
-                <TextArea label="Teks Deskripsi / Headline Edukasi" value={data.featureTitle} onChange={(v) => set("featureTitle", v)} rows={4} />
+              <div className="space-y-6">
+                <SectionTitle title="Edukasi &amp; Komunitas" desc="Bagian presentasi pilar edukasi dan fitur platform yang didapatkan member." />
+                
+                <div className="bg-amber-50/40 p-4 border border-amber-200/50 rounded-2xl space-y-4">
+                  <p className="text-xs font-bold uppercase tracking-wider text-amber-700">Header Section Edukasi</p>
+                  <Field label="Subtitle / Nama Komunitas (e.g. Eksklusif Untuk Member)" value={data.featureSubtitle} onChange={(v) => set("featureSubtitle", v)} compact />
+                  <Field label="Headline Section (e.g. Akses Aksesibilitas Tak Terbatas)" value={data.featureTitle} onChange={(v) => set("featureTitle", v)} compact />
+                </div>
+
+                <div className="space-y-6 pt-2">
+                  <p className="text-xs font-bold uppercase tracking-wider text-stone-500">Tiga Fitur Penjelasan Platform</p>
+                  {([1, 2, 3] as const).map(i => {
+                    const tKey = `feature${i}Title` as keyof LandingPageData;
+                    const dKey = `feature${i}Description` as keyof LandingPageData;
+                    const iKey = `feature${i}ImageUrl` as keyof LandingPageData;
+                    return (
+                      <div key={i} className="border border-stone-200 rounded-2xl p-4 bg-stone-50/50 space-y-3">
+                        <p className="text-xs font-bold uppercase tracking-wider text-amber-600">Fitur/Penjelasan {i}</p>
+                        <Field label="Judul Fitur" value={data[tKey]} onChange={(v) => set(tKey, v)} compact />
+                        <TextArea label="Deskripsi Fitur" value={data[dKey]} onChange={(v) => set(dKey, v)} rows={2} compact />
+                        <ImageUploadField
+                          label="Gambar Ilustrasi Fitur"
+                          value={data[iKey]}
+                          onChange={(url) => set(iKey, url)}
+                          folder={`landing/feature-${i}`}
+                          aspect="aspect-[4/3]"
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             )}
 
@@ -444,12 +471,37 @@ function LandingPreview({
       <button
         type="button"
         onClick={() => onJump("FEATURES")}
-        className={`block w-full text-left bg-gradient-to-br from-amber-50 to-white rounded-lg p-4 transition ${ring("FEATURES")}`}
+        className={`block w-full text-left bg-[#fafaf9] rounded-lg p-4 transition ${ring("FEATURES")}`}
       >
-        <div className="text-center space-y-1.5">
+        <div className="text-center space-y-1.5 mb-3">
           <span className="inline-block text-[7px] uppercase tracking-widest text-amber-600 bg-amber-100/60 px-2 py-0.5 rounded font-semibold">{data.featureSubtitle || "Cleanova Circle"}</span>
-          <p className="font-serif text-xs leading-normal text-stone-900">{data.featureTitle || <span className="italic text-stone-400">Deskripsi Edukasi...</span>}</p>
-          <span className="inline-block text-[7px] bg-amber-400 text-stone-900 px-3 py-1 rounded font-bold">Daftar Akun Gratis Sekarang</span>
+          <h2 className="font-serif text-xs leading-normal text-stone-900 font-bold">{data.featureTitle || "Akses Aksesibilitas Tak Terbatas"}</h2>
+          <div className="w-6 h-px bg-amber-500 mx-auto"></div>
+        </div>
+
+        <div className="grid grid-cols-3 gap-2 mb-3">
+          {([1, 2, 3] as const).map(i => {
+            const t = data[`feature${i}Title` as keyof LandingPageData];
+            const d = data[`feature${i}Description` as keyof LandingPageData];
+            const img = data[`feature${i}ImageUrl` as keyof LandingPageData];
+            return (
+              <div key={i} className="bg-white border border-stone-200 rounded p-2 text-left space-y-1">
+                <div className="aspect-[4/3] bg-stone-100 rounded relative overflow-hidden mb-1">
+                  {img ? (
+                    <Image src={img} alt={t} fill className="object-cover" unoptimized />
+                  ) : (
+                    <div className="absolute inset-0 grid place-items-center text-[6px] text-stone-400">No Image</div>
+                  )}
+                </div>
+                <p className="font-serif text-[8px] font-bold text-stone-900 truncate">{t || `Fitur ${i}`}</p>
+                <p className="text-[7px] text-stone-500 line-clamp-2 leading-tight font-light">{d || `Deskripsi ${i}...`}</p>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="text-center bg-amber-50 p-2 border border-amber-200/50 rounded">
+          <span className="inline-block text-[7px] bg-amber-400 text-stone-950 font-bold px-3 py-1 rounded">Daftar Akun Gratis Sekarang</span>
         </div>
       </button>
 
