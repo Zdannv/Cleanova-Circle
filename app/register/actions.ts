@@ -2,6 +2,8 @@
 
 import prisma from "../../lib/prisma";
 import bcrypt from "bcryptjs";
+import { headers } from "next/headers";
+import { RegisterSchema } from "../../lib/validations";
 
 type RegisterInput = {
   name: string;
@@ -12,26 +14,50 @@ type RegisterInput = {
 
 type RegisterResult = { success: true } | { success: false; error: string };
 
+const rateLimitMap = new Map<string, number>();
+
+function checkRateLimit(key: string, limitMs: number = 60000): boolean {
+  const now = Date.now();
+  const lastAttempt = rateLimitMap.get(key);
+  if (lastAttempt && now - lastAttempt < limitMs) {
+    return true;
+  }
+  rateLimitMap.set(key, now);
+
+  // Prune map jika terlalu besar untuk mencegah kebocoran memori
+  if (rateLimitMap.size > 2000) {
+    for (const [k, v] of rateLimitMap.entries()) {
+      if (now - v > limitMs) {
+        rateLimitMap.delete(k);
+      }
+    }
+  }
+  return false;
+}
+
 /**
  * Pendaftaran mandiri publik (Lead Magnet).
  * - Validasi input dasar + cek email duplikat.
  * - Password di-hash (bcrypt) sebelum disimpan.
  */
 export async function registerUserAction(input: RegisterInput): Promise<RegisterResult> {
-  const name = input?.name?.trim() || "";
-  const email = input?.email?.trim().toLowerCase() || "";
-  const password = input?.password || "";
-  const acceptsMarketing = input?.acceptsMarketing !== false;
+  // 1. Anti-Spam Rate Limiting (IP & Email)
+  const clientHeaders = await headers();
+  const clientIp = clientHeaders.get("x-forwarded-for")?.split(",")[0].trim() || clientHeaders.get("x-real-ip") || "unknown-ip";
+  const emailKey = input?.email?.trim().toLowerCase() || "unknown-email";
 
-  // Validasi
-  if (!name) return { success: false, error: "Nama wajib diisi." };
-  if (!email) return { success: false, error: "Email wajib diisi." };
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return { success: false, error: "Format email tidak valid." };
+  if (checkRateLimit(`ip:${clientIp}`) || checkRateLimit(`email:${emailKey}`)) {
+    return { success: false, error: "Terlalu banyak percobaan. Harap tunggu 1 menit." };
   }
-  if (password.length < 6) {
-    return { success: false, error: "Password minimal 6 karakter." };
+
+  // 2. Validasi dengan Zod
+  const validationResult = RegisterSchema.safeParse(input);
+  if (!validationResult.success) {
+    return { success: false, error: validationResult.error.issues[0].message };
   }
+
+  const { name, email, password, acceptsMarketing } = validationResult.data;
+
   if (!acceptsMarketing) {
     return { success: false, error: "Persetujuan penerimaan informasi promo wajib dicentang." };
   }

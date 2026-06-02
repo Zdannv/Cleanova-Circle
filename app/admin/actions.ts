@@ -6,6 +6,7 @@ import prisma from "../../lib/prisma";
 import { revalidatePath } from "next/cache";
 import { sendConfirmationEmail } from "../../lib/mailer";
 import { sendMail } from "../../lib/mail";
+import { BroadcastSchema } from "../../lib/validations";
 
 async function verifyAdmin() {
   const session = await getServerSession(authOptions);
@@ -243,9 +244,12 @@ export async function updateLandingPageAction(formData: FormData) {
 export async function sendBroadcastAction(subject: string, htmlBody: string) {
   await verifyAdmin();
 
-  if (!subject.trim() || !htmlBody.trim()) {
-    throw new Error("Subjek dan isi pesan wajib diisi.");
+  const validationResult = BroadcastSchema.safeParse({ subject, htmlBody });
+  if (!validationResult.success) {
+    throw new Error(validationResult.error.issues[0].message);
   }
+
+  const { subject: cleanSubject, htmlBody: cleanHtmlBody } = validationResult.data;
 
   // Cari semua user dengan acceptsMarketing: true dan email tidak null
   const users = await prisma.user.findMany({
@@ -268,7 +272,7 @@ export async function sendBroadcastAction(subject: string, htmlBody: string) {
 
   // Kirim email ke semua penerima secara paralel
   const results = await Promise.allSettled(
-    emails.map((email) => sendMail(email, subject, htmlBody))
+    emails.map((email) => sendMail(email, cleanSubject, cleanHtmlBody))
   );
 
   const succeeded = results.filter((r) => r.status === "fulfilled" && (r.value as any).success).length;
