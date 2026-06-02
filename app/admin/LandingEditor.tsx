@@ -426,7 +426,7 @@ function LandingPreview({
         <div className="grid grid-cols-2 gap-3 items-center">
           <div className="space-y-2">
             <span className="inline-flex items-center gap-1 text-[7px] uppercase tracking-widest text-amber-700 bg-amber-50 border border-amber-200 px-1.5 py-0.5 rounded-sm font-semibold">
-              Master Brand
+              Cleanova
             </span>
             <h1 className="text-xs font-serif leading-tight text-stone-900">
               {data.heroTitle || <span className="text-stone-400 italic">Hero title…</span>}<br />

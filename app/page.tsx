@@ -111,8 +111,7 @@ export default async function Home() {
         <div className="relative flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
           <div className="flex-1 text-center lg:text-left space-y-8 z-10">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 border border-amber-200/60 dark:border-amber-800/40 bg-amber-50/50 dark:bg-amber-950/30 text-amber-800 dark:text-amber-400 text-[11px] font-semibold tracking-widest uppercase rounded-full">
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
-              The Master Brand Cleanova
+              Cleanova
             </div>
             
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-light tracking-tight leading-tight text-stone-900 dark:text-white">
