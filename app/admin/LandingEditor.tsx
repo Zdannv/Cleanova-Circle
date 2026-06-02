@@ -55,7 +55,7 @@ const DEFAULTS: LandingPageData = {
   valueCard2Text: "Edukasi perawatan mendalam dan produk pendukung dalam satu genggaman.",
   valueCard3Title: "Transaksi & Pengiriman Aman",
   valueCard3Text: "Terintegrasi langsung dengan kurir terpercaya dan gateway pembayaran yang aman.",
-  featureTitle: "Akses Aksesibilitas Tak Terbatas",
+  featureTitle: "Cleanova Circle",
   featureSubtitle: "Eksklusif Untuk Member",
   feature1Title: "DIY Hacks & Tricks",
   feature1Description: "Pelajari rahasia merawat perak, emas, hingga berlian menggunakan bahan-bahan aman yang bisa Anda temukan di rumah.",
