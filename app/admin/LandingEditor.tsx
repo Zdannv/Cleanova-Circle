@@ -43,20 +43,20 @@ export type LandingPageData = {
 const DEFAULTS: LandingPageData = {
   logoUrl: "/landing-page/logo.jpg",
   whatsappUrl: "https://wa.me/6287855310680",
-  heroTitle: "Kembalikan Kilau",
-  heroSubtitle: "Koleksi Berharga Anda.",
-  heroDescription: "",
-  heroImageUrl: "",
-  valueTitle: "Perawatan Tepat, Investasi Selamat",
+  heroTitle: "Solusi Kebersihan Modern",
+  heroSubtitle: "untuk Barang Berharga Anda",
+  heroDescription: "Memadukan formula premium ramah lingkungan dengan getaran ultrasonik untuk merawat, membersihkan, dan menjaga nilai perhiasan serta barang berharga Anda tetap seperti baru.",
+  heroImageUrl: "/landing-page/671129876_17900392704423715_6523539329292204971_n..jpg",
+  valueTitle: "Mengapa Memilih Cleanova?",
   valueDescription: "",
-  valueCard1Title: "Hemat Ratusan Ribu",
-  valueCard1Text: "",
-  valueCard2Title: "Aman & Teruji",
-  valueCard2Text: "",
-  valueCard3Title: "Hasil Instan",
-  valueCard3Text: "",
-  featureTitle: "Akses Aksesibilitas Tak Terbatas",
-  featureSubtitle: "Eksklusif Untuk Member",
+  valueCard1Title: "Teknologi Canggih",
+  valueCard1Text: "Formula aman ramah lingkungan dengan pembersihan getaran ultrasonik mikro.",
+  valueCard2Title: "Ekosistem Lengkap",
+  valueCard2Text: "Edukasi perawatan mendalam dan produk pendukung dalam satu genggaman.",
+  valueCard3Title: "Transaksi & Pengiriman Aman",
+  valueCard3Text: "Terintegrasi langsung dengan kurir terpercaya dan gateway pembayaran yang aman.",
+  featureTitle: "Gabung Cleanova Circle: Ribuan Tips & Video Panduan Merawat Barang Kesayangan Anda Gratis!",
+  featureSubtitle: "Cleanova Circle",
   feature1Title: "DIY Hacks & Tricks",
   feature1Description: "",
   feature1ImageUrl: "",
@@ -68,11 +68,11 @@ const DEFAULTS: LandingPageData = {
   feature3ImageUrl: "",
   ctaTitle: "Mulai Merawat",
   ctaSubtitle: "Koleksi Kesayangan Anda.",
-  ctaDescription: "",
+  ctaDescription: "Tingkatkan standar kebersihan dan estetika koleksi Anda hari ini juga tanpa menghabiskan budget berlebih di jasa terpadu.",
   shopCardLabel: "Toko Cleanova",
-  shopCardTitle: "Beli Produk",
+  shopCardTitle: "Jelajahi Produk",
   eduCardLabel: "Tips & Trik",
-  eduCardTitle: "Komunitas Edukasi",
+  eduCardTitle: "Pelajari Tips Bersih",
 };
 
 type Section = "HEADER" | "HERO" | "VALUE" | "FEATURES" | "CTA";
@@ -80,9 +80,9 @@ type Section = "HEADER" | "HERO" | "VALUE" | "FEATURES" | "CTA";
 const SECTIONS: { id: Section; label: string; icon: string }[] = [
   { id: "HEADER", label: "Header", icon: "M4 6h16M4 12h16M4 18h16" },
   { id: "HERO", label: "Hero", icon: "M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" },
-  { id: "VALUE", label: "Value Cards", icon: "M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" },
-  { id: "FEATURES", label: "Features", icon: "M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25" },
-  { id: "CTA", label: "CTA", icon: "M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" },
+  { id: "FEATURES", label: "Edukasi", icon: "M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" },
+  { id: "VALUE", label: "Keunggulan", icon: "M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" },
+  { id: "CTA", label: "CTA Bawah", icon: "M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" },
 ];
 
 export default function LandingEditor({ initial }: { initial: LandingPageData | null }) {
@@ -202,12 +202,12 @@ export default function LandingEditor({ initial }: { initial: LandingPageData | 
 
             {activeSection === "HERO" && (
               <div className="space-y-5">
-                <SectionTitle title="Hero Section" desc="Bagian pertama yang dilihat pengunjung." />
-                <Field label="Hero Title" value={data.heroTitle} onChange={(v) => set("heroTitle", v)} />
-                <Field label="Hero Subtitle (italic)" value={data.heroSubtitle} onChange={(v) => set("heroSubtitle", v)} />
-                <TextArea label="Hero Description" value={data.heroDescription} onChange={(v) => set("heroDescription", v)} rows={4} />
+                <SectionTitle title="Hero Section" desc="Headline dan deskripsi utama Landing Page Brand." />
+                <Field label="Headline Baris 1 (Hero Title)" value={data.heroTitle} onChange={(v) => set("heroTitle", v)} />
+                <Field label="Headline Baris 2 (Hero Subtitle - Italic &amp; Kuning)" value={data.heroSubtitle} onChange={(v) => set("heroSubtitle", v)} />
+                <TextArea label="Deskripsi Brand" value={data.heroDescription} onChange={(v) => set("heroDescription", v)} rows={4} />
                 <ImageUploadField
-                  label="Hero Image"
+                  label="Hero Image (Visual Brand Utama)"
                   value={data.heroImageUrl}
                   onChange={(url) => set("heroImageUrl", url)}
                   folder="landing/hero"
@@ -215,26 +215,32 @@ export default function LandingEditor({ initial }: { initial: LandingPageData | 
                 />
 
                 <div className="border-t border-gray-200 pt-4 space-y-4">
-                  <p className="text-xs font-bold uppercase tracking-wider text-amber-600">Tombol Aksi (CTA)</p>
+                  <p className="text-xs font-bold uppercase tracking-wider text-amber-600">Tombol Aksi Utama (CTA)</p>
                   <div className="border border-gray-200 rounded-lg p-4 bg-amber-50/30 space-y-3">
-                    <p className="text-[11px] font-semibold text-gray-600">Kartu Toko (mengarah ke /shop)</p>
-                    <Field label="Label kecil" value={data.shopCardLabel} onChange={(v) => set("shopCardLabel", v)} compact />
-                    <Field label="Judul tombol" value={data.shopCardTitle} onChange={(v) => set("shopCardTitle", v)} compact />
+                    <p className="text-[11px] font-semibold text-gray-600">Tombol Utama (Mengarahkan ke /shop)</p>
+                    <Field label="Teks Tombol" value={data.shopCardTitle} onChange={(v) => set("shopCardTitle", v)} compact />
                   </div>
                   <div className="border border-gray-200 rounded-lg p-4 bg-gray-50/40 space-y-3">
-                    <p className="text-[11px] font-semibold text-gray-600">Kartu Edukasi (mengarah ke /dashboard)</p>
-                    <Field label="Label kecil" value={data.eduCardLabel} onChange={(v) => set("eduCardLabel", v)} compact />
-                    <Field label="Judul tombol" value={data.eduCardTitle} onChange={(v) => set("eduCardTitle", v)} compact />
+                    <p className="text-[11px] font-semibold text-gray-600">Tombol Sekunder (Mengarahkan ke /dashboard)</p>
+                    <Field label="Teks Tombol" value={data.eduCardTitle} onChange={(v) => set("eduCardTitle", v)} compact />
                   </div>
                 </div>
               </div>
             )}
 
+            {activeSection === "FEATURES" && (
+              <div className="space-y-5">
+                <SectionTitle title="Section Cleanova Circle (Edukasi)" desc="Bagian Lead Magnet &amp; Edukasi di Landing Page." />
+                <Field label="Subtitle / Nama Komunitas" value={data.featureSubtitle} onChange={(v) => set("featureSubtitle", v)} />
+                <TextArea label="Teks Deskripsi / Headline Edukasi" value={data.featureTitle} onChange={(v) => set("featureTitle", v)} rows={4} />
+              </div>
+            )}
+
             {activeSection === "VALUE" && (
               <div className="space-y-5">
-                <SectionTitle title="Value Section" desc="Headline + 3 kartu manfaat di tengah halaman." />
-                <Field label="Value Title" value={data.valueTitle} onChange={(v) => set("valueTitle", v)} />
-                <TextArea label="Value Description" value={data.valueDescription} onChange={(v) => set("valueDescription", v)} rows={3} />
+                <SectionTitle title="Mengapa Memilih Cleanova?" desc="Headline + 3 keunggulan utama brand." />
+                <Field label="Judul Utama Section" value={data.valueTitle} onChange={(v) => set("valueTitle", v)} />
+                <TextArea label="Deskripsi Tambahan Section (Opsional)" value={data.valueDescription} onChange={(v) => set("valueDescription", v)} rows={2} />
 
                 <div className="space-y-4">
                   {([1, 2, 3] as const).map(i => {
@@ -242,39 +248,9 @@ export default function LandingEditor({ initial }: { initial: LandingPageData | 
                     const xKey = `valueCard${i}Text` as keyof LandingPageData;
                     return (
                       <div key={i} className="border border-gray-200 rounded-lg p-4 bg-gray-50/40 space-y-3">
-                        <p className="text-xs font-bold uppercase tracking-wider text-amber-600">Kartu {i}</p>
-                        <Field label="Title" value={data[tKey]} onChange={(v) => set(tKey, v)} compact />
-                        <TextArea label="Text" value={data[xKey]} onChange={(v) => set(xKey, v)} rows={2} compact />
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-
-            {activeSection === "FEATURES" && (
-              <div className="space-y-5">
-                <SectionTitle title="Features Section" desc="3 fitur unggulan dengan gambar." />
-                <Field label="Feature Subtitle (kapitalisasi atas)" value={data.featureSubtitle} onChange={(v) => set("featureSubtitle", v)} />
-                <Field label="Feature Title" value={data.featureTitle} onChange={(v) => set("featureTitle", v)} />
-
-                <div className="space-y-5">
-                  {([1, 2, 3] as const).map(i => {
-                    const tKey = `feature${i}Title` as keyof LandingPageData;
-                    const dKey = `feature${i}Description` as keyof LandingPageData;
-                    const iKey = `feature${i}ImageUrl` as keyof LandingPageData;
-                    return (
-                      <div key={i} className="border border-gray-200 rounded-lg p-4 bg-gray-50/40 space-y-3">
-                        <p className="text-xs font-bold uppercase tracking-wider text-amber-600">Fitur {i}</p>
-                        <Field label="Title" value={data[tKey]} onChange={(v) => set(tKey, v)} compact />
-                        <TextArea label="Description" value={data[dKey]} onChange={(v) => set(dKey, v)} rows={2} compact />
-                        <ImageUploadField
-                          label="Image"
-                          value={data[iKey]}
-                          onChange={(url) => set(iKey, url)}
-                          folder={`landing/feature-${i}`}
-                          aspect="aspect-[4/3]"
-                        />
+                        <p className="text-xs font-bold uppercase tracking-wider text-amber-600">Keunggulan {i}</p>
+                        <Field label="Judul Keunggulan" value={data[tKey]} onChange={(v) => set(tKey, v)} compact />
+                        <TextArea label="Teks Deskripsi Keunggulan" value={data[xKey]} onChange={(v) => set(xKey, v)} rows={2} compact />
                       </div>
                     );
                   })}
@@ -284,7 +260,7 @@ export default function LandingEditor({ initial }: { initial: LandingPageData | 
 
             {activeSection === "CTA" && (
               <div className="space-y-5">
-                <SectionTitle title="CTA Section" desc="Ajakan terakhir di bagian bawah halaman." />
+                <SectionTitle title="CTA Bawah (Retained)" desc="Bagian ajakan pendaftaran di bagian paling bawah halaman." />
                 <Field label="CTA Title" value={data.ctaTitle} onChange={(v) => set("ctaTitle", v)} />
                 <Field label="CTA Subtitle (italic, kuning)" value={data.ctaSubtitle} onChange={(v) => set("ctaSubtitle", v)} />
                 <TextArea label="CTA Description" value={data.ctaDescription} onChange={(v) => set("ctaDescription", v)} rows={3} />
@@ -389,7 +365,7 @@ function LandingPreview({
       : "ring-1 ring-transparent hover:ring-stone-300";
 
   return (
-    <div className="p-4 space-y-3">
+    <div className="p-4 space-y-4">
       {/* Header */}
       <button
         type="button"
@@ -405,11 +381,11 @@ function LandingPreview({
             ) : (
               <div className="w-7 h-7 rounded-full bg-stone-200 grid place-items-center text-[9px] text-stone-500">logo</div>
             )}
-            <span className="font-serif text-sm text-stone-800">Cleanova Circle</span>
+            <span className="font-serif text-xs text-stone-850">Cleanova Circle</span>
           </div>
           <div className="flex items-center gap-1">
             <span className="text-[8px] uppercase tracking-widest bg-amber-400 text-stone-900 px-2 py-1 rounded font-bold">Toko</span>
-            <span className="text-[8px] uppercase tracking-widest bg-stone-900 text-white px-2 py-1 rounded font-bold">Tips &amp; Trik</span>
+            <span className="text-[8px] uppercase tracking-widest bg-stone-900 text-white px-2 py-1 rounded font-bold">Tips</span>
           </div>
         </div>
       </button>
@@ -423,36 +399,19 @@ function LandingPreview({
         <div className="grid grid-cols-2 gap-3 items-center">
           <div className="space-y-2">
             <span className="inline-flex items-center gap-1 text-[7px] uppercase tracking-widest text-amber-700 bg-amber-50 border border-amber-200 px-1.5 py-0.5 rounded-sm font-semibold">
-              Perawatan Premium
+              Master Brand
             </span>
-            <h1 className="text-sm font-serif leading-tight text-stone-900">
+            <h1 className="text-xs font-serif leading-tight text-stone-900">
               {data.heroTitle || <span className="text-stone-400 italic">Hero title…</span>}<br />
               <span className="italic text-amber-600 font-medium">{data.heroSubtitle || "—"}</span>
             </h1>
-            <p className="text-[9px] text-stone-600 line-clamp-2 leading-relaxed">
+            <p className="text-[8px] text-stone-600 line-clamp-2 leading-relaxed">
               {data.heroDescription || <span className="italic text-stone-400">Deskripsi hero…</span>}
             </p>
 
-            {/* CTA cards mini — match real design */}
-            <div className="grid grid-cols-2 gap-1.5 pt-1">
-              <div className="rounded-lg bg-gradient-to-br from-amber-500 to-amber-600 text-white p-2">
-                <div className="w-5 h-5 rounded bg-white/20 grid place-items-center mb-1">
-                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272" /></svg>
-                </div>
-                <p className="text-[6px] uppercase tracking-widest text-white/80 font-semibold leading-tight">{data.shopCardLabel || "Toko"}</p>
-                <p className="font-serif text-[10px] font-medium leading-tight">{data.shopCardTitle || "Beli Produk"} →</p>
-              </div>
-              <div className="rounded-lg bg-white border border-stone-200 text-stone-900 p-2">
-                <div className="w-5 h-5 rounded bg-amber-50 text-amber-700 grid place-items-center mb-1">
-                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347M12 13.489a50.702 50.702 0 0 1 7.74-3.342" /></svg>
-                </div>
-                <p className="text-[6px] uppercase tracking-widest text-stone-500 font-semibold leading-tight">{data.eduCardLabel || "Tips & Trik"}</p>
-                <p className="font-serif text-[10px] font-medium leading-tight">{data.eduCardTitle || "Edukasi"} →</p>
-              </div>
-            </div>
-            <div className="flex gap-1.5">
-              <span className="text-[7px] bg-green-600 text-white px-2 py-0.5 rounded">Tanya Admin</span>
-              <span className="text-[7px] border border-stone-300 text-stone-600 px-2 py-0.5 rounded">Pelajari</span>
+            <div className="flex gap-1 pt-1 flex-wrap">
+              <span className="text-[7px] bg-amber-400 text-stone-900 px-2 py-1 rounded font-semibold whitespace-nowrap">{data.shopCardTitle || "Jelajahi Produk"}</span>
+              <span className="text-[7px] bg-stone-900 text-white px-2 py-1 rounded font-semibold whitespace-nowrap">{data.eduCardTitle || "Pelajari Tips"}</span>
             </div>
           </div>
           <div className="aspect-[4/5] relative bg-stone-200 rounded overflow-hidden shadow-md">
@@ -465,53 +424,54 @@ function LandingPreview({
         </div>
       </button>
 
-      {/* Value */}
+      {/* Product Showcase Simulation */}
+      <div className="bg-[#fafaf9] rounded-lg p-4 border border-stone-200 text-center space-y-3">
+        <span className="text-[7px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded font-bold uppercase">Showcase</span>
+        <h3 className="text-xs font-serif text-stone-900">Koleksi Produk Perawatan Utama (Simulasi Data DB)</h3>
+        <div className="grid grid-cols-3 gap-2">
+          {[1, 2, 3].map(i => (
+            <div key={i} className="bg-white border border-stone-200 rounded p-2 text-left space-y-1">
+              <div className="aspect-square bg-stone-100 rounded flex items-center justify-center text-[8px] text-stone-400">Produk {i}</div>
+              <p className="text-[8px] font-serif font-bold text-stone-855 truncate">Cleanova Premium {i}</p>
+              <p className="text-[7px] text-stone-600">Rp 149.000</p>
+              <div className="text-center bg-stone-900 text-white rounded text-[6px] py-0.5">Detail</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Edukasi */}
+      <button
+        type="button"
+        onClick={() => onJump("FEATURES")}
+        className={`block w-full text-left bg-gradient-to-br from-amber-50 to-white rounded-lg p-4 transition ${ring("FEATURES")}`}
+      >
+        <div className="text-center space-y-1.5">
+          <span className="inline-block text-[7px] uppercase tracking-widest text-amber-600 bg-amber-100/60 px-2 py-0.5 rounded font-semibold">{data.featureSubtitle || "Cleanova Circle"}</span>
+          <p className="font-serif text-xs leading-normal text-stone-900">{data.featureTitle || <span className="italic text-stone-400">Deskripsi Edukasi...</span>}</p>
+          <span className="inline-block text-[7px] bg-amber-400 text-stone-900 px-3 py-1 rounded font-bold">Daftar Akun Gratis Sekarang</span>
+        </div>
+      </button>
+
+      {/* Value Propositions */}
       <button
         type="button"
         onClick={() => onJump("VALUE")}
         className={`block w-full text-left rounded-lg p-4 transition bg-stone-900 text-stone-100 ${ring("VALUE")}`}
       >
-        <h2 className="text-sm font-serif text-center font-light">{data.valueTitle || <span className="italic text-stone-500">Value title…</span>}</h2>
-        <div className="w-8 h-px bg-amber-500 mx-auto my-2" />
-        <p className="text-[9px] text-stone-300 text-center line-clamp-2 leading-relaxed font-light">{data.valueDescription || <span className="italic text-stone-500">Deskripsi value…</span>}</p>
-        <div className="grid grid-cols-3 gap-2 mt-3">
+        <h2 className="text-xs font-serif text-center font-light">{data.valueTitle || <span className="italic text-stone-500">Value title…</span>}</h2>
+        <div className="w-8 h-px bg-amber-500 mx-auto my-1.5" />
+        {data.valueDescription && (
+          <p className="text-[8px] text-stone-400 text-center line-clamp-1 leading-relaxed">{data.valueDescription}</p>
+        )}
+        <div className="grid grid-cols-3 gap-2 mt-2">
           {([1, 2, 3] as const).map(i => {
             const t = data[`valueCard${i}Title` as keyof LandingPageData];
             const x = data[`valueCard${i}Text` as keyof LandingPageData];
             return (
-              <div key={i} className="border border-stone-800 bg-stone-950/50 p-2 rounded">
-                <p className="text-amber-500 italic text-[9px] font-serif mb-1">{t || `Kartu ${i}`}</p>
-                <p className="text-[8px] text-stone-400 line-clamp-3 font-light">{x || <span className="italic text-stone-600">Teks…</span>}</p>
-              </div>
-            );
-          })}
-        </div>
-      </button>
-
-      {/* Features */}
-      <button
-        type="button"
-        onClick={() => onJump("FEATURES")}
-        className={`block w-full text-left bg-white rounded-lg p-4 transition ${ring("FEATURES")}`}
-      >
-        <p className="text-[8px] uppercase tracking-widest text-amber-600 font-semibold">{data.featureSubtitle || "Subtitle"}</p>
-        <h2 className="text-sm font-serif mt-1 text-stone-900">{data.featureTitle || <span className="italic text-stone-400">Feature title…</span>}</h2>
-        <div className="grid grid-cols-3 gap-2 mt-3">
-          {([1, 2, 3] as const).map(i => {
-            const t = data[`feature${i}Title` as keyof LandingPageData];
-            const d = data[`feature${i}Description` as keyof LandingPageData];
-            const img = data[`feature${i}ImageUrl` as keyof LandingPageData];
-            return (
-              <div key={i}>
-                <div className="aspect-[4/3] bg-stone-100 rounded relative overflow-hidden mb-1.5">
-                  {img ? (
-                    <Image src={img} alt={t} fill className="object-cover" unoptimized />
-                  ) : (
-                    <div className="absolute inset-0 grid place-items-center text-[8px] text-stone-500">No image</div>
-                  )}
-                </div>
-                <p className="font-serif text-[10px] mb-0.5 line-clamp-1 text-stone-900">{t || `Fitur ${i}`}</p>
-                <p className="text-[8px] text-stone-500 line-clamp-2 font-light">{d || <span className="italic">Deskripsi…</span>}</p>
+              <div key={i} className="border border-stone-850 bg-stone-950/50 p-2 rounded">
+                <p className="text-amber-500 italic text-[8px] font-serif mb-0.5 truncate">{t || `Keunggulan ${i}`}</p>
+                <p className="text-[7px] text-stone-400 line-clamp-2 font-light">{x || <span className="italic text-stone-600">Teks…</span>}</p>
               </div>
             );
           })}
@@ -524,12 +484,12 @@ function LandingPreview({
         onClick={() => onJump("CTA")}
         className={`block w-full text-left rounded-lg p-4 transition bg-stone-900 text-white text-center border border-amber-900/40 ${ring("CTA")}`}
       >
-        <h2 className="text-sm font-serif">
+        <h2 className="text-xs font-serif">
           {data.ctaTitle || <span className="italic text-stone-500">CTA title…</span>}<br />
           <span className="italic text-amber-500 font-light">{data.ctaSubtitle || "—"}</span>
         </h2>
-        <p className="text-[9px] text-stone-300 mt-1.5 line-clamp-2 font-light">{data.ctaDescription || <span className="italic text-stone-500">Deskripsi CTA…</span>}</p>
-        <span className="inline-block mt-2 text-[8px] uppercase tracking-widest bg-amber-500 text-stone-900 font-bold px-3 py-1.5 rounded">
+        <p className="text-[8px] text-stone-300 mt-1 line-clamp-2 font-light">{data.ctaDescription || <span className="italic text-stone-500">Deskripsi CTA…</span>}</p>
+        <span className="inline-block mt-1.5 text-[7px] uppercase tracking-widest bg-amber-500 text-stone-900 font-bold px-3 py-1 rounded">
           Daftar Gratis
         </span>
       </button>
