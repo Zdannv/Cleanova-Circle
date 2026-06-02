@@ -5,6 +5,7 @@ import { authOptions } from "../api/auth/[...nextauth]/route";
 import prisma from "../../lib/prisma";
 import { revalidatePath } from "next/cache";
 import { sendConfirmationEmail } from "../../lib/mailer";
+import { sendMail } from "../../lib/mail";
 
 async function verifyAdmin() {
   const session = await getServerSession(authOptions);
@@ -237,4 +238,46 @@ export async function updateLandingPageAction(formData: FormData) {
 
   revalidatePath("/");
   revalidatePath("/admin");
+}
+
+export async function sendBroadcastAction(subject: string, htmlBody: string) {
+  await verifyAdmin();
+
+  if (!subject.trim() || !htmlBody.trim()) {
+    throw new Error("Subjek dan isi pesan wajib diisi.");
+  }
+
+  // Cari semua user dengan acceptsMarketing: true dan email tidak null
+  const users = await prisma.user.findMany({
+    where: {
+      acceptsMarketing: true,
+      email: {
+        not: null,
+      },
+    },
+    select: {
+      email: true,
+    },
+  });
+
+  const emails = users.map((u) => u.email).filter(Boolean) as string[];
+
+  if (emails.length === 0) {
+    return { success: true, count: 0, succeeded: 0, failed: 0, message: "Tidak ada penerima yang terdaftar untuk menerima promosi." };
+  }
+
+  // Kirim email ke semua penerima secara paralel
+  const results = await Promise.allSettled(
+    emails.map((email) => sendMail(email, subject, htmlBody))
+  );
+
+  const succeeded = results.filter((r) => r.status === "fulfilled" && (r.value as any).success).length;
+  const failed = emails.length - succeeded;
+
+  return {
+    success: true,
+    count: emails.length,
+    succeeded,
+    failed,
+  };
 }
