@@ -136,13 +136,13 @@ export default function RegisterClient() {
               className="mt-0.5 w-4 h-4 rounded border-stone-300 text-amber-600 focus:ring-amber-500 flex-shrink-0"
             />
             <span className="text-xs text-stone-600 dark:text-stone-400 leading-relaxed">
-              Saya setuju menerima informasi promo, tips kebersihan, dan penawaran menarik dari Cleanova. <span className="text-amber-600 dark:text-amber-500 font-medium">(wajib)</span>
+              Saya setuju menerima informasi promo, tips kebersihan, dan penawaran menarik dari Cleanova.
             </span>
           </label>
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={!acceptsMarketing || loading}
             className="w-full py-4 px-4 rounded-xl bg-amber-600 hover:bg-amber-700 focus:ring-4 focus:ring-amber-500/50 text-white font-medium transition-all shadow-lg shadow-amber-600/30 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
           >
             {loading ? (
