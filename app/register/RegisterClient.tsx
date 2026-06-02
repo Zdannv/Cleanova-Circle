@@ -6,6 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { registerUserAction } from "./actions";
 import PasswordInput from "../components/PasswordInput";
+import { toast } from "sonner";
 
 export default function RegisterClient() {
   const router = useRouter();
@@ -16,18 +17,16 @@ export default function RegisterClient() {
   const [acceptsMarketing, setAcceptsMarketing] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
 
-    if (!name.trim()) return setError("Nama wajib diisi.");
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) return setError("Format email tidak valid.");
-    if (password.length < 6) return setError("Password minimal 6 karakter.");
-    if (password !== confirmPassword) return setError("Konfirmasi password tidak cocok.");
-    if (!acceptsMarketing) return setError("Anda harus menyetujui penerimaan informasi promo untuk mendaftar.");
+    if (!name.trim()) return toast.error("Nama wajib diisi.");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) return toast.error("Format email tidak valid.");
+    if (password.length < 6) return toast.error("Password minimal 6 karakter.");
+    if (password !== confirmPassword) return toast.error("Konfirmasi password tidak cocok.");
+    if (!acceptsMarketing) return toast.error("Anda harus menyetujui penerimaan informasi promo untuk mendaftar.");
 
     setLoading(true);
     try {
@@ -39,15 +38,16 @@ export default function RegisterClient() {
       });
 
       if (!result.success) {
-        setError(result.error);
+        toast.error(result.error);
         setLoading(false);
         return;
       }
 
       // Sukses → arahkan ke login.
+      toast.success("Pendaftaran berhasil! Silakan masuk.");
       router.push("/login?registered=1");
     } catch {
-      setError("Terjadi kesalahan. Coba lagi nanti.");
+      toast.error("Terjadi kesalahan. Coba lagi nanti.");
       setLoading(false);
     }
   };
@@ -74,11 +74,7 @@ export default function RegisterClient() {
           </p>
         </div>
 
-        {error && (
-          <div className="mb-6 p-4 rounded-xl bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-900/50 text-red-600 dark:text-red-400 text-sm text-center font-medium">
-            {error}
-          </div>
-        )}
+
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="space-y-1.5">
@@ -143,7 +139,7 @@ export default function RegisterClient() {
           <button
             type="submit"
             disabled={!acceptsMarketing || loading}
-            className="w-full py-4 px-4 rounded-xl bg-amber-600 hover:bg-amber-700 focus:ring-4 focus:ring-amber-500/50 text-white font-medium transition-all shadow-lg shadow-amber-600/30 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+            className="w-full py-4 px-4 rounded-xl bg-amber-600 hover:bg-amber-700 focus:ring-4 focus:ring-amber-500/50 text-white font-medium transition-all active:scale-[0.98] transition-transform duration-150 shadow-lg shadow-amber-600/30 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
           >
             {loading ? (
               <span className="flex items-center gap-3">

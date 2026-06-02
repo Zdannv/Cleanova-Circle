@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useCart, formatRupiah } from "./CartContext";
+import { toast } from "sonner";
 
 type Product = {
   id: string;
@@ -32,6 +33,7 @@ export default function CatalogClient({ products }: { products: Product[] }) {
       quantity: 1,
     });
     setJustAdded(p.id);
+    toast.success(`${p.name} berhasil ditambahkan ke keranjang!`);
     window.setTimeout(() => setJustAdded((cur) => (cur === p.id ? null : cur)), 1400);
   };
 
@@ -121,8 +123,8 @@ export default function CatalogClient({ products }: { products: Product[] }) {
                         isOut
                           ? "bg-stone-100 text-stone-400 cursor-not-allowed dark:bg-stone-800 dark:text-stone-600"
                           : wasJustAdded
-                            ? "bg-emerald-600 text-white shadow-md shadow-emerald-600/30"
-                            : "bg-stone-900 text-white hover:bg-amber-600 hover:shadow-lg hover:shadow-amber-600/20 dark:bg-white dark:text-stone-900 dark:hover:bg-amber-500"
+                            ? "bg-emerald-600 text-white shadow-md shadow-emerald-600/30 active:scale-95 duration-150"
+                            : "bg-stone-900 text-white hover:bg-amber-600 hover:shadow-lg hover:shadow-amber-600/20 dark:bg-white dark:text-stone-900 dark:hover:bg-amber-500 active:scale-95 duration-150"
                       }`}
                     >
                       {wasJustAdded ? (

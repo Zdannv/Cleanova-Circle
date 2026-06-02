@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import Link from "next/link";
 import { sendBroadcastAction } from "../actions";
+import { toast } from "sonner";
 
 export default function MarketingClient({
   subscriberCount,
@@ -14,15 +15,13 @@ export default function MarketingClient({
   const [isPending, startTransition] = useTransition();
   const [subject, setSubject] = useState("");
   const [htmlBody, setHtmlBody] = useState("");
-  const [statusMsg, setStatusMsg] = useState<{ type: "success" | "error"; text: string } | null>(null);
   const [previewMode, setPreviewMode] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setStatusMsg(null);
 
     if (!subject.trim() || !htmlBody.trim()) {
-      setStatusMsg({ type: "error", text: "Subjek dan isi pesan wajib diisi." });
+      toast.error("Subjek dan isi pesan wajib diisi.");
       return;
     }
 
@@ -30,21 +29,20 @@ export default function MarketingClient({
       return;
     }
 
+    const toastId = toast.loading("Mengirim broadcast email...");
+
     startTransition(async () => {
       try {
         const res = await sendBroadcastAction(subject, htmlBody);
         if (res.success) {
-          setStatusMsg({
-            type: "success",
-            text: `Broadcast berhasil dikirim! Total: ${res.count} penerima (${res.succeeded} sukses, ${res.failed} gagal).`,
-          });
+          toast.success(`Broadcast berhasil dikirim! Total: ${res.count} penerima (${res.succeeded} sukses, ${res.failed} gagal).`, { id: toastId });
           setSubject("");
           setHtmlBody("");
         } else {
-          setStatusMsg({ type: "error", text: res.message || "Gagal mengirim broadcast." });
+          toast.error(res.message || "Gagal mengirim broadcast.", { id: toastId });
         }
       } catch (err: any) {
-        setStatusMsg({ type: "error", text: err.message || "Terjadi kesalahan sistem saat mengirim broadcast." });
+        toast.error(err.message || "Terjadi kesalahan sistem saat mengirim broadcast.", { id: toastId });
       }
     });
   };
@@ -88,17 +86,7 @@ export default function MarketingClient({
           </div>
         </div>
 
-        {statusMsg && (
-          <div
-            className={`p-4 rounded-xl border text-sm font-medium ${
-              statusMsg.type === "success"
-                ? "bg-emerald-50 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-800/50 text-emerald-800 dark:text-emerald-400"
-                : "bg-rose-50 dark:bg-rose-950/20 border-rose-200 dark:border-rose-800/50 text-rose-800 dark:text-rose-400"
-            }`}
-          >
-            {statusMsg.type === "success" ? "✓" : "⚠"} {statusMsg.text}
-          </div>
-        )}
+
 
         <div className="bg-white dark:bg-stone-900 rounded-2xl border border-stone-200 dark:border-stone-800 shadow-sm overflow-hidden transition-colors">
           <div className="px-6 py-4 border-b border-stone-200 dark:border-stone-800 bg-stone-50/50 dark:bg-stone-900/50 flex justify-between items-center">
@@ -183,7 +171,7 @@ export default function MarketingClient({
               <button
                 type="submit"
                 disabled={isPending || subscriberCount === 0}
-                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-amber-600 hover:bg-amber-700 text-white font-medium rounded-xl shadow-lg shadow-amber-600/20 dark:shadow-none hover:shadow-none transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm min-w-[180px]"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-amber-600 hover:bg-amber-700 text-white font-medium rounded-xl shadow-lg shadow-amber-600/20 dark:shadow-none hover:shadow-none transition-all active:scale-[0.98] transition-transform duration-150 disabled:opacity-50 disabled:cursor-not-allowed text-sm min-w-[180px]"
               >
                 {isPending ? (
                   <>

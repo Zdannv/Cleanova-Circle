@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import PasswordInput from "../components/PasswordInput";
+import { toast } from "sonner";
 
 export default function LoginClient() {
   const router = useRouter();
@@ -13,13 +14,17 @@ export default function LoginClient() {
   const justRegistered = searchParams.get("registered") === "1";
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (justRegistered) {
+      toast.success("Pendaftaran berhasil! Silakan masuk dengan email dan password Anda.");
+    }
+  }, [justRegistered]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
 
     try {
       const res = await signIn("credentials", {
@@ -29,18 +34,19 @@ export default function LoginClient() {
       });
 
       if (res?.error) {
-        setError(res.error);
+        toast.error(res.error);
         setLoading(false);
         return;
       }
 
       if (res?.ok) {
+        toast.success("Berhasil masuk! Mengalihkan...");
         // Hard navigation untuk memotong masalah cache Next.js router
         // Browser akan langsung memuat ulang halaman dashboard
         window.location.href = "/dashboard";
       }
-    } catch (error) {
-      setError("Terjadi kesalahan saat login. Silakan coba lagi.");
+    } catch {
+      toast.error("Terjadi kesalahan saat login. Silakan coba lagi.");
       setLoading(false);
     }
   };
@@ -68,17 +74,7 @@ export default function LoginClient() {
           </p>
         </div>
 
-        {justRegistered && !error && (
-          <div className="mb-6 p-4 rounded-xl bg-emerald-50 dark:bg-emerald-900/10 border border-emerald-200 dark:border-emerald-900/50 text-emerald-700 dark:text-emerald-400 text-sm text-center font-medium">
-            Pendaftaran berhasil! Silakan masuk dengan email dan password Anda.
-          </div>
-        )}
 
-        {error && (
-          <div className="mb-6 p-4 rounded-xl bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-900/50 text-red-600 dark:text-red-400 text-sm text-center font-medium">
-            {error}
-          </div>
-        )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-1.5">
@@ -107,7 +103,7 @@ export default function LoginClient() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-4 px-4 rounded-xl bg-amber-600 hover:bg-amber-700 focus:ring-4 focus:ring-amber-500/50 text-white font-medium transition-all shadow-lg shadow-amber-600/30 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center mt-4"
+            className="w-full py-4 px-4 rounded-xl bg-amber-600 hover:bg-amber-700 focus:ring-4 focus:ring-amber-500/50 text-white font-medium transition-all active:scale-[0.98] transition-transform duration-150 shadow-lg shadow-amber-600/30 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center mt-4"
           >
             {loading ? (
               <span className="flex items-center gap-3">

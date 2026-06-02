@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCart, formatRupiah } from "../CartContext";
+import { toast } from "sonner";
 
 declare global {
   interface Window {
@@ -68,7 +69,6 @@ export default function CartClient({ defaultName, defaultPhone, defaultEmail }: 
   const [ratesFallback, setRatesFallback] = useState(false);
   const [selectedRateKey, setSelectedRateKey] = useState<string>("");
 
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [snapReady, setSnapReady] = useState<boolean>(false);
 
@@ -203,14 +203,13 @@ export default function CartClient({ defaultName, defaultPhone, defaultEmail }: 
   };
 
   const handleCheckout = async () => {
-    setErrorMsg(null);
     const err = validate();
     if (err) {
-      setErrorMsg(err);
+      toast.error(err);
       return;
     }
     if (!snapReady || !window.snap) {
-      setErrorMsg("Modul pembayaran belum siap. Coba lagi sebentar.");
+      toast.error("Modul pembayaran belum siap. Coba lagi sebentar.");
       return;
     }
 
@@ -262,19 +261,19 @@ export default function CartClient({ defaultName, defaultPhone, defaultEmail }: 
         onSuccess: async () => {
           await verifyPayment();
           clear();
-          alert("Pembayaran berhasil! Pesanan Anda otomatis masuk tahap dikemas. Bukti pembayaran dikirim ke email Anda.");
+          toast.success("Pembayaran berhasil! Pesanan Anda otomatis masuk tahap dikemas. Bukti pembayaran dikirim ke email Anda.", { duration: 6000 });
           router.push(`/shop?paid=${encodeURIComponent(orderId)}`);
         },
         onPending: async () => {
           await verifyPayment();
           clear();
-          alert("Pembayaran sedang diproses. Status order akan otomatis ter-update setelah pembayaran selesai.");
+          toast.info("Pembayaran sedang diproses. Status order akan otomatis ter-update setelah pembayaran selesai.", { duration: 6000 });
           router.push(`/shop?pending=${encodeURIComponent(orderId)}`);
         },
         onError: (result) => {
           // eslint-disable-next-line no-console
           console.error("[snap] error:", result);
-          setErrorMsg("Pembayaran gagal. Silakan coba metode pembayaran lain.");
+          toast.error("Pembayaran gagal. Silakan coba metode pembayaran lain.");
           setIsSubmitting(false);
         },
         onClose: () => {
@@ -282,7 +281,7 @@ export default function CartClient({ defaultName, defaultPhone, defaultEmail }: 
         },
       });
     } catch (e: any) {
-      setErrorMsg(e?.message || "Terjadi kesalahan saat checkout.");
+      toast.error(e?.message || "Terjadi kesalahan saat checkout.");
       setIsSubmitting(false);
     }
   };
@@ -636,17 +635,12 @@ export default function CartClient({ defaultName, defaultPhone, defaultEmail }: 
                   <span className="text-lg font-bold text-amber-600 tabular-nums">{formatRupiah(grandTotal)}</span>
                 </div>
 
-                {errorMsg && (
-                  <div className="mt-3 p-3 bg-rose-50 text-rose-700 border border-rose-200 dark:bg-rose-900/20 dark:text-rose-300 dark:border-rose-800/40 rounded-xl text-xs font-medium">
-                    ⚠ {errorMsg}
-                  </div>
-                )}
 
                 <button
                   type="button"
                   onClick={handleCheckout}
                   disabled={isSubmitting || items.length === 0 || !selectedRate}
-                  className="w-full mt-2 inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-amber-600 hover:bg-amber-700 text-white text-sm font-bold uppercase tracking-widest rounded-full transition-all shadow-lg shadow-amber-600/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full mt-2 inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-amber-600 hover:bg-amber-700 text-white text-sm font-bold uppercase tracking-widest rounded-full transition-all active:scale-[0.98] transition-transform duration-150 shadow-lg shadow-amber-600/20 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? (
                     <>
