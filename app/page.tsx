@@ -175,7 +175,7 @@ export default async function Home() {
               {/* Elegant Accent Box */}
               <div className="absolute bottom-6 left-6 right-6 bg-white/85 dark:bg-stone-900/85 backdrop-blur-md p-4 rounded-2xl border border-white/20 shadow-lg flex items-center justify-between gap-4">
                 <div>
-                  <span className="block text-[10px] uppercase tracking-widest font-bold text-amber-600 dark:text-amber-500">Premium Standard</span>
+                  <span className="block text-[10px] uppercase tracking-widest font-bold text-amber-600 dark:text-amber-500">Premium Product</span>
                   <span className="text-xs text-stone-800 dark:text-stone-250 font-serif">Original &amp; Certified Care</span>
                 </div>
                 <span className="px-3 py-1 bg-amber-400 text-stone-900 text-[10px] uppercase tracking-wider font-extrabold rounded-lg">Eco-Friendly</span>
