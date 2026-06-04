@@ -37,7 +37,7 @@ function VideoCard({ id, title, description, url, category, isCompleted, inProgr
   return (
     <Link
       href={`/dashboard/videos/${id}`}
-      className="group flex flex-col bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl overflow-hidden hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:-translate-y-1 dark:hover:shadow-[0_8px_30px_rgb(0,0,0,0.5)] transition-all duration-500 flex-shrink-0 w-72 md:w-80"
+      className="group flex flex-col bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl overflow-hidden hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:-translate-y-1 dark:hover:shadow-[0_8px_30px_rgb(0,0,0,0.5)] transition-all duration-500 flex-shrink-0 w-72 md:w-80 h-full"
     >
       <div className="relative aspect-video bg-stone-100 dark:bg-stone-800 overflow-hidden">
         {thumbnailUrl ? (
@@ -265,7 +265,7 @@ export default async function DashboardPage() {
           {recentlyViewedVideos.map(video => {
             const p = progressMap.get(video.id);
             return (
-              <div key={video.id} className="snap-start">
+              <div key={video.id} className="snap-start flex">
                 <VideoCard
                   id={video.id} title={video.title} description={video.description}
                   url={video.url} category={video.Category?.name || ""}
@@ -284,7 +284,7 @@ export default async function DashboardPage() {
         ) : recentlyAdded.map(video => {
           const p = progressMap.get(video.id);
           return (
-            <div key={video.id} className="snap-start">
+            <div key={video.id} className="snap-start flex">
               <VideoCard
                 id={video.id} title={video.title} description={video.description}
                 url={video.url} category={video.Category?.name || ""}
@@ -302,7 +302,7 @@ export default async function DashboardPage() {
         ) : popularVideos.map(video => {
           const p = progressMap.get(video.id);
           return (
-            <div key={video.id} className="snap-start">
+            <div key={video.id} className="snap-start flex">
               <VideoCard
                 id={video.id} title={video.title} description={video.description}
                 url={video.url} category={video.Category?.name || ""}
