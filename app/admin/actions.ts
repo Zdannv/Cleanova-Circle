@@ -176,8 +176,6 @@ export async function updateArticleAction(id: string, formData: FormData) {
   const excerpt = (formData.get("excerpt") as string)?.trim() || "";
   const isFeatured = formData.get("isFeatured") === "on" || formData.get("isFeatured") === "true";
 
-  const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
-
   // content bisa null jika hidden input tidak terkirim — fallback ke string kosong
   const safeContent = content ?? "";
 
@@ -185,7 +183,6 @@ export async function updateArticleAction(id: string, formData: FormData) {
     where: { id },
     data: {
       title,
-      slug: `${slug}-${Math.random().toString(36).substring(2, 6)}`,
       content: safeContent,
       coverImage,
       excerpt,

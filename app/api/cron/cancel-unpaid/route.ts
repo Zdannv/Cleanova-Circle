@@ -3,7 +3,12 @@ import prisma from "../../../../lib/prisma";
 
 export async function GET(req: NextRequest) {
   try {
-    // 1. Amankan endpoint dengan Bearer Token
+    // 1. Validasi environment variable untuk mencegah footgun 'Bearer undefined'
+    if (!process.env.CRON_SECRET) {
+      return NextResponse.json({ error: "Server misconfiguration" }, { status: 500 });
+    }
+
+    // 2. Amankan endpoint dengan Bearer Token
     const authHeader = req.headers.get("authorization");
     if (!authHeader || authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
