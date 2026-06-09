@@ -440,6 +440,103 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* Section Tersedia Di (Where to Buy) */}
+      <section className="py-24 bg-white dark:bg-stone-900 border-b border-stone-200/50 dark:border-stone-850">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
+            <span className="text-amber-600 dark:text-amber-500 text-xs font-semibold tracking-wider uppercase bg-amber-50 dark:bg-amber-950/40 border border-amber-150 dark:border-amber-900/30 px-3.5 py-1.5 rounded-full">
+              Tersedia Di
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-serif font-light text-stone-900 dark:text-white leading-tight">
+              Dapatkan Produk Cleanova
+            </h2>
+            <div className="w-16 h-px bg-amber-500 mx-auto"></div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            {/* Online Card */}
+            <div className="group bg-gradient-to-br from-amber-50/50 to-orange-50/30 dark:from-stone-900/40 dark:to-stone-900/20 p-8 rounded-3xl border border-amber-100/70 dark:border-stone-850 flex flex-col justify-between items-center text-center gap-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+              <div className="space-y-2">
+                <span className="text-[10px] uppercase tracking-widest font-bold text-orange-600 dark:text-orange-450">Online Store</span>
+                <h3 className="text-2xl font-serif text-stone-900 dark:text-white font-medium">Beli secara Online</h3>
+                <p className="text-sm text-stone-500 dark:text-stone-400 font-light">
+                  Dapatkan kemudahan berbelanja produk Cleanova dengan promo menarik langsung dari handphone Anda.
+                </p>
+              </div>
+              <a
+                href="https://shopee.co.id"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 text-xs font-semibold tracking-widest uppercase text-white bg-[#ee4d2d] hover:bg-[#ff5722] rounded-xl transition-all shadow-md shadow-[#ee4d2d]/25 hover:shadow-[#ee4d2d]/40 active:scale-95 duration-150"
+              >
+                Official Shopee Store
+              </a>
+            </div>
+
+            {/* Offline Card */}
+            <div className="group bg-gradient-to-br from-stone-900 to-stone-950 text-white dark:from-stone-950 dark:to-stone-900 p-8 rounded-3xl border border-stone-800 dark:border-stone-850 flex flex-col justify-between items-center text-center gap-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+              <div className="space-y-2">
+                <span className="text-[10px] uppercase tracking-widest font-bold text-amber-500">Offline Store</span>
+                <h3 className="text-2xl font-serif text-white font-medium">Tersedia offline</h3>
+                <p className="text-sm text-stone-400 dark:text-stone-400 font-light">
+                  Kunjungi supermarket mitra kami untuk mendapatkan produk Cleanova secara instan.
+                </p>
+              </div>
+              <div className="inline-flex items-center gap-2 px-5 py-3.5 bg-stone-850/80 text-white rounded-xl text-xs font-medium tracking-wide border border-stone-700">
+                <svg className="w-4 h-4 text-amber-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25s-7.5-4.108-7.5-11.25C4.5 5.25 7.821 2 12 2s7.5 3.25 7.5 8.5z" />
+                </svg>
+                <strong>Hokky Supermarket Pakuwon City</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Section Komunitas & Sosial Media */}
+      <section className="py-24 bg-stone-50 dark:bg-stone-950 border-b border-stone-200/50 dark:border-stone-850">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="max-w-3xl mx-auto mb-12 space-y-4">
+            <span className="text-amber-600 dark:text-amber-500 text-xs font-semibold tracking-wider uppercase bg-amber-50 dark:bg-amber-950/40 border border-amber-150 dark:border-amber-900/30 px-3.5 py-1.5 rounded-full">
+              Komunitas
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-serif font-light text-stone-900 dark:text-white leading-tight">
+              Lihat Bukti Nyatanya
+            </h2>
+            <p className="text-stone-550 dark:text-stone-400 font-light text-sm sm:text-base leading-relaxed">
+              Ikuti Instagram dan TikTok kami untuk tips kebersihan dan video before-after.
+            </p>
+            <div className="w-16 h-px bg-amber-500 mx-auto"></div>
+          </div>
+
+          <div className="flex flex-row items-center justify-center gap-4">
+            <a
+              href="https://instagram.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-3 px-8 py-4 text-xs font-semibold tracking-widest uppercase text-white bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] hover:brightness-110 shadow-lg shadow-pink-500/20 active:scale-95 transition-transform rounded-xl"
+            >
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+              </svg>
+              Instagram
+            </a>
+            <a
+              href="https://tiktok.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-3 px-8 py-4 text-xs font-semibold tracking-widest uppercase text-white bg-black hover:bg-stone-900 border border-stone-850 dark:border-stone-700 active:scale-95 transition-transform rounded-xl shadow-md"
+            >
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.17-2.89-.74-3.94-1.78-.22-.22-.41-.47-.59-.73v7.02c0 3.32-2.23 6.47-5.59 7.15-3.36.68-6.94-1.25-7.98-4.54-1.04-3.29.62-7.14 3.91-8.15.86-.27 1.77-.32 2.66-.2v4.07c-1.12-.34-2.39-.07-3.23.75-.84.82-1.08 2.14-.59 3.2.49 1.06 1.71 1.73 2.88 1.51 1.17-.22 2.01-1.34 2-2.53V.02z"/>
+              </svg>
+              TikTok
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* Bottom CTA Section */}
       <section className="py-24 px-4 sm:px-6">
         <div className="max-w-4xl mx-auto bg-stone-900 dark:bg-stone-950 p-12 md:p-20 text-center relative overflow-hidden border border-amber-900/30">
