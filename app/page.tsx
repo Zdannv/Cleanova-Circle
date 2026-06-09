@@ -464,7 +464,7 @@ export default async function Home() {
                 </p>
               </div>
               <a
-                href="https://shopee.co.id"
+                href="https://shopee.co.id/cleanova_id?categoryId=100636&entryPoint=ShopByPDP&itemId=43856905949&upstream=search"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 px-6 py-3.5 text-xs font-semibold tracking-widest uppercase text-white bg-[#ee4d2d] hover:bg-[#ff5722] rounded-xl transition-all shadow-md shadow-[#ee4d2d]/25 hover:shadow-[#ee4d2d]/40 active:scale-95 duration-150"
@@ -512,7 +512,7 @@ export default async function Home() {
 
           <div className="flex flex-row items-center justify-center gap-4">
             <a
-              href="https://instagram.com"
+              href="https://www.instagram.com/cleanovaofficial/"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-3 px-8 py-4 text-xs font-semibold tracking-widest uppercase text-white bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] hover:brightness-110 shadow-lg shadow-pink-500/20 active:scale-95 transition-transform rounded-xl"
